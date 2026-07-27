@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useDocumentMetadata from "../hooks/useDocumentMetadata";
 import {
   Phone, MessageCircle, Mail, MapPin, Send, Building2,
   HandCoins, Landmark, Clock, PhoneCall, CheckCircle,
@@ -18,8 +19,8 @@ const channels = [
     title: "Call Us Directly",
     desc: "Speak with an expert immediately. No IVR, no waiting.",
     action: "Call Now",
-    href: "tel:+918888802588",
-    meta: "+91 88888 02588",
+    href: "tel:+919899902568",
+    meta: "+91 98999 02568",
     color: "from-blue-500 to-blue-700",
     badge: "Fastest",
   },
@@ -28,7 +29,7 @@ const channels = [
     title: "WhatsApp Chat",
     desc: "Send documents, ask questions — get replies fast.",
     action: "Open WhatsApp",
-    href: "https://wa.me/918888802588",
+    href: "https://wa.me/919899902568",
     meta: "Avg. reply: 10 mins",
     color: "from-green-500 to-green-600",
     badge: "Popular",
@@ -38,8 +39,8 @@ const channels = [
     title: "Email Us",
     desc: "For detailed queries, proposals, and document sharing.",
     action: "Send Email",
-    href: "mailto:info@arthaventures.com",
-    meta: "info@arthaventures.com",
+    href: "mailto:support@arthovista.com",
+    meta: "support@arthovista.com",
     color: "from-purple-500 to-purple-700",
     badge: "Official",
   },
@@ -52,6 +53,10 @@ const quickLinks = [
 ];
 
 export default function Contact() {
+  useDocumentMetadata(
+    "Contact Us | Artha Ventures",
+    "Get in touch with Artha Ventures for business registration, subsidies, loans, and startup consulting. Contact our team in Noida."
+  );
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -270,7 +275,7 @@ export default function Contact() {
                           <label className="text-xs font-semibold text-navy block mb-1.5">Phone Number *</label>
                           <input
                             type="tel"
-                            placeholder="98765 43210"
+                            placeholder="98999 02568"
                             required
                             className="input-3d"
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -361,8 +366,8 @@ export default function Contact() {
                 <div className="space-y-4">
                   {[
                     { icon: MapPin, text: "Logix Cyber Park, Noida Sector 62, Uttar Pradesh - 201309" },
-                    { icon: Phone, text: "+91 88888 02588" },
-                    { icon: Mail, text: "info@arthaventures.com" },
+                    { icon: Phone, text: "+91 98999 02568" },
+                    { icon: Mail, text: "support@arthovista.com" },
                     { icon: Clock, text: "Mon-Sat, 9:30 AM - 6:00 PM IST" },
                   ].map(({ icon: Icon, text }) => (
                     <div key={text} className="flex items-start gap-3 text-sm text-slate-600">
@@ -372,11 +377,11 @@ export default function Contact() {
                   ))}
                 </div>
                 <div className="flex gap-3 mt-8">
-                  <a href="tel:+918888802588" className="btn-primary-3d">
+                  <a href="tel:+919899902568" className="btn-primary-3d">
                     <PhoneCall size={14} /> Call Now
                   </a>
                   <a
-                    href="https://wa.me/918888802588"
+                    href="https://wa.me/919899902568"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold text-sm px-5 py-3 rounded-xl transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-green-200"

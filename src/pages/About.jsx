@@ -4,6 +4,7 @@ import {
   TrendingUp, Heart, HandCoins, Star, CheckCircle, Building2
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import useDocumentMetadata from "../hooks/useDocumentMetadata";
 
 const stats = [
   { value: "500+", label: "MSMEs Served" },
@@ -40,6 +41,10 @@ const team = [
 ];
 
 export default function About() {
+  useDocumentMetadata(
+    "About Us | Artha Ventures",
+    "Learn about Artha Ventures (ArthoVista) — KVIC empanelled MSME consulting and government scheme facilitation specialists based in Noida."
+  );
   return (
     <div>
       {/* ====== HERO ====== */}
@@ -54,7 +59,7 @@ export default function About() {
             className="font-display font-black text-white mt-2"
             style={{ fontSize: "clamp(30px, 5vw, 54px)" }}
           >
-            About <span className="gradient-text">Artha Ventures</span>
+            About <span className="gradient-text">ArthoVista</span>
           </h1>
           <p className="text-orange-400 font-medium mt-3">
             Empowering Uttar Pradesh MSMEs and Startup Ecosystem from Noida
@@ -95,7 +100,7 @@ export default function About() {
                 "Every entrepreneur deserves the same access to government support — regardless of their education or connections."
               </blockquote>
               <p className="text-slate-600 leading-relaxed">
-                Artha Ventures was founded with a simple mission — to democratise access to government funding, and business support for India's millions of micro, small, and medium enterprises. Based in Noida, Uttar Pradesh, we bridge the gap between ambitious entrepreneurs and the complex world of government procedures, banking systems, and compliance requirements.
+                ArthoVista was founded with a simple mission — to democratise access to government funding, and business support for India's millions of micro, small, and medium enterprises. Based in Noida, Uttar Pradesh, we bridge the gap between ambitious entrepreneurs and the complex world of government procedures, banking systems, and compliance requirements.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-8">
@@ -201,7 +206,7 @@ export default function About() {
               className="font-display font-black text-white"
               style={{ fontSize: "clamp(26px, 4vw, 42px)" }}
             >
-              Meet <span className="gradient-text">Artha Ventures</span>
+              Meet <span className="gradient-text">ArthoVista</span>
             </h2>
             <p className="text-white/40 mt-3">The team behind your success</p>
           </div>
@@ -239,7 +244,7 @@ export default function About() {
                 Let's Grow Together
               </h3>
               <p className="text-orange-100 mt-3 max-w-lg mx-auto text-sm">
-                Join 500+ businesses that chose Artha Ventures as their growth partner. Book a free consultation today.
+                Join 500+ businesses that chose ArthoVista as their growth partner. Book a free consultation today.
               </p>
               <div className="flex flex-wrap gap-3 justify-center mt-7">
                 <Link to="/contact" className="bg-white text-orange-600 font-bold px-8 py-3.5 rounded-xl hover:bg-orange-50 transition-all hover:scale-105 inline-flex items-center gap-2">
@@ -255,11 +260,11 @@ export default function About() {
 
           {/* Contact Details */}
           <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-slate-500">
-            <a href="tel:+918888802588" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-              <Phone size={16} className="text-orange-600" /> +91 88888 02588
+            <a href="tel:+919899902568" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
+              <Phone size={16} className="text-orange-600" /> +91 98999 02568
             </a>
-            <a href="mailto:info@arthaventures.com" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-              <Mail size={16} className="text-orange-600" /> info@arthaventures.com
+            <a href="mailto:support@arthovista.com" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
+              <Mail size={16} className="text-orange-600" /> support@arthovista.com
             </a>
             <span className="flex items-center gap-2">
               <MapPin size={16} className="text-orange-600" /> Noida, Uttar Pradesh

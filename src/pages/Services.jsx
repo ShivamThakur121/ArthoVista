@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import useDocumentMetadata from "../hooks/useDocumentMetadata";
+import { useConsultation } from "../context/ConsultationContext";
 import {
   Building2, ShieldCheck, HandCoins, Banknote, Laptop2,
   ClipboardCheck, Scale, ArrowRight, PhoneCall, CheckCircle,
@@ -65,7 +67,7 @@ const blocks = [
     items: [
       { t: "Working Capital Loan", d: "Short-term financing to cover day-to-day operational expenses, inventory, and receivables management." },
       { t: "Term Loan", d: "Long-term funding for business expansion, equipment purchase, and infrastructure development." },
-      { t: "Venture Capital", d: "Connect with angel investors and VC funds for equity funding backed by growth potential." },
+      { t: "ArthoVista Capital", d: "Connect with angel investors and VC funds for equity funding backed by growth potential." },
       { t: "MSME Financing", d: "Specialised products for micro, small, and medium enterprises tailored to business need." },
     ],
   },
@@ -114,198 +116,20 @@ const stats = [
   { value: "7 Yrs", label: "Expert Experience" },
 ];
 
-/* ─── Lead Modal ─────────────────────────────────────────────────────── */
-function LeadModal({ service, color, icon: Icon, onClose }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "" });
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
-  const [errMsg, setErrMsg] = useState("");
-  const [active, setActive] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-
-  useEffect(() => {
-    // Trigger slide/fade in
-    const timer = setTimeout(() => setActive(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(onClose, 300); // Wait for transition animation to complete
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("loading");
-    setErrMsg("");
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          service: service,
-          source: "website-service-card",
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setStatus("success");
-      } else {
-        setErrMsg(data.message || "Something went wrong.");
-        setStatus("error");
-      }
-    } catch {
-      setErrMsg("Network error. Please try again.");
-      setStatus("error");
-    }
-  };
-
-  return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-        active && !isClosing ? "opacity-100" : "opacity-0"
-      }`}
-      style={{ background: "rgba(10,22,40,0.80)", backdropFilter: "blur(6px)" }}
-      onClick={(e) => e.target === e.currentTarget && handleClose()}
-    >
-      <div
-        className={`relative w-full max-w-md rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
-          active && !isClosing
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-4"
-        }`}
-        style={{ background: "linear-gradient(145deg,#0b1329,#16254e)" }}
-      >
-        {/* Top accent */}
-        <div className={`h-1.5 bg-gradient-to-r ${color}`} />
-
-        {/* Close */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center text-white/70 hover:text-white"
-        >
-          <X size={16} />
-        </button>
-
-        <div className="p-7">
-          {/* Icon + title */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center`}>
-              <Icon size={20} className="text-white" />
-            </div>
-            <div>
-              <p className="text-white/50 text-xs">Enquiring about</p>
-              <h3 className="font-display font-bold text-white text-lg leading-tight">{service}</h3>
-            </div>
-          </div>
-
-          {status === "success" ? (
-            <div className="py-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={36} className="text-green-400" />
-              </div>
-              <p className="text-white font-semibold text-lg">Request Submitted!</p>
-              <p className="text-white/50 text-sm mt-2">Our expert will call you within 24 hours.</p>
-              <button
-                onClick={handleClose}
-                className="mt-6 px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm transition"
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">Full Name *</label>
-                <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  required
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">Phone Number *</label>
-                <input
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  required
-                  pattern="[0-9+\s\-]{7,15}"
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">
-                  Email Address <span className="text-white/30">(optional)</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                />
-              </div>
-
-              {status === "error" && (
-                <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                  {errMsg}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm text-white transition-all disabled:opacity-70"
-                style={{ background: "linear-gradient(135deg,#f97316,#ea6820)" }}
-              >
-                {status === "loading" ? (
-                  <><Loader2 size={16} className="animate-spin" /> Submitting…</>
-                ) : (
-                  <>Get Free Consultation <ArrowRight size={15} /></>
-                )}
-              </button>
-              <p className="text-center text-xs text-white/25">
-                No hidden fees · 100% Confidential · Callback within 24 hrs
-              </p>
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function Services() {
+  useDocumentMetadata(
+    "Business Services & Registrations | Artha Ventures",
+    "Explore our professional services including Private Limited Company setup, LLP registration, GST filing, and ISO/FSSAI certifications."
+  );
   const [active, setActive] = useState("registration");
-  const [modal, setModal] = useState(null); // { service, color, icon }
+  const { openConsultationModal } = useConsultation();
 
-  const openModal = (service, color, icon) => {
-    setModal({ service, color, icon });
+  const openModal = (service) => {
+    openConsultationModal(service);
   };
-
-  const closeModal = () => setModal(null);
 
   return (
     <div>
-      {/* Lead Modal */}
-      {modal && (
-        <LeadModal
-          service={modal.service}
-          color={modal.color}
-          icon={modal.icon}
-          onClose={closeModal}
-        />
-      )}
 
       {/* ====== HERO ====== */}
       <section className="hero-dark relative py-16 px-6">
@@ -325,8 +149,8 @@ export default function Services() {
             <Link to="/" className="btn-primary-3d">
               Free Consultation <ArrowRight size={15} />
             </Link>
-            <a href="tel:+918888802588" className="btn-outline-white-3d">
-              <PhoneCall size={15} /> +91 88888 02588
+            <a href="tel:+919899902568" className="btn-outline-white-3d">
+              <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
         </div>
@@ -357,8 +181,8 @@ export default function Services() {
                 onClick={() => setActive(c.id)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                   active === c.id
-                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-200"
-                    : "bg-slate-50 text-slate-500 hover:bg-slate-100 border border-slate-100"
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/25"
+                    : "bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200/60"
                 }`}
               >
                 <c.icon size={15} />
@@ -370,16 +194,16 @@ export default function Services() {
       </section>
 
       {/* ====== SERVICE BLOCKS ====== */}
-      <section className="py-10 px-6 bg-slate-200">
+      <section className="py-12 px-6 bg-slate-50 border-t border-slate-200/60">
         <div className="max-w-6xl mx-auto space-y-8">
           {blocks.map((b) => (
             <div
               key={b.id}
               id={b.id}
-              className={`service-block glass-card rounded-2xl overflow-hidden transition-all duration-500 ${
+              className={`tilt-3d bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm transition-all duration-500 ${
                 active === b.id
-                  ? "ring-2 ring-orange-400 ring-offset-2"
-                  : "opacity-80"
+                  ? "ring-2 ring-blue-500 ring-offset-2"
+                  : "opacity-90"
               }`}
             >
               <div className="grid md:grid-cols-[300px_1fr]">
@@ -483,8 +307,8 @@ export default function Services() {
                 <Link to="/contact" className="btn-primary-3d">
                   Book Free Session <ArrowRight size={14} />
                 </Link>
-                <a href="tel:+918888802588" className="btn-outline-white-3d">
-                  <PhoneCall size={15} /> +91 88888 02588
+                <a href="tel:+919899902568" className="btn-outline-white-3d">
+                  <PhoneCall size={15} /> +91 98999 02568
                 </a>
               </div>
             </div>

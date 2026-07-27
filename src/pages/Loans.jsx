@@ -5,6 +5,29 @@ import {
   X, Loader2
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import useDocumentMetadata from "../hooks/useDocumentMetadata";
+import { useConsultation } from "../context/ConsultationContext";
+import axisLogo from "../assets/banks/Axis.png";
+import iciciLogo from "../assets/banks/ICICI.png";
+import hdfcLogo from "../assets/banks/HDFC.png";
+import kotakLogo from "../assets/banks/kotak.png";
+import idfcFirstLogo from "../assets/banks/IDFC-First.png"; 
+import sbiLogo from "../assets/banks/sbi.png";
+import standardLogo from "../assets/banks/Standard-Bank.jpg";
+import adityaBirlaLogo from "../assets/banks/Aditya-Birlaa.jpg";
+
+
+const banks = [
+  { name: "Axis Bank", logo: axisLogo },
+  { name: "ICICI Bank", logo: iciciLogo },
+  { name: "Kotak Mahindra Bank", logo: kotakLogo },
+  { name: "HDFC Bank", logo: hdfcLogo },
+  { name: "IDFC First Bank", logo: idfcFirstLogo },
+  { name: "Standard Bank", logo: standardLogo },
+  { name: "Aditya Birla", logo: adityaBirlaLogo },
+  { name: "SBI", logo: sbiLogo },
+];
+
 
 const API_URL = "/api/contact";
 
@@ -80,199 +103,25 @@ const steps = [
   { num: "05", t: "Loan Disbursal", d: "We guide on timely disbursal and repayments." },
 ];
 
-const banks = [
-  "IDFC Bank", "Axis Bank", "ICICI Bank", "Kotak Mahindra Bank",
-  "HDFC Bank", "IDFC First Bank", "Standard Bank", "Mahindra Bank",
-  "Aditya Birla", "Manipal Finance", "SBI"
-];
-
 const faqs = [
   { q: "What is the minimum CIBIL score required?", a: "Most lenders prefer a CIBIL score of 700 or above for the best interest rates. However, we work with NBFCs that can approve loans with scores as low as 600." },
   { q: "How long does loan approval take?", a: "Approval typically takes 24-72 hours once all documents are submitted, with disbursal following within 3-7 business days." },
   { q: "Is collateral required for a business loan?", a: "Not always. Many of our banking partners offer collateral-free loans up to ₹50 lakh under government-backed guarantee schemes like CGTMSE." },
   { q: "Who can apply for a Salaried Personal Loan?", a: "Salaried individuals with a minimum monthly income and at least 1 year of continuous employment can apply." },
   { q: "What is a Machinery Loan and who is it for?", a: "It funds purchase of new or used machinery/equipment for manufacturing businesses, secured against the machinery itself." },
-  { q: "How does Artha Ventures help with loan applications?", a: "We match you to the right lender, prepare and verify documentation, and follow up on your behalf until disbursal." },
+  { q: "How does ArthoVista help with loan applications?", a: "We match you to the right lender, prepare and verify documentation, and follow up on your behalf until disbursal." },
 ];
 
-/* ─── Lead Modal ─────────────────────────────────────────────────────── */
-function LeadModal({ loan, onClose }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "" });
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
-  const [errMsg, setErrMsg] = useState("");
-  const [active, setActive] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-
-  useEffect(() => {
-    // Trigger slide/fade in
-    const timer = setTimeout(() => setActive(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setTimeout(onClose, 300); // Wait for transition animation to complete
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus("loading");
-    setErrMsg("");
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          service: loan.title,
-          source: "website-loan-card",
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setStatus("success");
-      } else {
-        setErrMsg(data.message || "Something went wrong.");
-        setStatus("error");
-      }
-    } catch {
-      setErrMsg("Network error. Please try again.");
-      setStatus("error");
-    }
-  };
-
-  return (
-    <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${
-        active && !isClosing ? "opacity-100" : "opacity-0"
-      }`}
-      style={{ background: "rgba(10,22,40,0.75)", backdropFilter: "blur(6px)" }}
-      onClick={(e) => e.target === e.currentTarget && handleClose()}
-    >
-      <div
-        className={`relative w-full max-w-md rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
-          active && !isClosing
-            ? "opacity-100 scale-100 translate-y-0"
-            : "opacity-0 scale-95 translate-y-4"
-        }`}
-        style={{ background: "linear-gradient(145deg,#0b1329,#16254e)" }}
-      >
-        {/* Top accent */}
-        <div className={`h-1.5 bg-gradient-to-r ${loan.color}`} />
-
-        {/* Close */}
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 transition flex items-center justify-center text-white/70 hover:text-white"
-        >
-          <X size={16} />
-        </button>
-
-        <div className="p-7">
-          {/* Icon + title */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${loan.color} flex items-center justify-center`}>
-              <loan.icon size={20} className="text-white" />
-            </div>
-            <div>
-              <p className="text-white/50 text-xs">Applying for</p>
-              <h3 className="font-display font-bold text-white text-lg leading-tight">{loan.title}</h3>
-            </div>
-          </div>
-
-          {status === "success" ? (
-            <div className="py-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={36} className="text-green-400" />
-              </div>
-              <p className="text-white font-semibold text-lg">Request Submitted!</p>
-              <p className="text-white/50 text-sm mt-2">Our loan expert will call you within 24 hours.</p>
-              <button
-                onClick={handleClose}
-                className="mt-6 px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm transition"
-              >
-                Close
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">Full Name *</label>
-                <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  required
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">Phone Number *</label>
-                <input
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  required
-                  pattern="[0-9+\s\-]{7,15}"
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="text-white/60 text-xs mb-1.5 block">Email Address <span className="text-white/30">(optional)</span></label>
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-xl text-sm text-white placeholder-white/30 outline-none focus:ring-2 focus:ring-orange-500 transition"
-                  style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)" }}
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                />
-              </div>
-
-              {status === "error" && (
-                <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
-                  {errMsg}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm text-white transition-all disabled:opacity-70"
-                style={{ background: "linear-gradient(135deg,#f97316,#ea6820)" }}
-              >
-                {status === "loading" ? (
-                  <><Loader2 size={16} className="animate-spin" /> Submitting…</>
-                ) : (
-                  <>Get Free Loan Consultation <ArrowRight size={15} /></>
-                )}
-              </button>
-              <p className="text-center text-xs text-white/25">No hidden fees · 100% Confidential · Callback within 24 hrs</p>
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Main Component ─────────────────────────────────────────────────── */
 export default function Loans() {
+  useDocumentMetadata(
+    "Business & MSME Loans | Artha Ventures",
+    "Get hassle-free business loans, MSME financing, working capital, and term loans with competitive interest rates and direct assistance."
+  );
   const [openFaq, setOpenFaq] = useState(0);
-  const [selectedLoan, setSelectedLoan] = useState(null);
+  const { openConsultationModal } = useConsultation();
 
   return (
     <div>
-      {/* Lead Modal */}
-      {selectedLoan && (
-        <LeadModal loan={selectedLoan} onClose={() => setSelectedLoan(null)} />
-      )}
 
       {/* ====== HERO ====== */}
       <section className="hero-dark relative py-16 px-6">
@@ -289,11 +138,14 @@ export default function Loans() {
             Smart funding for every need — from Business Loans to Home Loans, Education to Machinery. Get the best rates with our expert guidance.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
-            <Link to="/contact" className="btn-primary-3d">
+            <button
+              onClick={() => openConsultationModal("Business Loans & Funding")}
+              className="btn-3d inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3 rounded-xl cursor-pointer"
+            >
               Check Loan Eligibility <ArrowRight size={15} />
-            </Link>
-            <a href="tel:+918888802588" className="btn-outline-white-3d">
-              <PhoneCall size={15} /> +91 88888 02588
+            </button>
+            <a href="tel:+919899902568" className="btn-outline-white-3d">
+              <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
         </div>
@@ -326,8 +178,8 @@ export default function Loans() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loans.map((l) => (
-              <div key={l.title} className="loan-card">
-                <div className="loan-card-inner glass-card rounded-2xl overflow-hidden">
+              <div key={l.title} className="tilt-3d rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:border-blue-500/30 transition-all">
+                <div className="loan-card-inner">
                   {/* Header */}
                   <div className={`bg-gradient-to-br ${l.color} p-6`}>
                     <div className="flex items-center justify-between">
@@ -355,8 +207,8 @@ export default function Loans() {
                       ))}
                     </div>
                     <button
-                      onClick={() => setSelectedLoan(l)}
-                      className="w-full block text-center bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-sm py-3 rounded-xl hover:shadow-lg hover:shadow-orange-200 transition-all hover:-translate-y-0.5 cursor-pointer"
+                      onClick={() => openConsultationModal(l.title)}
+                      className="btn-3d w-full block text-center bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm py-3 rounded-xl transition-all cursor-pointer"
                     >
                       Apply Now →
                     </button>
@@ -409,7 +261,11 @@ export default function Loans() {
                   key={`${b}-${i}`}
                   className="mx-3 px-6 py-3 bg-white rounded-xl border border-slate-100 shadow-sm whitespace-nowrap text-sm font-semibold text-slate-600 hover:border-orange-200 hover:text-orange-600 transition-colors"
                 >
-                  {b}
+                  <img
+                    src={bank.logo}
+                    alt={bank.name}
+                    className="w-8 h-8 object-contain"
+                  />
                 </div>
               ))}
             </div>
@@ -481,8 +337,8 @@ export default function Loans() {
             <Link to="/contact" className="btn-primary-3d">
               Get Free Loan Assessment <ArrowRight size={15} />
             </Link>
-            <a href="tel:+918888802588" className="btn-outline-white-3d">
-              <PhoneCall size={15} /> +91 88888 02588
+            <a href="tel:+919899902568" className="btn-outline-white-3d">
+              <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
           <p className="text-white/30 text-xs mt-5">400+ businesses funded · No hidden fees</p>

@@ -6,15 +6,16 @@
 
 /* ===================== ROOT VARIABLES ===================== */
 :root {
-  --navy:         #0a1220;   /* Rich deep navy */
-  --navy-mid:     #0f1c33;
-  --navy-light:   #172a4d;
-  --primary:      #2563eb;   /* Professional Cobalt/Royal Blue */
-  --primary-dark: #1d4ed8;
-  --primary-glow: rgba(37, 99, 235, 0.25);
+  --navy:         #060b18;   /* Deep Executive Navy */
+  --navy-mid:     #0d172e;
+  --navy-light:   #172545;
+  --primary:      #0d9488;   /* Vivid Emerald Teal */
+  --primary-dark: #0f766e;
+  --primary-glow: rgba(13, 148, 136, 0.35);
   --accent:       #d4af37;   /* Refined financial gold accent */
   --accent-light: #f5cf40;
-  --cream:        #fffdf0;
+  --accent-orange:#ea580c;   /* High-conversion Orange CTA */
+  --cream:        #fffdfa;
   --surface:      #f8fafc;   /* Slate 50 background */
   --sidebar-w:    260px;
 }
@@ -25,8 +26,8 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #1e293b;
-  background: #060d1f;
+  color: #0f172a;
+  background: #f8fafc;
   overflow-x: hidden;
 }
 
@@ -35,45 +36,62 @@ h1, h2, h3, h4, h5, .font-display {
 }
 
 /* ===================== CURSOR ===================== */
-/* Natural browser cursor behaves normally, with pointer hand only on interactive points */
 a, button, select, input[type="submit"], input[type="button"], [role="button"], .cursor-pointer {
   cursor: pointer;
 }
 
 /* ===================== LAYOUT ===================== */
-#root { display: flex; min-height: 100vh; }
-
-/* Sidebar */
-.sidebar {
-  width: var(--sidebar-w);
-  min-height: 100vh;
-  position: fixed;
-  left: 0; top: 0;
-  z-index: 1000;
-  background: linear-gradient(180deg, #060d1f 0%, #0d1b2e 50%, #122240 100%);
-  border-right: 1px solid rgba(255,255,255,0.06);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.sidebar::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(ellipse at 20% 20%, rgba(37,99,235,0.07) 0%, transparent 60%);
-  pointer-events: none;
-}
+#root { display: flex; flex-direction: column; min-height: 100vh; width: 100%; }
 
 /* Main content */
 .main-content {
-  margin-left: var(--sidebar-w);
-  width: calc(100% - var(--sidebar-w));
+  margin-left: 0 !important;
+  width: 100% !important;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background: var(--surface);
+}
+
+/* ===================== 3D CARD ANIMATIONS & TILTS ===================== */
+.tilt-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.tilt-3d:hover {
+  transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) translateZ(14px);
+  box-shadow: 0 25px 50px -12px rgba(13, 148, 136, 0.2), 0 0 0 1px rgba(13, 148, 136, 0.2);
+}
+
+.float-3d {
+  animation: float3d 5s ease-in-out infinite;
+}
+
+@keyframes float3d {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotateX(3deg) rotateY(-3deg);
+  }
+}
+
+.btn-3d {
+  transform-style: preserve-3d;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.25), 0 2px 0 0 #0f766e;
+}
+
+.btn-3d:hover {
+  transform: translateY(-3px) translateZ(8px);
+  box-shadow: 0 12px 30px rgba(13, 148, 136, 0.38), 0 4px 0 0 #0f766e;
+}
+
+.btn-3d:active {
+  transform: translateY(1px) translateZ(0px);
+  box-shadow: 0 4px 10px rgba(13, 148, 136, 0.2), 0 1px 0 0 #0f766e;
 }
 
 /* ===================== STICKY CONSULTATION BAR ===================== */
@@ -726,4 +744,70 @@ a, button, select, input[type="submit"], input[type="button"], [role="button"], 
   border: 1px solid rgba(37,99,235,0.14);
   pointer-events: none;
 }
+
+/* ===================== ATTENDANCE SYSTEM GLASS & ANIMATIONS ===================== */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(79, 115, 255, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(79, 115, 255, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(79, 115, 255, 0);
+  }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.shimmer-bg {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.2) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ===================== SETAPRINT ANIMATION ===================== */
+@keyframes setaprintGlow {
+  0%, 100% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 12px rgba(13, 148, 136, 0.25));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 24px rgba(13, 148, 136, 0.5));
+  }
+}
+
+.setaprint-anim {
+  animation: setaprintGlow 4s ease-in-out infinite;
+}
+
+
 

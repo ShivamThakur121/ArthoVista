@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
+import useDocumentMetadata from "../hooks/useDocumentMetadata";
+import { useConsultation } from "../context/ConsultationContext";
 import {
   Building2, Rocket, HeartHandshake, FileCheck2, Landmark,
   Percent, ArrowRight, Phone, Star, CheckCircle, TrendingUp,
@@ -45,7 +47,7 @@ const quickLinks = [
 ];
 
 const testimonials = [
-  { quote: "Artha Ventures helped us secure MSME funding through PMEGP scheme. Their team was very professional and guided us at every step.", name: "Ramesh Patel", role: "Founder, Digital Fresh", rating: 5 },
+  { quote: "ArthoVista helped us secure MSME funding through PMEGP scheme. Their team was very professional and guided us at every step.", name: "Ramesh Patel", role: "Founder, Digital Fresh", rating: 5 },
   { quote: "Their expertise in company registration and compliance saved us months of effort. Highly recommended for every entrepreneur.", name: "Priya Mehta", role: "Co-Founder, TechBridge", rating: 5 },
   { quote: "Got our NGO registered and 80G certification done within weeks. Their team was very responsive and knowledgeable.", name: "Amit Sharma", role: "Trustee, Asha Foundation", rating: 5 },
 ];
@@ -152,6 +154,11 @@ function HeroParticles() {
 
 /* ---------- MAIN HOME ---------- */
 export default function Home() {
+  useDocumentMetadata(
+    "Artha Ventures | MSME & Startup Business Support",
+    "End-to-end support for MSMEs and startups — registration, certifications, government funding and digital growth."
+  );
+  const { openConsultationModal } = useConsultation();
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "" });
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [errMsg, setErrMsg] = useState("");
@@ -188,92 +195,91 @@ export default function Home() {
   return (
     <div>
       {/* ====== HERO SECTION ====== */}
-      <section className="hero-dark relative min-h-[90vh] flex items-center">
-        <div className="grid-bg" />
+      <section className="relative min-h-[85vh] bg-slate-900 text-white flex items-center overflow-hidden border-b border-slate-800">
+        <div className="grid-bg opacity-30" />
         <HeroParticles />
 
-        {/* Orbit decorations */}
-        <div className="orbit-ring absolute" style={{ width: 300, height: 300, top: "10%", right: "5%", animationDuration: "20s" }} />
-        <div className="orbit-ring absolute" style={{ width: 200, height: 200, top: "20%", right: "12%", opacity: 0.5 }} />
-
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-10 py-16 grid lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-10 py-16 grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="animate-slide-left">
-            <span className="badge-orange mb-6 inline-block">
-              Trusted by 500+ Businesses Across India
-            </span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-6">
+              <Shield size={14} className="text-amber-400" />
+              Empanelled Advisory · 500+ MSMEs Empowered
+            </div>
             <h1
-              className="font-display font-black text-white leading-tight"
-              style={{ fontSize: "clamp(34px, 5vw, 58px)" }}
+              className="font-display font-black text-white leading-tight tracking-tight"
+              style={{ fontSize: "clamp(34px, 5vw, 56px)" }}
             >
-              Grow Your{" "}
-              <span className="gradient-text relative">
-                Business Wings
+              Accelerate Your{" "}
+              <span className="text-teal-400 relative">
+                Business Growth
                 <svg className="absolute -bottom-2 left-0 w-full" height="4" viewBox="0 0 200 4">
-                  <path d="M0 2 Q50 0 100 2 Q150 4 200 2" stroke="#f2711c" strokeWidth="2" fill="none" strokeLinecap="round" />
+                  <path d="M0 2 Q50 0 100 2 Q150 4 200 2" stroke="#14b8a6" strokeWidth="2" fill="none" strokeLinecap="round" />
                 </svg>
               </span>
-              <br />with Artha Ventures
+              <br />With ArthoVista
             </h1>
-            <p className="text-white/60 mt-6 text-base leading-relaxed max-w-lg">
-              End-to-end support for MSMEs and startups — from registration and certifications to government funding and digital growth.
+            <p className="text-slate-300 mt-5 text-base leading-relaxed max-w-lg">
+              Official end-to-end consulting for MSMEs, Corporates, and NGOs — registrations, ISO/FSSAI certifications, government scheme grants, and loan facilitation.
             </p>
 
             {/* Badges */}
-            <div className="flex flex-wrap gap-6 mt-8">
+            <div className="flex flex-wrap gap-8 mt-8">
               {[
                 { val: "500+", lab: "Clients" },
                 { val: "₹50Cr+", lab: "Funded" },
                 { val: "98%", lab: "Success" },
               ].map((b) => (
-                <div key={b.lab} className="text-center">
-                  <div className="text-2xl font-display font-black gradient-text">{b.val}</div>
-                  <div className="text-xs text-white/40 mt-0.5">{b.lab}</div>
+                <div key={b.lab} className="text-left">
+                  <div className="text-2xl font-display font-black text-white">{b.val}</div>
+                  <div className="text-xs text-slate-400 mt-0.5">{b.lab}</div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-3 mt-8">
-              <Link to="/contact" className="btn-primary-3d">
+            <div className="flex flex-wrap gap-4 mt-8">
+              <button
+                onClick={() => openConsultationModal("General Consultation")}
+                className="btn-3d inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-teal-500/25 transition-all cursor-pointer"
+              >
                 <Phone size={15} />
-                Free Consultation
+                <span>Free Consultation</span>
                 <ArrowRight size={15} />
-              </Link>
-              <Link to="/services" className="btn-outline-white-3d">
+              </button>
+              <Link to="/services" className="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 font-semibold text-sm px-6 py-3.5 rounded-xl transition-all">
                 Explore Services
               </Link>
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-4 mt-8 pt-4 border-t border-slate-800">
               {["KVIC Empanelled", "MSME Certified", "Startup India Partner"].map((b) => (
-                <span key={b} className="flex items-center gap-1.5 text-xs text-white/50">
-                  <CheckCircle size={12} className="text-green-400" />
+                <span key={b} className="flex items-center gap-1.5 text-xs text-slate-400">
+                  <CheckCircle size={13} className="text-emerald-400" />
                   {b}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Right — Lead Form */}
+          {/* Right — 3D Lead Form Card */}
           <div className="animate-slide-right lg:animate-scale-in">
             <div
-              className="glass-card-dark rounded-2xl p-7 md:p-8 relative overflow-hidden"
-              style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(242,113,28,0.15)" }}
+              className="tilt-3d float-3d bg-slate-900/90 border border-slate-700/80 rounded-2xl p-7 md:p-8 relative overflow-hidden shadow-2xl backdrop-blur-xl"
             >
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600" />
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-amber-500" />
               <h2 className="font-display font-bold text-white text-xl mb-1">
                 Get Free Business Assessment
               </h2>
-              <p className="text-white/50 text-sm mb-6">
-                Our expert will call you within 24 hours.
+              <p className="text-slate-400 text-sm mb-6">
+                Our expert advisor will call you within 24 hours.
               </p>
 
               {status === "success" ? (
                 <div className="py-10 text-center">
-                  <CheckCircle size={48} className="text-green-400 mx-auto mb-4" />
+                  <CheckCircle size={48} className="text-emerald-400 mx-auto mb-4" />
                   <p className="text-white font-semibold text-lg">Consultation Requested!</p>
-                  <p className="text-white/50 text-sm mt-2">Thank you! Our expert will call you within 24 hours.</p>
+                  <p className="text-slate-400 text-sm mt-2">Thank you! Our expert will call you within 24 hours.</p>
                 </div>
               ) : (
                 <form className="space-y-4" onSubmit={handleSubmit}>
@@ -281,40 +287,36 @@ export default function Home() {
                     type="text"
                     placeholder="Full Name"
                     required
-                    className="input-3d"
-                    style={{ background: "rgba(255,255,255,0.06)", color: "white", borderColor: "rgba(255,255,255,0.1)" }}
+                    className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-blue-500 placeholder-slate-500"
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   />
                   <input
                     type="tel"
                     placeholder="Phone Number"
                     required
-                    className="input-3d"
-                    style={{ background: "rgba(255,255,255,0.06)", color: "white", borderColor: "rgba(255,255,255,0.1)" }}
+                    className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-blue-500 placeholder-slate-500"
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   />
                   <input
                     type="email"
                     placeholder="Email Address"
-                    className="input-3d"
-                    style={{ background: "rgba(255,255,255,0.06)", color: "white", borderColor: "rgba(255,255,255,0.1)" }}
+                    className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-blue-500 placeholder-slate-500"
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   />
                   <select
-                    className="input-3d"
-                    style={{ background: "#10214a", color: "rgba(255,255,255,0.8)", borderColor: "rgba(255,255,255,0.1)" }}
+                    className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-blue-500"
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                     required
                   >
-                    <option value="" style={{ background: "#10214a" }}>Select Service</option>
-                    <option style={{ background: "#10214a" }}>Business Registration</option>
-                    <option style={{ background: "#10214a" }}>Government Schemes</option>
-                    <option style={{ background: "#10214a" }}>Loan Products</option>
-                    <option style={{ background: "#10214a" }}>Certifications</option>
-                    <option style={{ background: "#10214a" }}>GST & Tax</option>
-                    <option style={{ background: "#10214a" }}>NGO Services</option>
-                    <option style={{ background: "#10214a" }}>Digital Marketing</option>
-                    <option style={{ background: "#10214a" }}>DPR & Pitch Deck</option>
+                    <option value="" className="bg-white">Select Service</option>
+                    <option className="bg-white">Business Registration</option>
+                    <option className="bg-white">Government Schemes</option>
+                    <option className="bg-white">Loan Products</option>
+                    <option className="bg-white">Certifications</option>
+                    <option className="bg-white">GST & Tax</option>
+                    <option className="bg-white">NGO Services</option>
+                    <option className="bg-white">Digital Marketing</option>
+                    <option className="bg-white">DPR & Pitch Deck</option>
                   </select>
 
                   {status === "error" && (
@@ -326,12 +328,12 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="btn-primary-3d w-full justify-center disabled:opacity-70"
+                    className="btn-3d w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70"
                   >
                     {status === "loading" ? "Booking..." : "Book Free Consultation"}
                     <ArrowRight size={15} />
                   </button>
-                  <p className="text-center text-xs text-white/30">
+                  <p className="text-center text-xs text-slate-400">
                     No hidden fees · 100% Confidential
                   </p>
                 </form>
@@ -366,7 +368,7 @@ export default function Home() {
           {segments.map((s, i) => (
             <div
               key={s.title}
-              className="service-block rounded-2xl overflow-hidden glass-card perspective-wrapper"
+              className="tilt-3d service-block rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm"
               style={{ animationDelay: `${i * 150}ms` }}
             >
               <div className={`bg-gradient-to-br ${s.color} p-6`}>
@@ -374,20 +376,20 @@ export default function Home() {
                   <s.icon size={22} className="text-white" />
                 </div>
                 <h3 className="font-display font-bold text-white text-xl">{s.title}</h3>
-                <p className="text-white/60 text-xs mt-1">{s.subtitle}</p>
+                <p className="text-white/70 text-xs mt-1">{s.subtitle}</p>
               </div>
               <div className="p-6">
                 <ul className="space-y-3">
                   {s.items.map((item) => (
                     <li key={item} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle size={14} className="text-orange-500 mt-0.5 shrink-0" />
+                      <CheckCircle size={14} className="text-blue-600 mt-0.5 shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <Link
                   to="/services"
-                  className="mt-6 inline-flex items-center gap-1 text-orange-600 font-semibold text-sm hover:gap-3 transition-all"
+                  className="mt-6 inline-flex items-center gap-1.5 text-blue-600 font-semibold text-sm hover:gap-2.5 transition-all"
                 >
                   Learn More <ArrowRight size={14} />
                 </Link>
@@ -398,25 +400,25 @@ export default function Home() {
       </section>
 
       {/* ====== QUICK LINKS SECTION ====== */}
-      <section className="py-16 bg-gradient-to-br from-slate-50 to-orange-50/30">
+      <section className="py-16 bg-slate-50 border-t border-b border-slate-200/60">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
             <div className="eyebrow">Quick Access</div>
             <h2 className="section-title">Popular <span className="highlight">Services</span></h2>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {quickLinks.map((q) => (
               <Link
                 key={q.title}
                 to={q.to}
-                className="glass-card rounded-2xl p-6 card-3d group"
+                className="tilt-3d bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:border-blue-500/30 transition-all group"
               >
                 <div className={`w-12 h-12 rounded-xl ${q.color} bg-opacity-10 flex items-center justify-center mb-4`}>
                   <q.icon size={22} />
                 </div>
-                <h4 className="font-display font-bold text-navy text-lg mb-2">{q.title}</h4>
+                <h4 className="font-display font-bold text-slate-900 text-lg mb-2">{q.title}</h4>
                 <p className="text-slate-500 text-sm leading-relaxed">{q.desc}</p>
-                <div className="mt-4 flex items-center gap-1 text-orange-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="mt-4 flex items-center gap-1.5 text-blue-600 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity">
                   Get Started <ArrowRight size={13} />
                 </div>
               </Link>
@@ -548,16 +550,16 @@ export default function Home() {
             Ready to <span className="gradient-text">Grow Your Business?</span>
           </h2>
           <p className="text-white/50 mt-4 max-w-lg mx-auto">
-            Join 500+ businesses that chose Artha Ventures as their trusted growth partner.
+            Join 500+ businesses that chose ArthoVista as their trusted growth partner.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
-            <Link to="/contact" className="btn-primary-3d">
+            <Link to="/" className="btn-primary-3d">
               <Phone size={15} />
               Book Free Consultation
               <ArrowRight size={15} />
             </Link>
-            <a href="tel:+918888802588" className="btn-outline-white-3d">
-              +91 88888 02588
+            <a href="tel:+919899902568" className="btn-outline-white-3d">
+              +91 98999 02568
             </a>
           </div>
           <p className="text-white/30 text-xs mt-5">

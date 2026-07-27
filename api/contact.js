@@ -6,9 +6,16 @@ import { MongoClient } from "mongodb";
 
 let cachedClient = null;
 
+import dns from "dns";
+
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (_) {}
+
 async function getClient() {
   if (cachedClient) return cachedClient;
-  const client = new MongoClient(process.env.MONGODB_URI);
+  const uri = process.env.LEADS_MONGODB_URI || process.env.MONGODB_URI;
+  const client = new MongoClient(uri);
   await client.connect();
   cachedClient = client;
   return client;

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Clock, MapPin, Phone, MessageCircle, ArrowRight, Shield } from "lucide-react";
+import { useConsultation } from "../context/ConsultationContext";
 
 const SocialIcon = ({ path }) => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -10,7 +11,7 @@ const SocialIcon = ({ path }) => (
 const FB_PATH = "M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12";
 const TW_PATH = "M22 5.9c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1a4.1 4.1 0 0 0-7 3.7A11.6 11.6 0 0 1 3.4 4.6a4.1 4.1 0 0 0 1.3 5.5c-.7 0-1.3-.2-1.9-.5v.1c0 2 1.4 3.6 3.3 4a4.1 4.1 0 0 1-1.9.1 4.1 4.1 0 0 0 3.8 2.8A8.2 8.2 0 0 1 2 18.4a11.6 11.6 0 0 0 6.3 1.8c7.5 0 11.7-6.3 11.7-11.7v-.5c.8-.6 1.5-1.3 2-2.1";
 const LI_PATH = "M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.5-2.1 2.9v5.7H9.2V9h3.4v1.6h.05c.5-.9 1.7-1.9 3.5-1.9 3.7 0 4.4 2.5 4.4 5.6v6.1zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.4H3.6V9h3.5v11.4z";
-const YT_PATH = "M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.2 5 12 5 12 5s-4.2 0-7 .1c-.4.1-1.2.1-2 .9C2.4 6.6 2.2 8 2.2 8S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.8 1.6.2 6.7.2 6.7.2s4.2 0 7-.1c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z";
+const YT_PATH = "M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.2 5 12 5 12 5s-4.2 0-7 .1c-.4.1-1.2.1-2 .9C2.4 6.6 2.2 8 2.2 8S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.3.8 1.6.2 6.7.2 6.7.2s4.2 0 7-.1c-.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z";
 
 const navigation = [
   { to: "/", label: "Home" },
@@ -42,35 +43,42 @@ const schemes = [
 ];
 
 export default function Footer() {
+  const { openConsultationModal } = useConsultation();
+
   return (
     <footer className="footer-dark">
       {/* ====== PRE-FOOTER CTA ====== */}
       <div
-        className="relative py-14 px-6 overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #ea580c 0%, #c2410c 100%)" }}
+        className="relative py-16 px-6 overflow-hidden border-t border-b border-white/10"
+        style={{ background: "linear-gradient(135deg, #060b18 0%, #0d172e 40%, #042f2c 100%)" }}
       >
-        <div className="absolute inset-0 opacity-10 bg-repeat" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+        <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-teal-500/10 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[250px] bg-emerald-600/15 blur-[100px] rounded-full pointer-events-none" />
+        
         <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h3 className="font-display font-black text-white text-2xl md:text-3xl leading-tight">
-              Ready to Grow Your Business?
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold uppercase tracking-wider mb-3">
+              Fast Track Your MSME Funding
+            </div>
+            <h3 className="font-display font-black text-white text-3xl md:text-4xl leading-tight">
+              Ready to Accelerate Your Business Growth?
             </h3>
-            <p className="text-orange-100 mt-2 text-sm leading-relaxed">
-              Book a free consultation with our experts. Get a tailored roadmap for your business growth — no commitment required.
+            <p className="text-slate-300 mt-3 text-sm md:text-base leading-relaxed">
+              Book a 1-on-1 strategy session with our empanelled MSME advisors. Discover applicable government grants, subsidies, and credit options with zero upfront commitment.
             </p>
           </div>
-          <div className="flex flex-wrap gap-3 md:justify-end">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 bg-white text-orange-600 font-bold px-7 py-3.5 rounded-xl hover:bg-orange-50 transition-all hover:scale-105 hover:shadow-xl"
+          <div className="flex flex-wrap gap-4 md:justify-end">
+            <button
+              onClick={() => openConsultationModal("Strategy Session")}
+              className="btn-3d inline-flex items-center gap-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold px-7 py-4 rounded-xl shadow-lg shadow-teal-500/25 transition-all cursor-pointer"
             >
-              Book a Free Call <ArrowRight size={15} />
-            </Link>
+              <span>Book Free Session</span> <ArrowRight size={16} />
+            </button>
             <a
-              href="tel:+918888802588"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-7 py-3.5 rounded-xl border border-white/30 transition-all"
+              href="tel:+919899902568"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-4 rounded-xl border border-white/20 transition-all hover:scale-105 backdrop-blur-md"
             >
-              <Phone size={15} /> +91 88888 02588
+              <Phone size={16} className="text-orange-400" /> +91 98999 02568
             </a>
           </div>
         </div>
@@ -98,7 +106,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <div className="font-display font-black text-xl text-white mb-3">
-            Artha <span className="text-orange-500">Ventures</span>
+            Artho<span className="text-orange-500">Vista</span>
           </div>
           <p className="text-sm text-white/40 leading-relaxed mb-5">
             India's trusted MSME & startup support platform. End-to-end business support from registration and certifications to government funding and digital growth.
@@ -165,13 +173,13 @@ export default function Footer() {
               <span>Logix Cyber Park, Sector 62, Noida, Uttar Pradesh - 201309</span>
             </li>
             <li>
-              <a href="tel:+918888802588" className="flex gap-3 hover:text-orange-400 transition-colors">
+              <a href="tel:+919899902568" className="flex gap-3 hover:text-orange-400 transition-colors">
                 <Phone size={16} className="shrink-0 text-orange-500" />
                 +91 98999 02568
               </a>
             </li>
             <li>
-              <a href="mailto:info@arthaventures.com" className="flex gap-3 hover:text-orange-400 transition-colors">
+              <a href="mailto:support@arthovista.com" className="flex gap-3 hover:text-orange-400 transition-colors">
                 <Mail size={16} className="shrink-0 text-orange-500" />
                 support@arthovista.com
               </a>
@@ -182,7 +190,7 @@ export default function Footer() {
             </li>
           </ul>
           <a
-            href="https://wa.me/918888802588"
+            href="https://wa.me/919899902568"
             target="_blank"
             rel="noreferrer"
             className="mt-5 inline-flex items-center gap-2 bg-green-500/15 border border-green-500/25 text-green-400 hover:bg-green-500 hover:text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all"
@@ -196,17 +204,17 @@ export default function Footer() {
       <div className="border-t border-white/06 max-w-6xl mx-auto px-6 py-6">
         <div className="grid md:grid-cols-2 gap-4 text-xs text-white/25 leading-relaxed">
           <p>
-            <span className="font-semibold text-white/40">DISCLAIMER:</span> Artha Ventures is a consulting firm providing advisory and execution support services. We do not guarantee loan or scheme approval outcomes.
+            <span className="font-semibold text-white/40">DISCLAIMER:</span> ArthoVista is a consulting firm providing advisory and execution support services. We do not guarantee loan or scheme approval outcomes.
           </p>
           <p>
-            <span className="font-semibold text-white/40">PAYMENT NOTE:</span> All payments must be made exclusively to the official Artha Ventures bank accounts. We do not accept payments to personal accounts.
+            <span className="font-semibold text-white/40">PAYMENT NOTE:</span> All payments must be made exclusively to the official ArthoVista bank accounts. We do not accept payments to personal accounts.
           </p>
         </div>
       </div>
 
       {/* ====== BOTTOM BAR ====== */}
       <div className="border-t border-white/06 py-5 px-6 text-center text-xs text-white/25">
-        © {new Date().getFullYear()} Artha Ventures. All rights reserved. &nbsp;·&nbsp;
+        © {new Date().getFullYear()} ArthoVista. All rights reserved. &nbsp;·&nbsp;
         <span className="hover:text-white/50 cursor-pointer transition-colors">Privacy Policy</span>
         &nbsp;·&nbsp;
         <span className="hover:text-white/50 cursor-pointer transition-colors">Terms of Service</span>
@@ -215,7 +223,7 @@ export default function Footer() {
 
       {/* ====== WHATSAPP FAB ====== */}
       <a
-        href="https://wa.me/918888802588"
+        href="https://wa.me/919899902568"
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all"

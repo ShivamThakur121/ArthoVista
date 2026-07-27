@@ -18,8 +18,8 @@ export default function CtaBanner({
             {primaryLabel} <ArrowRight size={16} />
           </Link>
           {showPhone && (
-            <a href="tel:+918888802588" className="btn-outline-white">
-              <Phone size={16} /> +91 88888 02588
+            <a href="tel:+919899902568" className="btn-outline-white">
+              <Phone size={16} /> +91 98999 02568
             </a>
           )}
         </div>
