@@ -20,7 +20,7 @@ router.get('/', protect, async (req, res, next) => {
   }
 });
 
-router.post('/', protect, authorize('Admin'), async (req, res, next) => {
+router.post('/', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   const { title, description, priority, attachmentUrl } = req.body;
 
   if (!title || !description) {
@@ -53,7 +53,7 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
   }
 });
 
-router.delete('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.delete('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const announcement = await Announcement.findById(req.params.id);
 

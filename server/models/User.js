@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Admin', 'Employee'],
+    enum: ['Admin', 'Manager', 'Employee'],
     default: 'Employee'
   },
   department: {
@@ -68,6 +68,14 @@ const UserSchema = new mongoose.Schema({
   faceEmbeddings: {
     type: [[Number]],
     default: []
+  },
+  resetPasswordOTP: {
+    type: String,
+    select: false
+  },
+  resetPasswordOTPExpires: {
+    type: Date,
+    select: false
   }
 }, { timestamps: true });
 

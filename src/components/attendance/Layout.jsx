@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
   };
 
   // Sidebar navigation configuration based on role
-  const navigation = user?.role === 'Admin' ? [
+  const navigation = (user?.role === 'Admin' || user?.role === 'Manager') ? [
     { name: 'Admin Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Employees', href: '/admin/employees', icon: Users },
     { name: 'Leaves Board', href: '/admin/leaves', icon: Briefcase },

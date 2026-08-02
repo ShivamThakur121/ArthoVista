@@ -213,7 +213,7 @@ const HolidaysEvents = () => {
           </button>
         </div>
 
-        {user?.role === 'Admin' && (
+        {((activeTab === 'holidays' && user?.role === 'Admin') || (activeTab === 'events' && ['Admin', 'Manager'].includes(user?.role))) && (
           <div className="flex items-center gap-3">
             {activeTab === 'holidays' ? (
               <button
@@ -328,7 +328,7 @@ const HolidaysEvents = () => {
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-bold text-base text-slate-850 dark:text-slate-100">{evt.name}</h3>
-                      {user?.role === 'Admin' && (
+                      {['Admin', 'Manager'].includes(user?.role) && (
                         <button
                           onClick={() => handleDeleteEvent(evt._id, evt.name)}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all shrink-0"

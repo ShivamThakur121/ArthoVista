@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dir = 'uploads/banners/';
+    const dir = path.join(__dirname, '../uploads/banners/');
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
@@ -48,7 +48,7 @@ router.get('/', protect, async (req, res, next) => {
   }
 });
 
-router.post('/', protect, authorize('Admin'), upload.single('banner'), async (req, res, next) => {
+router.post('/', protect, authorize('Admin', 'Manager'), upload.single('banner'), async (req, res, next) => {
   const { name, description, date, time, venue } = req.body;
 
   if (!name || !description || !date || !time || !venue) {
@@ -90,7 +90,7 @@ router.post('/', protect, authorize('Admin'), upload.single('banner'), async (re
   }
 });
 
-router.delete('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.delete('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
 

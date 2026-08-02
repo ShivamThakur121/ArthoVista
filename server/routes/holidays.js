@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Holiday = require('../models/Holiday');
 const { protect, authorize } = require('../middleware/auth');
+const { sendNotification } = require('../utils/notifications');
 
 router.get('/', protect, async (req, res, next) => {
   try {
@@ -16,7 +17,7 @@ router.get('/', protect, async (req, res, next) => {
   }
 });
 
-router.post('/', protect, authorize('Admin'), async (req, res, next) => {
+router.post('/', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   const { name, date, type } = req.body;
 
   if (!name || !date) {
@@ -33,6 +34,14 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
       type: type || 'Public'
     });
 
+    const formattedDate = new Date(date).toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    await sendNotification(
+      'All',
+      `New Holiday Scheduled: ${name}`,
+      `A new holiday "${name}" has been scheduled for ${formattedDate} (${type || 'Public'} Holiday).`,
+      'Holiday'
+    );
+
     res.status(201).json({
       success: true,
       data: holiday
@@ -42,7 +51,7 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
   }
 });
 
-router.delete('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.delete('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const holiday = await Holiday.findById(req.params.id);
 

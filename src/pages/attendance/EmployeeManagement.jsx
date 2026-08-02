@@ -275,7 +275,7 @@ const EmployeeManagement = () => {
                   <th className="px-6 py-4">Department</th>
                   <th className="px-6 py-4 text-center">Status</th>
                   <th className="px-6 py-4 text-center">Biometrics</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  {user?.role === 'Admin' && <th className="px-6 py-4 text-right">Actions</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
@@ -349,32 +349,34 @@ const EmployeeManagement = () => {
                       )}
                     </td>
 
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => navigate(`/admin/employees/enroll/${emp._id}`)}
-                          className="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/20 border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30 transition-all"
-                          title="Enroll Webcam Face"
-                        >
-                          <Camera className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => openEditModal(emp)}
-                          className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
-                          title="Edit Details"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(emp._id, emp.fullName)}
-                          className="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
-                          title="Delete Employee"
-                          disabled={emp.employeeId === 'ADMIN001'}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
+                    {user?.role === 'Admin' && (
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => navigate(`/admin/employees/enroll/${emp._id}`)}
+                            className="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/20 border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30 transition-all"
+                            title="Enroll Webcam Face"
+                          >
+                            <Camera className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => openEditModal(emp)}
+                            className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                            title="Edit Details"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(emp._id, emp.fullName)}
+                            className="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
+                            title="Delete Employee"
+                            disabled={emp.employeeId === 'ADMIN001'}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -483,7 +485,7 @@ const EmployeeManagement = () => {
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                   >
                     <option value="Employee" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Employee</option>
-                    <option value="Admin" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Admin</option>
+                    <option value="Manager" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Manager</option>
                   </select>
                 </div>
 
@@ -495,9 +497,12 @@ const EmployeeManagement = () => {
                     onChange={handleInputChange}
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                   >
-                    <option value="" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Select Department</option>
+                    <option value="IT Department" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">IT Department</option>
+                    <option value="Operation" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Operation</option>
+                    <option value="Sale" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Sale</option>
+                    <option value="Executive" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">Executive</option>
                     {departments.map(dept => (
-                      <option key={dept._id} value={dept._id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100">{dept.name}</option>
+                      <option key={dept._id} value={dept._id} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">{dept.name}</option>
                     ))}
                   </select>
                 </div>

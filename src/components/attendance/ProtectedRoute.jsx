@@ -31,7 +31,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   // Logged in but role not allowed: redirect to respective dashboard
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     console.warn(`Unauthorized role access: ${user.role} tried to view administrative page.`);
-    return <Navigate to={user.role === 'Admin' ? '/admin' : '/employee'} replace />;
+    return <Navigate to={['Admin', 'Manager'].includes(user.role) ? '/admin' : '/employee'} replace />;
   }
 
   return children;

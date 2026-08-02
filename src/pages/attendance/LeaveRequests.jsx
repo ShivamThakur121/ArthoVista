@@ -17,6 +17,7 @@ import {
 
 const LeaveRequests = () => {
   const { user } = useAuth();
+  const isPrivileged = user?.role === 'Admin' || user?.role === 'Manager';
   const [leaves, setLeaves] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -182,22 +183,20 @@ const LeaveRequests = () => {
       <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h2 className="text-base font-bold text-slate-850 dark:text-slate-200 uppercase tracking-wide">
-            {user?.role === 'Admin' ? 'Leave Approval Dashboard' : 'My Leave Registry'}
+            {isPrivileged ? 'Leave Approval Dashboard' : 'My Leave Registry'}
           </h2>
           <p className="text-xs text-slate-400 mt-1">
-            {user?.role === 'Admin' ? 'Manage and review pending employee leave requests' : 'Apply for paid/unpaid leaves and track status'}
+            {isPrivileged ? 'Manage and review pending employee leave requests' : 'Apply for paid/unpaid leaves and track status'}
           </p>
         </div>
 
-        {user?.role !== 'Admin' && (
-          <button
-            onClick={() => setShowApplyModal(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-semibold text-sm rounded-2xl shadow-md transition-all active:scale-[0.98]"
-          >
-            <Plus className="w-4 h-4" />
-            Apply Leave
-          </button>
-        )}
+        <button
+          onClick={() => setShowApplyModal(true)}
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white font-semibold text-sm rounded-2xl shadow-md transition-all active:scale-[0.98]"
+        >
+          <Plus className="w-4 h-4" />
+          Apply Leave
+        </button>
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm overflow-hidden">
@@ -217,20 +216,20 @@ const LeaveRequests = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  {user?.role === 'Admin' && <th className="px-6 py-4">Employee</th>}
+                  {isPrivileged && <th className="px-6 py-4">Employee</th>}
                   <th className="px-6 py-4">Leave Type</th>
                   <th className="px-6 py-4">Period</th>
                   <th className="px-6 py-4">Reason</th>
                   <th className="px-6 py-4 text-center">Attachment</th>
                   <th className="px-6 py-4 text-center">Status</th>
-                  {user?.role === 'Admin' && <th className="px-6 py-4 text-right">Actions</th>}
+                  {isPrivileged && <th className="px-6 py-4 text-right">Actions</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                 {leaves.map((leave) => (
                   <tr key={leave._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
                     
-                    {user?.role === 'Admin' && (
+                    {isPrivileged && (
                       <td className="px-6 py-4">
                         <div className="font-semibold text-slate-800 dark:text-slate-200">{leave.employee?.fullName}</div>
                         <div className="text-xs text-slate-400 font-mono mt-0.5">{leave.employee?.employeeId} • {leave.employee?.designation}</div>
@@ -281,7 +280,7 @@ const LeaveRequests = () => {
                       </span>
                     </td>
 
-                    {user?.role === 'Admin' && (
+                    {isPrivileged && (
                       <td className="px-6 py-4 text-right">
                         {leave.status === 'Pending' ? (
                           <button

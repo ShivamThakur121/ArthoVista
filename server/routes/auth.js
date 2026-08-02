@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
+const sendEmail = require('../utils/email');
 
 const generateAccessToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
@@ -139,9 +141,10 @@ router.post('/refresh', async (req, res, next) => {
 
 router.get('/me', protect, async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id)
-      .populate('department', 'name code')
-      .select('-password');
+    const user = req.user;
+    if (user.department && typeof user.populate === 'function') {
+      await user.populate('department', 'name code');
+    }
       
     res.status(200).json({
       success: true,
@@ -171,6 +174,198 @@ router.post('/logout', protect, (req, res) => {
     success: true,
     message: 'Logged out successfully'
   });
+});
+
+// @route   POST /api/auth/forgot-password
+// @desc    Generate OTP and send it via email for forgot password
+// @access  Public
+router.post('/forgot-password', async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide a registered email address'
+    });
+  }
+
+  try {
+    const user = await User.findOne({
+      email: email.toLowerCase()
+    }).select('+resetPasswordOTP +resetPasswordOTPExpires');
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No registered user found with this email address'
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Hash OTP using bcrypt
+    const salt = await bcrypt.genSalt(10);
+    const hashedOtp = await bcrypt.hash(otp, salt);
+
+    // Set hashed OTP and expiry (5 minutes)
+    user.resetPasswordOTP = hashedOtp;
+    user.resetPasswordOTPExpires = Date.now() + 5 * 60 * 1000;
+
+    await user.save();
+
+    // Send email with OTP
+    const emailResult = await sendEmail({
+      to: user.email,
+      from: process.env.SMTP_FROM,
+      subject: '[AttendanceHub] Password Reset Verification Code',
+      text: `Your password reset verification code is ${otp}. This code is valid for 5 minutes.`,
+      html: `<div style="font-family: Arial, sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
+        <h2 style="color: #4f46e5; margin-top: 0; font-size: 20px;">Verification Code</h2>
+        <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+          You requested to reset your password. Use the following 6-digit verification code to proceed:
+        </p>
+        <div style="background-color: #f1f5f9; padding: 16px; border-radius: 12px; text-align: center; margin: 24px 0;">
+          <span style="font-size: 28px; font-weight: 800; letter-spacing: 6px; color: #1e1b4b;">${otp}</span>
+        </div>
+        <p style="font-size: 12px; color: #64748b;">
+          This code is valid for 5 minutes. If you did not request a password reset, please ignore this email.
+        </p>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 24px 0;"/>
+        <p style="font-size: 11px; color: #94a3b8; margin: 0;">Sent by Support Team (support@gmail.com) • AttendanceHub</p>
+      </div>`
+    });
+
+    if (!emailResult.success) {
+      return res.status(500).json({
+        success: false,
+        message: `Failed to send verification email: ${emailResult.error}`
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Verification code sent to registered email address.'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /api/auth/verify-otp
+// @desc    Verify OTP code
+// @access  Public
+router.post('/verify-otp', async (req, res, next) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide email and verification code'
+    });
+  }
+
+  try {
+    const user = await User.findOne({
+      email: email.toLowerCase()
+    }).select('+resetPasswordOTP +resetPasswordOTPExpires');
+
+    if (!user || !user.resetPasswordOTP || !user.resetPasswordOTPExpires) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification code'
+      });
+    }
+
+    // Check expiry
+    if (user.resetPasswordOTPExpires < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification code has expired'
+      });
+    }
+
+    // Compare hashed OTP
+    const isMatch = await bcrypt.compare(otp, user.resetPasswordOTP);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid verification code'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Code verified successfully.'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @route   POST /api/auth/reset-password
+// @desc    Reset password using OTP code
+// @access  Public
+router.post('/reset-password', async (req, res, next) => {
+  const { email, otp, password } = req.body;
+
+  if (!email || !otp || !password) {
+    return res.status(400).json({
+      success: false,
+      message: 'Please provide email, verification code, and new password'
+    });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({
+      success: false,
+      message: 'Password must be at least 6 characters'
+    });
+  }
+
+  try {
+    const user = await User.findOne({
+      email: email.toLowerCase()
+    }).select('+password +resetPasswordOTP +resetPasswordOTPExpires');
+
+    if (!user || !user.resetPasswordOTP || !user.resetPasswordOTPExpires) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification code'
+      });
+    }
+
+    // Check expiry
+    if (user.resetPasswordOTPExpires < Date.now()) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification code has expired'
+      });
+    }
+
+    // Compare hashed OTP
+    const isMatch = await bcrypt.compare(otp, user.resetPasswordOTP);
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid verification code'
+      });
+    }
+
+    // Set new password (pre-save hook will hash it)
+    user.password = password;
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordOTPExpires = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset successfully. You can now login.'
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

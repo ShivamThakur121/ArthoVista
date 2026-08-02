@@ -16,7 +16,7 @@ router.get('/', protect, async (req, res, next) => {
   }
 });
 
-router.post('/', protect, authorize('Admin'), async (req, res, next) => {
+router.post('/', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   const { name, code, description } = req.body;
 
   if (!name || !code) {
@@ -42,7 +42,7 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
   }
 });
 
-router.put('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.put('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     let department = await Department.findById(req.params.id);
 
@@ -67,7 +67,7 @@ router.put('/:id', protect, authorize('Admin'), async (req, res, next) => {
   }
 });
 
-router.delete('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.delete('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const department = await Department.findById(req.params.id);
 

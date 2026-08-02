@@ -20,13 +20,32 @@ import {
   Calendar, 
   UserMinus, 
   Loader2, 
-  ShieldCheck
+  ShieldCheck,
+  AlertCircle
 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [sendingEmailId, setSendingEmailId] = useState(null);
+
+  const handleSendWarningEmail = async (employeeId) => {
+    setSendingEmailId(employeeId);
+    try {
+      const res = await api.post('/dashboard/send-warning-email', { employeeId });
+      if (res.data.success) {
+        alert(res.data.message || 'Warning email sent successfully.');
+      } else {
+        alert(res.data.message || 'Failed to send warning email.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error sending warning email.');
+    } finally {
+      setSendingEmailId(null);
+    }
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -94,6 +113,33 @@ const AdminDashboard = () => {
           );
         })}
       </div>
+
+      {/* Short Attendance Alerts */}
+      {data.shortAttendanceEmployees && data.shortAttendanceEmployees.length > 0 && (
+        <div className="bg-red-50 dark:bg-red-950/10 border border-red-200 dark:border-red-900/30 rounded-3xl p-5 space-y-3">
+          <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-bold text-sm">
+            <AlertCircle className="w-5 h-5" />
+            <span>Employees with Short Attendance (Below 75% this month)</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data.shortAttendanceEmployees.map((emp) => (
+              <div key={emp.employee.id} className="bg-white dark:bg-slate-900/50 p-4 rounded-2xl border border-red-100 dark:border-red-950/50 flex items-center justify-between gap-3 text-xs">
+                <div>
+                  <p className="font-bold text-slate-800 dark:text-slate-200">{emp.employee.fullName}</p>
+                  <p className="text-slate-400 text-[10px] mt-0.5">{emp.employee.employeeId} • Attendance: <strong className="text-red-600 dark:text-red-400">{emp.attendancePercentage}%</strong></p>
+                </div>
+                <button
+                  onClick={() => handleSendWarningEmail(emp.employee.id)}
+                  disabled={sendingEmailId === emp.employee.id}
+                  className="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] transition-colors disabled:opacity-50"
+                >
+                  {sendingEmailId === emp.employee.id ? 'Sending...' : 'Send Email Alert'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Analytics and Recent Activity Split Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">

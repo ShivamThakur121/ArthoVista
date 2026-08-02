@@ -16,7 +16,7 @@ import {
 
 const Announcements = () => {
   const { user } = useAuth();
-  const isAdmin = user?.role === 'Admin';
+  const isAdminOrManager = user?.role === 'Admin' || user?.role === 'Manager';
 
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -138,7 +138,7 @@ const Announcements = () => {
           </div>
         </div>
 
-        {isAdmin && (
+        {isAdminOrManager && (
           <button
             onClick={() => setShowModal(true)}
             className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary-500 to-indigo-650 text-white font-semibold text-xs rounded-xl shadow-md transition-all active:scale-[0.98]"
@@ -179,7 +179,7 @@ const Announcements = () => {
                   </span>
                 </div>
 
-                {isAdmin && (
+                {isAdminOrManager && (
                   <button
                     onClick={() => handleDelete(ann._id, ann.title)}
                     className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 md:opacity-0 group-hover:opacity-100 transition-opacity"
@@ -230,7 +230,7 @@ const Announcements = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                 />
               </div>
 
@@ -240,11 +240,11 @@ const Announcements = () => {
                   name="priority"
                   value={formData.priority}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                 >
-                  <option value="Low">Low Priority</option>
-                  <option value="Medium">Medium Priority</option>
-                  <option value="High">High (Urgent Alerts)</option>
+                  <option value="Low" className="text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900">Low Priority</option>
+                  <option value="Medium" className="text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900">Medium Priority</option>
+                  <option value="High" className="text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900">High (Urgent Alerts)</option>
                 </select>
               </div>
 
@@ -257,7 +257,7 @@ const Announcements = () => {
                   placeholder="Write the details to be broadcasted to all employees..."
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-transparent text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/40"
                 />
               </div>
 

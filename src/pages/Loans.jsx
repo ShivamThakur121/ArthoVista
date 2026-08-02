@@ -13,8 +13,8 @@ import hdfcLogo from "../assets/banks/HDFC.png";
 import kotakLogo from "../assets/banks/kotak.png";
 import idfcFirstLogo from "../assets/banks/IDFC-First.png"; 
 import sbiLogo from "../assets/banks/sbi.png";
-import standardLogo from "../assets/banks/Standard-Bank.jpg";
-import adityaBirlaLogo from "../assets/banks/Aditya-Birlaa.jpg";
+import standardLogo from "../assets/banks/standard_bank.png";
+import adityaBirlaLogo from "../assets/banks/Aditya-Birlaa.png";
 
 
 const banks = [
@@ -149,7 +149,7 @@ export default function Loans() {
             </a>
           </div>
         </div>
-      </section>
+      </section>i
 
       {/* ====== STATS BAR ====== */}
       <section className="stats-section">
@@ -258,13 +258,13 @@ export default function Loans() {
             <div className="marquee-track">
               {[...banks, ...banks].map((b, i) => (
                 <div
-                  key={`${b}-${i}`}
+                  key={`${b.name}-${i}`}
                   className="mx-3 px-6 py-3 bg-white rounded-xl border border-slate-100 shadow-sm whitespace-nowrap text-sm font-semibold text-slate-600 hover:border-orange-200 hover:text-orange-600 transition-colors"
                 >
                   <img
-                    src={bank.logo}
-                    alt={bank.name}
-                    className="w-8 h-8 object-contain"
+                    src={b.logo}
+                    alt={b.name}
+                    className="max-w-[110px] max-h-[45px] object-contain"
                   />
                 </div>
               ))}

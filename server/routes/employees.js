@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const dir = 'uploads/profiles/';
+    const dir = path.join(__dirname, '../uploads/profiles/');
     if (!fs.existsSync(dir)){
       fs.mkdirSync(dir, { recursive: true });
     }
@@ -35,7 +35,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 });
 
-router.get('/', protect, authorize('Admin'), async (req, res, next) => {
+router.get('/', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const { department, search, role } = req.query;
     let query = {};
@@ -72,7 +72,7 @@ router.get('/', protect, authorize('Admin'), async (req, res, next) => {
 
 router.get('/:id', protect, async (req, res, next) => {
   try {
-    if (req.user.role !== 'Admin' && req.user.id !== req.params.id) {
+    if (req.user.role !== 'Admin' && req.user.role !== 'Manager' && req.user.id !== req.params.id) {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
@@ -122,6 +122,13 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
   }
 
   try {
+    if (role === 'Admin' && email.toLowerCase() !== 'shivamthakur12012@gmail.com') {
+      return res.status(400).json({
+        success: false,
+        message: 'Security Restriction: Only shivamthakur12012@gmail.com can be assigned the Admin role.'
+      });
+    }
+
     const employee = await User.create({
       fullName,
       employeeId: employeeId.toUpperCase(),
@@ -148,7 +155,7 @@ router.post('/', protect, authorize('Admin'), async (req, res, next) => {
   }
 });
 
-router.put('/:id', protect, authorize('Admin'), async (req, res, next) => {
+router.put('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   const { password, ...updateFields } = req.body;
 
   try {
@@ -159,6 +166,31 @@ router.put('/:id', protect, authorize('Admin'), async (req, res, next) => {
         success: false,
         message: 'Employee not found'
       });
+    }
+
+    if (updateFields.role === 'Admin') {
+      const targetEmail = updateFields.email || employee.email;
+      if (targetEmail.toLowerCase() !== 'shivamthakur12012@gmail.com') {
+        return res.status(400).json({
+          success: false,
+          message: 'Security Restriction: Only shivamthakur12012@gmail.com can be assigned the Admin role.'
+        });
+      }
+    }
+
+    if (employee.role === 'Admin') {
+      if (updateFields.role && updateFields.role !== 'Admin') {
+        return res.status(400).json({
+          success: false,
+          message: 'Security Restriction: The Admin role cannot be changed.'
+        });
+      }
+      if (updateFields.email && updateFields.email.toLowerCase() !== 'shivamthakur12012@gmail.com') {
+        return res.status(400).json({
+          success: false,
+          message: 'Security Restriction: The Admin email address cannot be changed.'
+        });
+      }
     }
 
     if (password) {
@@ -190,7 +222,7 @@ router.put('/:id', protect, authorize('Admin'), async (req, res, next) => {
 
 router.post('/:id/photo', protect, upload.single('photo'), async (req, res, next) => {
   try {
-    if (req.user.role !== 'Admin' && req.user.id !== req.params.id) {
+    if (req.user.role !== 'Admin' && req.user.role !== 'Manager' && req.user.id !== req.params.id) {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
@@ -227,7 +259,7 @@ router.post('/:id/photo', protect, upload.single('photo'), async (req, res, next
   }
 });
 
-router.post('/:id/face-embeddings', protect, authorize('Admin'), async (req, res, next) => {
+router.post('/:id/face-embeddings', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   const { embeddings } = req.body;
 
   if (!embeddings || !Array.isArray(embeddings) || embeddings.length === 0) {

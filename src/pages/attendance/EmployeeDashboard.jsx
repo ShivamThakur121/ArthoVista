@@ -7,7 +7,8 @@ import {
   ChevronRight, 
   Megaphone,
   Loader2,
-  CalendarCheck2
+  CalendarCheck2,
+  AlertCircle
 } from 'lucide-react';
 
 const EmployeeDashboard = () => {
@@ -83,10 +84,18 @@ const EmployeeDashboard = () => {
 
   return (
     <div className="space-y-8">
+      {/* Short Attendance Alert Banner */}
+      {data?.shortAttendanceAlert && (
+        <div className="flex items-center gap-3 p-4 rounded-3xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-700 dark:text-red-400 text-sm leading-relaxed animate-pulse">
+          <AlertCircle className="w-5 h-5 shrink-0" />
+          <div>
+            <span className="font-bold">⚠️ Warning: Short Attendance!</span> Your attendance percentage for this month is <span className="font-bold">{data.attendancePercentage}%</span>, which is below the required 75% threshold. Please make sure to check in regularly to avoid further action.
+          </div>
+        </div>
+      )}
       
       {/* Upper Grid: Welcome banner & stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
         {/* Quick Check-in Access card */}
         <div className="md:col-span-2 bg-gradient-to-tr from-primary-600 to-indigo-700 text-white p-6 rounded-3xl shadow-lg relative overflow-hidden flex flex-col justify-between min-h-[180px]">
           {/* Background decoration */}

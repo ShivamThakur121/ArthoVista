@@ -20,24 +20,22 @@ const sendNotification = async (recipient, title, message, type) => {
       console.log(`[Notification Broadcast] Dispatching email to ${emails.length} employee address(es): ${emails.join(', ')}`);
 
       if (emails.length > 0) {
-        for (const email of emails) {
-          sendEmail({
-            to: email,
-            subject: `[Company Update] ${title}`,
-            text: `${message}\n\nThis is an automated notification from AttendanceHub.`,
-            html: `<div style="font-family: Arial, sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
-              <div style="background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 16px 20px; border-radius: 12px; color: #ffffff; margin-bottom: 20px;">
-                <h2 style="margin: 0; font-size: 18px; font-weight: 700;">${title}</h2>
-              </div>
-              <div style="font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-line;">
-                ${message}
-              </div>
-              <br/>
-              <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;"/>
-              <p style="font-size: 11px; color: #94a3b8; margin: 0;">This is an automated event broadcast from AttendanceHub Portal.</p>
-            </div>`
-          });
-        }
+        await sendEmail({
+          to: emails,
+          subject: `[Company Update] ${title}`,
+          text: `${message}\n\nThis is an automated notification from AttendanceHub.`,
+          html: `<div style="font-family: Arial, sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
+            <div style="background: linear-gradient(135deg, #4f46e5, #6366f1); padding: 16px 20px; border-radius: 12px; color: #ffffff; margin-bottom: 20px;">
+              <h2 style="margin: 0; font-size: 18px; font-weight: 700;">${title}</h2>
+            </div>
+            <div style="font-size: 14px; line-height: 1.6; color: #334155; white-space: pre-line;">
+              ${message}
+            </div>
+            <br/>
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;"/>
+            <p style="font-size: 11px; color: #94a3b8; margin: 0;">This is an automated event broadcast from AttendanceHub Portal.</p>
+          </div>`
+        });
       }
     } else {
       const user = await User.findById(recipient);
