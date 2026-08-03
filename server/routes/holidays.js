@@ -73,4 +73,41 @@ router.delete('/:id', protect, authorize('Admin', 'Manager'), async (req, res, n
   }
 });
 
+router.get('/check-daily', async (req, res, next) => {
+  const isCron = req.headers['x-vercel-cron'] === '1' || req.query.bypass === 'true';
+  if (!isCron) {
+    return res.status(401).json({ success: false, message: 'Unauthorized execution' });
+  }
+
+  try {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const holiday = await Holiday.findOne({ date: todayStr });
+    if (holiday) {
+      const Notification = require('../models/Notification');
+      const alreadySent = await Notification.findOne({
+        title: `Happy Holiday: ${holiday.name}!`,
+        createdAt: {
+          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+          $lt: new Date(new Date().setHours(23, 59, 59, 999))
+        }
+      });
+      if (alreadySent) {
+        return res.status(200).json({ success: true, message: 'Holiday greeting already sent today.' });
+      }
+
+      const { sendNotification } = require('../utils/notifications');
+      await sendNotification(
+        'All',
+        `Happy Holiday: ${holiday.name}!`,
+        `Wishing all employees a wonderful and restful "${holiday.name}" holiday!\n\nWarm regards,\nManagement Team`,
+        'Holiday'
+      );
+      return res.status(200).json({ success: true, message: `Holiday greeting dispatched for: ${holiday.name}` });
+    }
+    res.status(200).json({ success: true, message: 'No holiday scheduled for today.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

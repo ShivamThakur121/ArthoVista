@@ -7,18 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = path.join(__dirname, '../uploads/profiles/');
-    if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, `employee-${req.params.id || 'new'}-${Date.now()}${path.extname(file.originalname)}`);
-  }
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
@@ -222,10 +211,10 @@ router.put('/:id', protect, authorize('Admin', 'Manager'), async (req, res, next
 
 router.post('/:id/photo', protect, upload.single('photo'), async (req, res, next) => {
   try {
-    if (req.user.role !== 'Admin' && req.user.role !== 'Manager' && req.user.id !== req.params.id) {
+    if (req.user.role !== 'Admin') {
       return res.status(403).json({
         success: false,
-        message: 'Access denied'
+        message: 'Access denied. Only Admins can upload profile photos.'
       });
     }
 
@@ -244,7 +233,8 @@ router.post('/:id/photo', protect, upload.single('photo'), async (req, res, next
       });
     }
 
-    const photoUrl = `/uploads/profiles/${req.file.filename}`;
+    const base64Data = req.file.buffer.toString('base64');
+    const photoUrl = `data:${req.file.mimetype};base64,${base64Data}`;
     employee.profilePhoto = photoUrl;
     await employee.save();
 

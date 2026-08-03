@@ -170,7 +170,11 @@ app.get('/', (req, res) => {
 // Centralized Error Handler
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Attendance Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Attendance Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;

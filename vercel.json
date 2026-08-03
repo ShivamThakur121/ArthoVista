@@ -4,6 +4,13 @@
   "framework": "vite",
   "rewrites": [
     { "source": "/api/contact", "destination": "/api/contact" },
+    { "source": "/api/:path*",   "destination": "/api/app.js"   },
     { "source": "/(.*)",         "destination": "/index.html"   }
+  ],
+  "crons": [
+    {
+      "path": "/api/holidays/check-daily",
+      "schedule": "0 9 * * *"
+    }
   ]
 }

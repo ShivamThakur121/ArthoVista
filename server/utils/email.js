@@ -23,14 +23,19 @@ const sendEmail = async (options) => {
         }
       };
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+
       const res = await fetch('https://email-api.mailercloud.com/email', {
         method: 'POST',
         headers: {
           'Authorization': process.env.MAILERCLOUD_API_KEY,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
 
       const responseText = await res.text();
       let responseJson = {};
@@ -45,8 +50,7 @@ const sendEmail = async (options) => {
         throw new Error(responseJson.message || responseText);
       }
     } catch (err) {
-      console.error(`Email delivery failure via Mailercloud API:`, err.message);
-      return { success: false, error: err.message };
+      console.error(`Email delivery failure via Mailercloud API: ${err.message}. Falling back to Nodemailer SMTP...`);
     }
   }
 

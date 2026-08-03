@@ -289,15 +289,17 @@ const EmployeeManagement = () => {
                           ) : (
                             emp.fullName.charAt(0).toUpperCase()
                           )}
-                          <label className="absolute inset-0 bg-slate-900/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                            <Upload className="w-3.5 h-3.5 text-white" />
-                            <input 
-                              type="file" 
-                              accept="image/*" 
-                              onChange={(e) => handlePhotoUpload(e, emp._id)} 
-                              className="hidden" 
-                            />
-                          </label>
+                          {user?.role === 'Admin' && (
+                            <label className="absolute inset-0 bg-slate-900/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                              <Upload className="w-3.5 h-3.5 text-white" />
+                              <input 
+                                type="file" 
+                                accept="image/*" 
+                                onChange={(e) => handlePhotoUpload(e, emp._id)} 
+                                className="hidden" 
+                              />
+                            </label>
+                          )}
                         </div>
                         <div>
                           <div className="font-semibold text-slate-800 dark:text-slate-200">{emp.fullName}</div>

@@ -8,18 +8,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = path.join(__dirname, '../uploads/attachments/');
-    if (!fs.existsSync(dir)){
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, `leave-${req.user.id}-${Date.now()}${path.extname(file.originalname)}`);
-  }
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
@@ -71,7 +60,7 @@ router.post('/', protect, upload.single('attachment'), async (req, res, next) =>
   }
 
   try {
-    const attachmentUrl = req.file ? `/uploads/attachments/${req.file.filename}` : '';
+    const attachmentUrl = req.file ? `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}` : '';
 
     const leave = await LeaveRequest.create({
       employee: req.user.id,
