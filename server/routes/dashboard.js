@@ -69,7 +69,7 @@ const calculateCurrentMonthAttendance = async (employeeId, holidayDates, leaveRe
         absentDays++;
       }
     } else {
-      const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+      const isWeekend = (dayOfWeek === 0); // 0 = Sunday (Only Sunday is weekend, Saturday is a working day)
       const isHoliday = holidayDates.has(dateStr);
 
       if (isWeekend || isHoliday) {
@@ -105,7 +105,7 @@ const getCurrentWeekDateStrings = () => {
   const diff = today.getDate() - day + (day === 0 ? -6 : 1);
   const monday = new Date(today.setDate(diff));
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
     const year = d.getFullYear();
@@ -455,7 +455,7 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
       datesInRange.forEach(dateStr => {
         const log = logsByDate[dateStr];
         const dateObj = new Date(dateStr);
-        const dayOfWeek = dateObj.getDay(); // 0 = Sunday, 6 = Saturday
+        const dayOfWeek = dateObj.getDay(); // 0 = Sunday
 
         if (log) {
           if (log.status === 'Present') {
@@ -470,7 +470,7 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
             absentDays++;
           }
         } else {
-          const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+          const isWeekend = (dayOfWeek === 0);
           const isHoliday = holidayDates.has(dateStr);
 
           if (isWeekend || isHoliday) {

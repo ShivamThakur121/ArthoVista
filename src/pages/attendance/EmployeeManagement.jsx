@@ -16,7 +16,11 @@ import {
   X,
   Loader2,
   AlertCircle,
-  Users
+  Users,
+  Eye,
+  ShieldCheck,
+  Calendar,
+  Building2
 } from 'lucide-react';
 
 const EmployeeManagement = () => {
@@ -35,6 +39,7 @@ const EmployeeManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [activeEmployee, setActiveEmployee] = useState(null);
+  const [selectedProfileEmp, setSelectedProfileEmp] = useState(null);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -355,6 +360,13 @@ const EmployeeManagement = () => {
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           <button
+                            onClick={() => setSelectedProfileEmp(emp)}
+                            className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30 transition-all"
+                            title="View Full Profile"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
                             onClick={() => navigate(`/admin/employees/enroll/${emp._id}`)}
                             className="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/20 border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30 transition-all"
                             title="Enroll Webcam Face"
@@ -578,6 +590,92 @@ const EmployeeManagement = () => {
               </div>
 
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Dedicated Employee Profile View Modal */}
+      {selectedProfileEmp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn">
+          <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 md:p-8 space-y-6 animate-scaleUp">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary-500 to-indigo-600 p-0.5 shadow-md">
+                  <div className="w-full h-full rounded-[14px] bg-slate-900 overflow-hidden flex items-center justify-center font-bold text-lg text-white">
+                    {selectedProfileEmp.profilePhoto ? (
+                      <img src={selectedProfileEmp.profilePhoto} alt={selectedProfileEmp.fullName} className="w-full h-full object-cover" />
+                    ) : (
+                      selectedProfileEmp.fullName?.charAt(0).toUpperCase()
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{selectedProfileEmp.fullName}</h3>
+                  <p className="text-xs text-slate-400 font-mono">{selectedProfileEmp.employeeId} • <span className="capitalize">{selectedProfileEmp.role}</span></p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setSelectedProfileEmp(null)}
+                className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Profile Grid */}
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Email Address</span>
+                <p className="font-bold text-slate-800 dark:text-slate-200 truncate">{selectedProfileEmp.email}</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Contact Phone</span>
+                <p className="font-bold text-slate-800 dark:text-slate-200">{selectedProfileEmp.phone || 'Not provided'}</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Department</span>
+                <p className="font-bold text-slate-800 dark:text-slate-200">{selectedProfileEmp.department?.name || 'Unassigned'}</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Designation</span>
+                <p className="font-bold text-slate-800 dark:text-slate-200">{selectedProfileEmp.designation || 'Staff'}</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Shift Timing</span>
+                <p className="font-bold text-indigo-600 dark:text-indigo-400">10:00 AM – 06:00 PM (Mon-Sat)</p>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-slate-400">Biometric Status</span>
+                <p className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  {selectedProfileEmp.faceEmbeddings?.length > 0 ? `Enrolled (${selectedProfileEmp.faceEmbeddings.length} frames)` : 'Not Enrolled'}
+                </p>
+              </div>
+            </div>
+
+            {selectedProfileEmp.address && (
+              <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 text-xs">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-1">Residential Address</span>
+                <p className="text-slate-700 dark:text-slate-300">{selectedProfileEmp.address}</p>
+              </div>
+            )}
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => setSelectedProfileEmp(null)}
+                className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-colors"
+              >
+                Close Profile
+              </button>
+            </div>
+
           </div>
         </div>
       )}

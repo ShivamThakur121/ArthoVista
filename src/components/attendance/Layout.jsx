@@ -15,8 +15,10 @@ import {
   Megaphone,
   Briefcase,
   UserCheck,
-  ArrowLeft
+  ArrowLeft,
+  User
 } from 'lucide-react';
+import StarfieldBackground from '../StarfieldBackground';
 
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -49,33 +51,36 @@ const Layout = ({ children }) => {
     { name: 'Holidays & Events', href: '/admin/holidays', icon: Calendar },
     { name: 'Broadcasts', href: '/admin/announcements', icon: Megaphone },
     { name: 'Reports & Logs', href: '/admin/reports', icon: FileText },
+    { name: 'My Profile', href: '/admin/profile', icon: User },
   ] : [
     { name: 'Dashboard', href: '/employee', icon: LayoutDashboard },
     { name: 'Mark Attendance', href: '/employee/attendance', icon: UserCheck },
     { name: 'My Leaves', href: '/employee/leaves', icon: Briefcase },
     { name: 'Holidays & Events', href: '/employee/holidays', icon: Calendar },
     { name: 'Announcements', href: '/employee/announcements', icon: Megaphone },
+    { name: 'My Profile', href: '/employee/profile', icon: User },
   ];
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 font-sans transition-colors duration-200">
+    <div className="flex h-screen bg-[#07192f] text-slate-100 font-sans relative overflow-hidden">
+      <StarfieldBackground />
       
       {/* Mobile Sidebar overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar Panel */}
       <aside className={`
-        fixed inset-y-0 left-0 z-50 flex flex-col w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-transform duration-300 transform 
+        fixed inset-y-0 left-0 z-50 flex flex-col w-64 border-r border-slate-800/80 bg-slate-900/90 backdrop-blur-md transition-transform duration-300 transform 
         lg:translate-x-0 lg:static lg:inset-auto 
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Brand Banner */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-slate-800/80">
           <div className="flex items-center gap-2">
             <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-tr from-primary-500 to-indigo-600 text-white shadow-md shadow-primary-500/20">
               <UserCheck className="w-5 h-5" />
@@ -93,7 +98,7 @@ const Layout = ({ children }) => {
         </div>
 
         {/* Sidebar Nav Items */}
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           {navigation.map((item) => {
             const isActive = location.pathname === item.href;
             const Icon = item.icon;
@@ -103,31 +108,35 @@ const Layout = ({ children }) => {
                 to={item.href}
                 onClick={() => setSidebarOpen(false)}
                 className={`
-                  flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group
+                  flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 group
                   ${isActive 
-                    ? 'bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400' 
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'}
+                    ? 'bg-teal-500/25 text-teal-300 font-bold border border-teal-500/50 shadow-md shadow-teal-500/10' 
+                    : 'text-slate-200 hover:text-white hover:bg-slate-800/90'}
                 `}
               >
-                <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-105 ${isActive ? 'text-primary-600 dark:text-primary-400' : 'text-slate-400 dark:text-slate-500'}`} />
-                {item.name}
+                <Icon className={`w-5 h-5 transition-transform duration-200 group-hover:scale-105 ${isActive ? 'text-teal-400' : 'text-slate-300 group-hover:text-white'}`} />
+                <span>{item.name}</span>
               </Link>
             );
           })}
         </nav>
 
         {/* Back to main portal link & User Card */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 space-y-2">
+        <div className="p-4 border-t border-slate-800 bg-slate-900/80 space-y-2.5">
           <Link
             to="/"
-            className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-200 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 text-orange-500" />
+            <ArrowLeft className="w-4 h-4 text-teal-400" />
             Main Website
           </Link>
 
-          <div className="flex items-center gap-3 px-2 py-3">
-            <div className="w-9 h-9 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center font-bold text-primary-600 overflow-hidden border border-slate-200 dark:border-slate-700">
+          <Link 
+            to={user?.role === 'Admin' || user?.role === 'Manager' ? '/admin/profile' : '/employee/profile'}
+            className="flex items-center gap-3 px-2.5 py-2.5 rounded-xl hover:bg-slate-800 transition-colors group border border-slate-800/80 bg-slate-950/40"
+            title="View Profile Console"
+          >
+            <div className="w-9 h-9 rounded-full bg-teal-800/60 flex items-center justify-center font-bold text-white overflow-hidden border border-teal-500/40 shrink-0 group-hover:scale-105 transition-transform shadow-sm">
               {user?.profilePhoto ? (
                 <img src={user.profilePhoto} alt="profile" className="w-full h-full object-cover" />
               ) : (
@@ -135,14 +144,14 @@ const Layout = ({ children }) => {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">{user?.fullName}</p>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate capitalize">{user?.role} • {user?.designation || 'Staff'}</p>
+              <p className="text-xs font-bold text-white truncate group-hover:text-teal-300 transition-colors">{user?.fullName}</p>
+              <p className="text-[11px] text-slate-300 font-medium truncate capitalize">{user?.role} • {user?.designation || 'Staff'}</p>
             </div>
-          </div>
+          </Link>
 
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-xl transition-colors duration-200"
+            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-xs font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-900/30 rounded-xl transition-colors duration-200 cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
             Sign Out
@@ -151,17 +160,17 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main View Container */}
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden relative z-10">
         {/* Top Navbar */}
-        <header className="flex items-center justify-between h-16 px-6 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 backdrop-blur-md z-30">
+        <header className="flex items-center justify-between h-16 px-6 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md z-30 shadow-md">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setSidebarOpen(true)}
-              className="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"
+              className="p-1.5 rounded-lg text-slate-200 hover:bg-slate-800 lg:hidden"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h1 className="text-lg font-bold text-slate-800 dark:text-slate-200 hidden sm:block">
+            <h1 className="text-lg font-black text-white hidden sm:block tracking-wide">
               {navigation.find(nav => nav.href === location.pathname)?.name || 'Dashboard'}
             </h1>
           </div>
@@ -170,25 +179,25 @@ const Layout = ({ children }) => {
             {/* Theme Toggle */}
             <button
               onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+              className="p-2 rounded-xl border border-slate-800 text-slate-400 hover:bg-slate-800 transition-colors"
               title="Toggle Theme"
             >
-              {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-indigo-500" />}
+              {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-indigo-400" />}
             </button>
 
             {/* Notification Trigger */}
             <button
-              className="relative p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+              className="relative p-2 rounded-xl border border-slate-800 text-slate-400 hover:bg-slate-800 transition-colors"
               title="Notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-white dark:border-slate-900" />
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-slate-900" />
             </button>
           </div>
         </header>
 
         {/* Page Inner Content Container */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-950/40 backdrop-blur-[2px]">
           {children}
         </main>
       </div>

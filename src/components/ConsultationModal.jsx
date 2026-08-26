@@ -150,19 +150,44 @@ export default function ConsultationModal() {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Service Interested In</label>
+                <label className="text-xs font-semibold text-slate-300 block mb-1">Service / Lead Type</label>
                 <select
                   value={form.service}
                   onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-teal-500"
+                  className="input-3d bg-slate-800 text-white border-slate-700 focus:border-teal-500 rounded-xl w-full p-3 text-xs font-semibold"
                 >
-                  <option value="General Consultation" className="bg-white">General Consultation</option>
-                  <option value="Business Registration" className="bg-white">Business Registration</option>
-                  <option value="Government Schemes & Subsidies" className="bg-white">Government Schemes & Subsidies</option>
-                  <option value="Business Loans & Funding" className="bg-white">Business Loans & Funding</option>
-                  <option value="Certifications (ISO/FSSAI/GeM)" className="bg-white">Certifications (ISO/FSSAI/GeM)</option>
-                  <option value="GST & Tax Compliance" className="bg-white">GST & Tax Compliance</option>
-                  <option value="NGO / Trust Registration" className="bg-white">NGO / Trust Registration</option>
+                  {/* Dynamic preset option if not already in list */}
+                  {form.service && (
+                    <option value={form.service} className="bg-slate-900 text-teal-300 font-bold">
+                      ★ {form.service} (Selected)
+                    </option>
+                  )}
+                  <optgroup label="── Loan Leads ──" className="bg-slate-900 text-slate-300">
+                    <option value="Business Loan Leads" className="bg-slate-900 text-white">Business Loan Leads</option>
+                    <option value="Salaried Personal Loan Leads" className="bg-slate-900 text-white">Salaried Personal Loan Leads</option>
+                    <option value="Home Loan Leads" className="bg-slate-900 text-white">Home Loan Leads</option>
+                    <option value="Loan Against Property Leads" className="bg-slate-900 text-white">Loan Against Property Leads</option>
+                    <option value="Education Loan Leads" className="bg-slate-900 text-white">Education Loan Leads</option>
+                    <option value="Machinery Loan Leads" className="bg-slate-900 text-white">Machinery Loan Leads</option>
+                  </optgroup>
+                  <optgroup label="── Government Scheme Leads ──" className="bg-slate-900 text-slate-300">
+                    <option value="PMEGP Scheme Leads" className="bg-slate-900 text-white">PMEGP Scheme Leads</option>
+                    <option value="CGTMSE Scheme Leads" className="bg-slate-900 text-white">CGTMSE Scheme Leads</option>
+                    <option value="Mudra Loan Leads" className="bg-slate-900 text-white">Mudra Loan Leads</option>
+                    <option value="Stand-Up India Scheme Leads" className="bg-slate-900 text-white">Stand-Up India Scheme Leads</option>
+                    <option value="Startup India Seed Fund Leads" className="bg-slate-900 text-white">Startup India Seed Fund Leads</option>
+                    <option value="PM-FME Scheme Leads" className="bg-slate-900 text-white">PM-FME Scheme Leads</option>
+                  </optgroup>
+                  <optgroup label="── Business & Compliance Leads ──" className="bg-slate-900 text-slate-300">
+                    <option value="Business Registration Leads" className="bg-slate-900 text-white">Business Registration Leads</option>
+                    <option value="Private Limited Company Leads" className="bg-slate-900 text-white">Private Limited Company Leads</option>
+                    <option value="LLP Registration Leads" className="bg-slate-900 text-white">LLP Registration Leads</option>
+                    <option value="ISO Certification Leads" className="bg-slate-900 text-white">ISO Certification Leads</option>
+                    <option value="FSSAI License Leads" className="bg-slate-900 text-white">FSSAI License Leads</option>
+                    <option value="GST & Tax Compliance Leads" className="bg-slate-900 text-white">GST & Tax Compliance Leads</option>
+                    <option value="Trademark & IP Protection Leads" className="bg-slate-900 text-white">Trademark & IP Protection Leads</option>
+                    <option value="General Consultation Leads" className="bg-slate-900 text-white">General Consultation Leads</option>
+                  </optgroup>
                 </select>
               </div>
 

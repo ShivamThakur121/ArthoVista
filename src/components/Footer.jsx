@@ -215,23 +215,28 @@ export default function Footer() {
       {/* ====== BOTTOM BAR ====== */}
       <div className="border-t border-white/06 py-5 px-6 text-center text-xs text-white/25">
         © {new Date().getFullYear()} ArthoVista. All rights reserved. &nbsp;·&nbsp;
-        <span className="hover:text-white/50 cursor-pointer transition-colors">Privacy Policy</span>
+        <Link to="/privacy-policy" className="hover:text-white/60 transition-colors">Privacy Policy</Link>
         &nbsp;·&nbsp;
-        <span className="hover:text-white/50 cursor-pointer transition-colors">Terms of Service</span>
+        <Link to="/terms-of-service" className="hover:text-white/60 transition-colors">Terms of Service</Link>
         &nbsp;·&nbsp; 🇮🇳 Made in India
       </div>
 
       {/* ====== WHATSAPP FAB ====== */}
-      <a
-        href="https://wa.me/919899902568"
-        target="_blank"
-        rel="noreferrer"
-        className="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all"
-        style={{ boxShadow: "0 8px 30px rgba(34,197,94,0.4)" }}
-        aria-label="Chat on WhatsApp"
-      >
-        <MessageCircle size={26} />
-      </a>
+      <div className="fixed bottom-6 right-6 z-40 group">
+        <a
+          href="https://wa.me/919899902568"
+          target="_blank"
+          rel="noreferrer"
+          className="fixed bottom-6 right-6 z-40 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all"
+          style={{ boxShadow: "0 8px 30px rgba(34,197,94,0.4)" }}
+          aria-label="Chat on WhatsApp"
+        >
+          <MessageCircle size={26} />
+        </a>
+        <span className="absolute right-14 top-1/2 -translate-y-1/2 whitespace-nowrap bg-gray-900 text-white text-xs px-3 py-1 rounded-lg opacity-0 group-hover:opacity-100 group-hover:translate-x-0 translate-x-2 transition-all duration-300 pointer-events-none">
+            Chat on WhatsApp
+        </span>
+      </div>
     </footer>
   );
 }

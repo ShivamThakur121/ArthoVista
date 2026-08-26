@@ -1,7 +1,7 @@
 import {
-  MapPin, Eye, Target, ShieldCheck, Award, Scale, Lightbulb,
-  User, BarChart3, FileText, Phone, Mail, Clock, ArrowRight,
-  TrendingUp, Heart, HandCoins, Star, CheckCircle, Building2
+  MapPin, Eye, Target, Award, Lightbulb, ShieldCheck,
+  User, BarChart3, FileText, Phone, Mail, Clock,
+  TrendingUp, Heart, HandCoins, Star, Building2
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import useDocumentMetadata from "../hooks/useDocumentMetadata";
@@ -42,8 +42,8 @@ const team = [
 
 export default function About() {
   useDocumentMetadata(
-    "About Us | Artha Ventures",
-    "Learn about Artha Ventures (ArthoVista) — KVIC empanelled MSME consulting and government scheme facilitation specialists based in Noida."
+    "About Us | ArthoVista",
+    "Learn about ArthoVista — KVIC empanelled MSME consulting and government scheme facilitation specialists based in Noida."
   );
   return (
     <div>
@@ -93,25 +93,25 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="eyebrow">Our Story</div>
-              <h2 className="section-title mb-6">
+              <h2 className="section-title text-white mb-6">
                 Democratizing <span className="highlight">Business Growth</span>
               </h2>
-              <blockquote className="border-l-4 border-orange-500 pl-5 italic text-slate-600 mb-6 bg-orange-50/50 py-3 rounded-r-xl">
+              <blockquote className="border-l-4 border-orange-500 pl-5 italic text-slate-100 mb-6 bg-slate-900/80 py-3 rounded-r-xl border border-slate-700 font-medium">
                 "Every entrepreneur deserves the same access to government support — regardless of their education or connections."
               </blockquote>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-100 leading-relaxed font-medium text-base">
                 ArthoVista was founded with a simple mission — to democratise access to government funding, and business support for India's millions of micro, small, and medium enterprises. Based in Noida, Uttar Pradesh, we bridge the gap between ambitious entrepreneurs and the complex world of government procedures, banking systems, and compliance requirements.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-8">
                 {highlights.map((h) => (
-                  <div key={h.title} className="glass-card rounded-xl p-4 flex gap-3 card-3d">
+                  <div key={h.title} className="glass-card-dark rounded-xl p-4 flex gap-3 card-3d border border-slate-700">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${h.color}`}>
                       <h.icon size={18} />
                     </div>
                     <div>
-                      <p className="font-semibold text-navy text-sm">{h.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{h.desc}</p>
+                      <p className="font-bold text-white text-sm">{h.title}</p>
+                      <p className="text-xs font-medium text-slate-200 mt-0.5">{h.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -121,29 +121,29 @@ export default function About() {
             {/* Right side - Mission & Vision */}
             <div className="space-y-5">
               <div
-                className="rounded-2xl p-7 text-white relative overflow-hidden"
-                style={{ background: "linear-gradient(135deg, #0a1628, #1a3060)" }}
+                className="rounded-2xl p-7 text-white relative overflow-hidden border border-slate-700"
+                style={{ background: "linear-gradient(135deg, rgba(10,22,40,0.85), rgba(26,48,96,0.85))" }}
               >
                 <div className="absolute top-4 right-4 opacity-10">
                   <Target size={80} />
                 </div>
                 <Target size={28} className="text-orange-400 mb-4" />
-                <h3 className="font-display font-bold text-xl text-white mb-3">Our Mission</h3>
-                <p className="text-white/60 text-sm leading-relaxed">
+                <h3 className="font-display font-bold text-xl text-white mb-3 drop-shadow-sm">Our Mission</h3>
+                <p className="text-slate-100 text-sm leading-relaxed font-medium">
                   An India where no entrepreneur is left behind due to lack of knowledge, resources, or access to government benefit. We envision 1 million businesses empowered by 2030.
                 </p>
               </div>
 
               <div
-                className="rounded-2xl p-7 text-white relative overflow-hidden"
-                style={{ background: "linear-gradient(135deg, #ea580c, #c2410c)" }}
+                className="rounded-2xl p-7 text-white relative overflow-hidden border border-orange-500/40"
+                style={{ background: "linear-gradient(135deg, rgba(234,88,12,0.85), rgba(194,65,12,0.85))" }}
               >
                 <div className="absolute top-4 right-4 opacity-10">
                   <Eye size={80} />
                 </div>
-                <Eye size={28} className="text-white/80 mb-4" />
-                <h3 className="font-display font-bold text-xl text-white mb-3">Our Vision</h3>
-                <p className="text-white/80 text-sm leading-relaxed">
+                <Eye size={28} className="text-white mb-4" />
+                <h3 className="font-display font-bold text-xl text-white mb-3 drop-shadow-sm">Our Vision</h3>
+                <p className="text-white text-sm leading-relaxed font-medium">
                   To be India's most trusted one-stop business support platform for MSMEs and startups — making growth accessible, affordable, and achievable for every entrepreneur.
                 </p>
               </div>
@@ -153,21 +153,23 @@ export default function About() {
       </section>
 
       {/* ====== JOURNEY TIMELINE ====== */}
-      <section className="py-16 px-6" style={{ background: "linear-gradient(135deg, #f8f9fc 0%, #fdf3ec 100%)" }}>
+      <section className="py-16 px-6 border-t border-slate-800/40">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="eyebrow">Our Growth Story</div>
-            <h2 className="section-title">Built Over a <span className="highlight">Decade</span></h2>
+            <h2 className="section-title text-white">Built Over a <span className="highlight">Decade</span></h2>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
-            {journey.map((j, i) => (
-              <div key={j.year} className="journey-card relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-orange-500 to-amber-400" />
-                <j.icon size={28} className="text-orange-500 mb-4" />
-                <span className="font-display font-black text-orange-600 text-2xl">{j.year}</span>
-                <p className="font-semibold text-navy mt-2 mb-2">{j.title}</p>
-                <p className="text-xs text-slate-500 leading-relaxed">{j.desc}</p>
+            {journey.map((j) => (
+              <div key={j.year} className="journey-card relative overflow-hidden bg-slate-900/90 backdrop-blur-md p-6 rounded-2xl border border-slate-700/80 shadow-2xl hover:border-orange-500/50 transition-all">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-300" />
+                <div className="w-12 h-12 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center mb-4">
+                  <j.icon size={24} className="text-orange-400" />
+                </div>
+                <span className="font-display font-black text-amber-400 text-3xl drop-shadow-md tracking-tight">{j.year}</span>
+                <p className="font-bold text-white mt-2 mb-2 text-base">{j.title}</p>
+                <p className="text-xs font-medium text-slate-200 leading-relaxed">{j.desc}</p>
               </div>
             ))}
           </div>
@@ -175,22 +177,22 @@ export default function About() {
       </section>
 
       {/* ====== VALUES ====== */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="eyebrow">Core Principles</div>
-            <h2 className="section-title">What <span className="highlight">Drives Us</span></h2>
+            <h2 className="section-title text-white">What <span className="highlight">Drives Us</span></h2>
           </div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
             {values.map((v, idx) => (
-              <div key={v.title} className="glass-card rounded-2xl p-6 card-3d text-center">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center mx-auto mb-4">
-                  <v.icon size={24} className="text-orange-600" />
+              <div key={v.title} className="glass-card-dark rounded-2xl p-6 card-3d text-center border border-slate-700">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 flex items-center justify-center mx-auto mb-4 border border-orange-500/30 shadow-sm">
+                  <v.icon size={24} className="text-orange-400" />
                 </div>
                 <span className="text-xs font-bold text-orange-400">0{idx + 1}</span>
-                <p className="font-display font-bold text-navy mt-2">{v.title}</p>
-                <p className="text-xs text-slate-500 mt-2 leading-relaxed">{v.desc}</p>
+                <p className="font-display font-bold text-white mt-2 text-base">{v.title}</p>
+                <p className="text-xs font-medium text-slate-200 mt-2 leading-relaxed">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -198,30 +200,30 @@ export default function About() {
       </section>
 
       {/* ====== TEAM ====== */}
-      <section className="py-16 px-6" style={{ background: "linear-gradient(135deg, #0a1628 0%, #0f1e3a 100%)" }}>
+      <section className="py-16 px-6 border-t border-slate-800/40">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <div className="eyebrow text-white/50">The Team</div>
+            <div className="eyebrow">The Team</div>
             <h2
               className="font-display font-black text-white"
               style={{ fontSize: "clamp(26px, 4vw, 42px)" }}
             >
               Meet <span className="gradient-text">ArthoVista</span>
             </h2>
-            <p className="text-white/40 mt-3">The team behind your success</p>
+            <p className="text-slate-200 mt-3 font-medium text-base">The team behind your success</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {team.map((t) => (
-              <div key={t.role} className={`bg-gradient-to-br ${t.color} rounded-2xl p-8 text-center relative overflow-hidden card-3d`}>
+              <div key={t.role} className={`bg-gradient-to-br ${t.color} rounded-2xl p-8 text-center relative overflow-hidden card-3d border border-white/15 shadow-xl`}>
                 <div className="absolute top-0 right-0 opacity-10">
                   <t.icon size={100} />
                 </div>
-                <div className="w-20 h-20 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-5">
+                <div className="w-20 h-20 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-5 shadow-sm">
                   <t.icon size={32} className="text-white" />
                 </div>
-                <p className="font-display font-bold text-white text-lg">{t.role}</p>
-                <p className="text-white/70 text-sm mt-3 leading-relaxed">{t.desc}</p>
+                <p className="font-display font-bold text-white text-xl drop-shadow-sm">{t.role}</p>
+                <p className="text-white font-medium text-sm mt-3 leading-relaxed">{t.desc}</p>
               </div>
             ))}
           </div>
@@ -229,13 +231,12 @@ export default function About() {
       </section>
 
       {/* ====== CONTACT INFO + CTA ====== */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 border-t border-slate-800/40">
         <div className="max-w-6xl mx-auto">
           <div
-            className="rounded-2xl p-8 md:p-12 text-center text-white relative overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #ea580c, #c2410c)" }}
+            className="rounded-2xl p-8 md:p-12 text-center text-white relative overflow-hidden border border-orange-500/40"
+            style={{ background: "linear-gradient(135deg, rgba(234,88,12,0.85), rgba(194,65,12,0.85))" }}
           >
-            <div className="absolute inset-0 opacity-10 bg-repeat" style={{ backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "30px 30px" }} />
             <div className="relative z-10">
               <h3
                 className="font-display font-black"
@@ -243,34 +244,34 @@ export default function About() {
               >
                 Let's Grow Together
               </h3>
-              <p className="text-orange-100 mt-3 max-w-lg mx-auto text-sm">
+              <p className="text-white mt-3 max-w-lg mx-auto text-base font-medium">
                 Join 500+ businesses that chose ArthoVista as their growth partner. Book a free consultation today.
               </p>
               <div className="flex flex-wrap gap-3 justify-center mt-7">
-                <Link to="/contact" className="bg-white text-orange-600 font-bold px-8 py-3.5 rounded-xl hover:bg-orange-50 transition-all hover:scale-105 inline-flex items-center gap-2">
+                <Link to="/contact" className="bg-white text-orange-600 font-bold px-8 py-3.5 rounded-xl hover:bg-orange-50 transition-all hover:scale-105 inline-flex items-center gap-2 shadow-lg">
                   <Phone size={15} /> Book Free Consultation
                 </Link>
                 <Link to="/services" className="btn-outline-white-3d">
                   <Eye size={15} /> View Services
                 </Link>
               </div>
-              <p className="text-orange-100/60 text-xs mt-5">★★★★★ 500+ businesses served</p>
+              <p className="text-white font-bold text-xs mt-5">★★★★★ 500+ businesses served</p>
             </div>
           </div>
 
           {/* Contact Details */}
-          <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-slate-500">
-            <a href="tel:+919899902568" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-              <Phone size={16} className="text-orange-600" /> +91 98999 02568
+          <div className="flex flex-wrap justify-center gap-8 mt-12 text-sm text-slate-200 font-medium">
+            <a href="tel:+919899902568" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
+              <Phone size={16} className="text-orange-400" /> +91 98999 02568
             </a>
-            <a href="mailto:support@arthovista.com" className="flex items-center gap-2 hover:text-orange-600 transition-colors">
-              <Mail size={16} className="text-orange-600" /> support@arthovista.com
+            <a href="mailto:support@arthovista.com" className="flex items-center gap-2 hover:text-orange-400 transition-colors">
+              <Mail size={16} className="text-orange-400" /> support@arthovista.com
             </a>
             <span className="flex items-center gap-2">
-              <MapPin size={16} className="text-orange-600" /> Noida, Uttar Pradesh
+              <MapPin size={16} className="text-orange-400" /> Noida, Uttar Pradesh
             </span>
             <span className="flex items-center gap-2">
-              <Clock size={16} className="text-orange-600" /> Mon-Sat, 9:30 AM - 6:00 PM
+              <Clock size={16} className="text-orange-400" /> Mon-Sat, 9:30 AM - 6:00 PM
             </span>
           </div>
         </div>

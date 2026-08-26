@@ -71,10 +71,10 @@ export default function CookieConsent() {
         {/* Links & Buttons */}
         <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/5 pt-4">
           <Link
-            to="/about"
+            to="/privacy-policy"
             className="text-[11px] text-orange-400 hover:text-orange-300 underline font-medium"
           >
-            Read Cookie Policy
+            Read Privacy & Cookie Policy
           </Link>
           <div className="flex gap-2 w-full sm:w-auto">
             <button

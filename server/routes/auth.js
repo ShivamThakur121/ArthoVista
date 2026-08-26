@@ -84,8 +84,10 @@ router.post('/login', async (req, res, next) => {
         designation: populatedUser.designation,
         joiningDate: populatedUser.joiningDate,
         status: populatedUser.status,
+        address: populatedUser.address || '',
         profilePhoto: populatedUser.profilePhoto,
-        hasBiometrics: populatedUser.faceEmbeddings && populatedUser.faceEmbeddings.length > 0
+        hasBiometrics: populatedUser.faceEmbeddings && populatedUser.faceEmbeddings.length > 0,
+        faceEmbeddingsCount: populatedUser.faceEmbeddings ? populatedUser.faceEmbeddings.length : 0
       }
     });
   } catch (error) {
@@ -159,8 +161,10 @@ router.get('/me', protect, async (req, res, next) => {
         designation: user.designation,
         joiningDate: user.joiningDate,
         status: user.status,
+        address: user.address || '',
         profilePhoto: user.profilePhoto,
-        hasBiometrics: user.faceEmbeddings && user.faceEmbeddings.length > 0
+        hasBiometrics: user.faceEmbeddings && user.faceEmbeddings.length > 0,
+        faceEmbeddingsCount: user.faceEmbeddings ? user.faceEmbeddings.length : 0
       }
     });
   } catch (error) {

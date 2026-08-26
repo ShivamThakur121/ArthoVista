@@ -133,14 +133,15 @@ export default async function handler(req, res) {
   try {
     const client = await getClient();
     const db = client.db();
-    const collectionName = getCollectionName(service);
+    const collectionName = "Website_Leads";
     const collection = db.collection(collectionName);
 
     const doc = {
       name: name.trim(),
       phone: phone.trim(),
       email: (email || "").trim().toLowerCase(),
-      service: service || "",
+      service: service || "General Consultation",
+      leadType: service || "General Consultation",
       message: message || "",
       source: source || "website",
       status: "new",
@@ -150,7 +151,7 @@ export default async function handler(req, res) {
 
     const result = await collection.insertOne(doc);
 
-    console.log(`📨 New lead → collection: "${collectionName}" | ${name} (${phone}) — ${service || "General"}`);
+    console.log(`📨 New lead saved to collection: "${collectionName}" | ${name} (${phone}) — ${service || "General"}`);
 
     return res.status(201).json({
       success: true,

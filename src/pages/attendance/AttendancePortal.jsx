@@ -305,6 +305,17 @@ const AttendancePortal = () => {
       
       <div className="lg:col-span-7 space-y-6">
         
+        {/* Office Shift Information Header */}
+        <div className="flex flex-wrap items-center justify-between gap-2 p-3.5 rounded-2xl bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-900/40 text-xs text-indigo-900 dark:text-indigo-200">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+            <span>Official Shift Start: <strong>10:00 AM IST</strong></span>
+          </div>
+          <span className="text-[11px] opacity-80">
+            Mon – Sat Active • Check-ins after 10:00 AM marked Late
+          </span>
+        </div>
+        
         {error && (
           <div className="flex items-start gap-3 p-4 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 text-sm font-medium rounded-2xl animate-fade-in">
             <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
