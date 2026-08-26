@@ -8,7 +8,7 @@ const Login = () => {
   const { login, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Standard Login state
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -62,14 +62,14 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#07192f] text-slate-100 px-4 relative overflow-hidden">
       <StarfieldBackground />
-      
+
       {/* Background radial gradient decoration */}
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-[radial-gradient(circle_at_top_right,rgba(79,115,255,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(79,115,255,0.03),transparent_45%)] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.08),transparent_45%)] dark:bg-[radial-gradient(circle_at_bottom_left,rgba(99,102,241,0.03),transparent_45%)] pointer-events-none" />
 
       {/* Main glass card container */}
       <div className="w-full max-w-md bg-slate-900/95 backdrop-blur-2xl p-8 rounded-3xl relative z-10 border border-slate-700/80 shadow-2xl text-white">
-        
+
         {/* Back to main website button */}
         <div className="mb-6 flex items-center justify-between border-b border-slate-800 pb-4">
           <Link

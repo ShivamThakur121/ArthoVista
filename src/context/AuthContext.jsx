@@ -107,16 +107,29 @@ export const AuthProvider = ({ children }) => {
   // Login handler
   const login = async (username, password) => {
     try {
-      const res = await api.post('/auth/login', { username, password });
+      const cleanUsername = (username || '').trim();
+      const res = await api.post('/auth/login', { username: cleanUsername, password });
       if (res.data.success) {
         setToken(res.data.accessToken);
         setUser(res.data.user);
         return { success: true, user: res.data.user };
       }
     } catch (error) {
+      if (error.response?.data?.message) {
+        return {
+          success: false,
+          message: error.response.data.message
+        };
+      }
+      if (error.code === 'ERR_NETWORK' || !error.response || error.response?.status >= 500) {
+        return {
+          success: false,
+          message: 'Unable to connect to backend server. Please verify backend is running on port 5000.'
+        };
+      }
       return {
         success: false,
-        message: error.response?.data?.message || 'Login failed. Please check your credentials.'
+        message: 'Login failed. Please check your credentials.'
       };
     }
   };

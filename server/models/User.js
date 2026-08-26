@@ -81,10 +81,17 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
-    next();
+    if (typeof next === 'function') return next();
+    return;
   }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    if (typeof next === 'function') next();
+  } catch (err) {
+    if (typeof next === 'function') return next(err);
+    throw err;
+  }
 });
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {

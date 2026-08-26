@@ -29,10 +29,11 @@ router.post('/login', async (req, res, next) => {
   }
 
   try {
+    const cleanUsername = username.trim();
     const user = await User.findOne({
       $or: [
-        { email: username.toLowerCase() },
-        { employeeId: username.toUpperCase() }
+        { email: cleanUsername.toLowerCase() },
+        { employeeId: cleanUsername.toUpperCase() }
       ]
     }).select('+password');
 
@@ -194,8 +195,9 @@ router.post('/forgot-password', async (req, res, next) => {
   }
 
   try {
+    const cleanEmail = email.trim().toLowerCase();
     const user = await User.findOne({
-      email: email.toLowerCase()
+      email: cleanEmail
     }).select('+resetPasswordOTP +resetPasswordOTPExpires');
 
     if (!user) {
@@ -270,8 +272,10 @@ router.post('/verify-otp', async (req, res, next) => {
   }
 
   try {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanOtp = otp.trim();
     const user = await User.findOne({
-      email: email.toLowerCase()
+      email: cleanEmail
     }).select('+resetPasswordOTP +resetPasswordOTPExpires');
 
     if (!user || !user.resetPasswordOTP || !user.resetPasswordOTPExpires) {
@@ -290,7 +294,7 @@ router.post('/verify-otp', async (req, res, next) => {
     }
 
     // Compare hashed OTP
-    const isMatch = await bcrypt.compare(otp, user.resetPasswordOTP);
+    const isMatch = await bcrypt.compare(cleanOtp, user.resetPasswordOTP);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
@@ -328,8 +332,10 @@ router.post('/reset-password', async (req, res, next) => {
   }
 
   try {
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanOtp = otp.trim();
     const user = await User.findOne({
-      email: email.toLowerCase()
+      email: cleanEmail
     }).select('+password +resetPasswordOTP +resetPasswordOTPExpires');
 
     if (!user || !user.resetPasswordOTP || !user.resetPasswordOTPExpires) {
@@ -348,7 +354,7 @@ router.post('/reset-password', async (req, res, next) => {
     }
 
     // Compare hashed OTP
-    const isMatch = await bcrypt.compare(otp, user.resetPasswordOTP);
+    const isMatch = await bcrypt.compare(cleanOtp, user.resetPasswordOTP);
     if (!isMatch) {
       return res.status(400).json({
         success: false,
