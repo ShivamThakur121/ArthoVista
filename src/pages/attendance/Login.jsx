@@ -124,7 +124,7 @@ const Login = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin@attendance.com or ADMIN001"
+                placeholder="EMAIL_ADDRESS or Employee ID"
                 className="w-full pl-10 pr-4 py-3 rounded-2xl border border-slate-700 bg-slate-950/90 text-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500 placeholder:text-slate-500 transition-all shadow-inner"
                 disabled={submitting}
                 required
