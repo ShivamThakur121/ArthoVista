@@ -306,27 +306,26 @@ export default function Loans() {
     <div>
 
       {/* ====== HERO ====== */}
-      <section className="hero-dark relative py-16 px-6">
-        <div className="grid-bg" />
+      <section className="relative py-16 px-6 border-b border-slate-200">
         <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <div className="eyebrow text-white/60">Smart Financing</div>
+          <div className="eyebrow">Smart Financing</div>
           <h1
-            className="font-display font-black text-white mt-2"
+            className="font-display font-black text-slate-900 mt-2"
             style={{ fontSize: "clamp(30px, 5vw, 54px)" }}
           >
-            Loan <span className="gradient-text">Products</span>
+            Loan <span className="highlight">Products</span>
           </h1>
-          <p className="text-white/50 mt-4 max-w-2xl mx-auto">
+          <p className="text-slate-600 mt-4 max-w-2xl mx-auto font-normal leading-relaxed">
             Smart funding for every need — from Business Loans to Home Loans, Education to Machinery. Get the best rates with our expert guidance.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
             <button
               onClick={() => openConsultationModal("Business & MSME Loan Leads")}
-              className="btn-3d inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3 rounded-xl cursor-pointer"
+              className="btn-3d inline-flex items-center gap-2 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold text-sm px-6 py-3 rounded-xl cursor-pointer shadow-md shadow-green-500/20"
             >
               Check Loan Eligibility <ArrowRight size={15} />
             </button>
-            <a href="tel:+919899902568" className="btn-outline-white-3d">
+            <a href="tel:+919899902568" className="btn-outline-3d">
               <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
@@ -335,7 +334,7 @@ export default function Loans() {
 
       {/* ====== STATS BAR ====== */}
       <section className="stats-section">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-value">{s.value}</div>
@@ -350,22 +349,22 @@ export default function Loans() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="eyebrow">All Products</div>
-            <h2 className="section-title text-white">
+            <h2 className="section-title">
               Choose Your <span className="highlight">Loan Type</span>
             </h2>
-            <p className="text-slate-100 mt-3 font-medium text-base max-w-xl mx-auto">
+            <p className="text-slate-600 mt-3 font-medium text-base max-w-xl mx-auto">
               We partner with India's top banks and NBFCs to get you the best rates and quickest approvals.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loans.map((l) => (
-              <div key={l.title} className="tilt-3d rounded-2xl overflow-hidden bg-slate-900/80 border border-slate-700/70 shadow-xl hover:border-teal-500 transition-all">
+              <div key={l.title} className="tilt-3d rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 transition-all">
                 <div className="loan-card-inner">
                   {/* Header */}
                   <div className={`bg-gradient-to-br ${l.color} p-6`}>
                     <div className="flex items-center justify-between">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shadow-sm">
+                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shadow-xs">
                         <l.icon size={22} className="text-white" />
                       </div>
                       <div className="text-right">
@@ -373,17 +372,17 @@ export default function Loans() {
                         <div className="text-white font-bold text-sm bg-white/15 px-2.5 py-0.5 rounded-full mt-0.5">{l.detail}</div>
                       </div>
                     </div>
-                    <h3 className="font-display font-black text-white text-xl mt-4 drop-shadow-sm">{l.title}</h3>
-                    <div className="text-white font-black text-2xl mt-1 drop-shadow-sm">{l.range}</div>
+                    <h3 className="font-display font-black text-white text-xl mt-4 drop-shadow-xs">{l.title}</h3>
+                    <div className="text-white font-black text-2xl mt-1 drop-shadow-xs">{l.range}</div>
                     <div className="text-white font-medium text-xs mt-1">Tenure: {l.tenure}</div>
                   </div>
 
                   {/* Body */}
-                  <div className="p-5">
+                  <div className="p-5 bg-white">
                     <div className="grid grid-cols-2 gap-2 mb-5">
                       {l.features.map((f) => (
-                        <div key={f} className="flex items-center gap-1.5 text-xs font-medium text-slate-100">
-                          <CheckCircle size={12} className="text-teal-400 shrink-0" />
+                        <div key={f} className="flex items-center gap-1.5 text-xs font-medium text-slate-700">
+                          <CheckCircle size={12} className="text-teal-600 shrink-0" />
                           {f}
                         </div>
                       ))}
@@ -397,7 +396,7 @@ export default function Loans() {
                       </button>
                       <button
                         onClick={() => handleApplyClick(l)}
-                        className="flex-1 text-center border border-slate-600 text-slate-200 hover:text-white text-xs font-bold py-2.5 rounded-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                        className="flex-1 text-center border border-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold py-2.5 rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
                       >
                         <span>Full Details</span> <ArrowRight size={12} />
                       </button>
@@ -411,23 +410,23 @@ export default function Loans() {
       </section>
 
       {/* ====== 5 STEPS ====== */}
-      <section className="py-16 px-6 border-t border-slate-800/40">
+      <section className="py-16 px-6 border-t border-slate-200 bg-white/60">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="eyebrow">Simple Process</div>
-            <h2 className="section-title text-white">Your Loan in <span className="highlight">5 Simple Steps</span></h2>
+            <h2 className="section-title">Your Loan in <span className="highlight">5 Simple Steps</span></h2>
           </div>
 
           <div className="grid sm:grid-cols-5 gap-4">
             {steps.map((s, i) => (
-              <div key={s.num} className="relative text-center bg-slate-900/80 p-5 rounded-2xl border border-slate-700">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/20">
+              <div key={s.num} className="relative text-center bg-white p-5 rounded-2xl border border-slate-200/90 shadow-xs">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-700 flex items-center justify-center mx-auto mb-4 shadow-md shadow-orange-500/20">
                   <span className="font-display font-black text-white text-lg">{s.num}</span>
                 </div>
-                <p className="font-bold text-white text-sm">{s.t}</p>
-                <p className="text-xs font-medium text-slate-200 mt-1.5 leading-relaxed">{s.d}</p>
+                <p className="font-bold text-slate-900 text-sm">{s.t}</p>
+                <p className="text-xs font-medium text-slate-600 mt-1.5 leading-relaxed">{s.d}</p>
                 {i < 4 && (
-                  <div className="hidden sm:block absolute top-7 left-[70%] w-[60%] h-0.5 bg-gradient-to-r from-orange-500/40 to-slate-700/40" />
+                  <div className="hidden sm:block absolute top-7 left-[70%] w-[60%] h-0.5 bg-gradient-to-r from-orange-500/40 to-slate-200" />
                 )}
               </div>
             ))}
@@ -436,18 +435,18 @@ export default function Loans() {
       </section>
 
       {/* ====== BANKING PARTNERS ====== */}
-      <section className="py-16 px-6 border-t border-b border-slate-800/40">
+      <section className="py-16 px-6 border-t border-b border-slate-200">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="eyebrow">Trusted Partners</div>
-            <h2 className="section-title text-white">Our Banking <span className="highlight">Partners</span></h2>
-            <p className="text-slate-100 text-sm mt-2 font-medium">We work with India's most trusted public and private sector lending institutions.</p>
+            <h2 className="section-title">Our Banking <span className="highlight">Partners</span></h2>
+            <p className="text-slate-600 text-sm mt-2 font-medium">We work with India's most trusted public and private sector lending institutions.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 items-center">
             {banks.map((b) => (
-              <div key={b.name} className="bg-slate-900/80 border border-slate-700/60 rounded-xl p-3 flex flex-col items-center justify-center h-20 hover:border-teal-500 transition-all shadow-sm">
-                <img src={b.logo} alt={b.name} className="h-8 object-contain filter brightness-95 contrast-125" />
-                <span className="text-[10px] font-semibold text-slate-300 mt-1.5 text-center leading-tight truncate w-full">{b.name}</span>
+              <div key={b.name} className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col items-center justify-center h-20 hover:border-teal-500 transition-all shadow-2xs">
+                <img src={b.logo} alt={b.name} className="h-8 object-contain filter contrast-125" />
+                <span className="text-[10px] font-semibold text-slate-600 mt-1.5 text-center leading-tight truncate w-full">{b.name}</span>
               </div>
             ))}
           </div>
@@ -526,18 +525,18 @@ export default function Loans() {
       {/* ====== DEDICATED INDIVIDUAL LOAN MODAL & CUSTOM FORM ====== */}
       {selectedLoan && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in"
           onClick={() => setSelectedLoan(null)}
         >
           <div
-            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl custom-scrollbar"
+            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-white border border-slate-200 rounded-3xl shadow-2xl custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className={`bg-gradient-to-r ${selectedLoan.color} p-6 sm:p-8 relative`}>
               <button
                 onClick={() => setSelectedLoan(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white/80 hover:text-white transition cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white transition cursor-pointer"
                 title="Close"
               >
                 <X size={20} />
@@ -553,7 +552,7 @@ export default function Loans() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-xs">
                   <selectedLoan.icon size={28} />
                 </div>
                 <div>
@@ -572,28 +571,28 @@ export default function Loans() {
             </div>
 
             {/* Modal Content: 2-Column Responsive Layout */}
-            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8">
+            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
               
               {/* Left Column: Loan Specifications */}
               <div className="lg:col-span-6 space-y-6">
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-2 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-2 flex items-center gap-1.5">
                     <Layers size={14} /> Product Overview
                   </h4>
-                  <p className="text-slate-200 text-sm leading-relaxed bg-slate-800/50 p-4 rounded-xl border border-slate-700/60">
+                  <p className="text-slate-700 text-sm leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200 font-normal">
                     {selectedLoan.overview}
                   </p>
                 </div>
 
                 {/* Eligibility Criteria */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <CheckCircle2 size={14} /> Eligibility Criteria
                   </h4>
-                  <div className="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium">
                     {selectedLoan.eligibility.map((el, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                        <CheckCircle size={14} className="text-teal-400 shrink-0 mt-0.5" />
+                      <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                        <CheckCircle size={14} className="text-teal-600 shrink-0 mt-0.5" />
                         <span>{el}</span>
                       </div>
                     ))}
@@ -602,13 +601,13 @@ export default function Loans() {
 
                 {/* Documents Checklist */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-amber-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-amber-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <FileText size={14} /> Mandatory Documents Checklist
                   </h4>
-                  <div className="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium">
                     {selectedLoan.documents.map((doc, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                      <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
                         <span>{doc}</span>
                       </div>
                     ))}
@@ -617,31 +616,31 @@ export default function Loans() {
               </div>
 
               {/* Right Column: TAILORED INDIVIDUAL LOAN FORM */}
-              <div className="lg:col-span-6 bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+              <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 border border-teal-500/30 text-teal-400 text-xs font-bold mb-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold mb-3">
                     <Sparkles size={13} /> {selectedLoan.title} Specific Form
                   </div>
-                  <h4 className="font-display font-black text-xl text-white">
+                  <h4 className="font-display font-black text-xl text-slate-900">
                     Apply for {selectedLoan.title}
                   </h4>
-                  <p className="text-slate-300 text-xs mt-1 mb-5">
+                  <p className="text-slate-600 text-xs mt-1 mb-5 font-normal">
                     Fill in your {selectedLoan.title.toLowerCase()} requirements for instant bank quotation and eligibility sanction.
                   </p>
 
                   {formStatus === "success" ? (
-                    <div className="p-5 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-center space-y-3">
-                      <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                    <div className="p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
+                      <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                         <CheckCircle size={28} />
                       </div>
-                      <p className="font-bold text-white text-sm">Application Received!</p>
-                      <p className="text-xs text-emerald-200 leading-relaxed">{formMsg}</p>
+                      <p className="font-bold text-slate-900 text-sm">Application Received!</p>
+                      <p className="text-xs text-emerald-800 leading-relaxed font-medium">{formMsg}</p>
                       <button
                         onClick={() => {
                           setFormStatus("idle");
                           setFormMsg("");
                         }}
-                        className="mt-2 text-xs text-emerald-400 underline font-semibold cursor-pointer"
+                        className="mt-2 text-xs text-teal-700 underline font-bold cursor-pointer"
                       >
                         Submit another enquiry
                       </button>
@@ -649,7 +648,7 @@ export default function Loans() {
                   ) : (
                     <form onSubmit={handleLoanFormSubmit} className="space-y-3.5">
                       {formStatus === "error" && (
-                        <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-red-300 text-xs flex items-center gap-2">
+                        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 font-medium">
                           <AlertCircle size={15} className="shrink-0" />
                           <span>{formMsg}</span>
                         </div>
@@ -657,7 +656,7 @@ export default function Loans() {
 
                       {/* Common Basic Fields */}
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
                           Applicant Full Name *
                         </label>
                         <input
@@ -666,13 +665,13 @@ export default function Loans() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. Anand Verma"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             Mobile Number *
                           </label>
                           <input
@@ -681,11 +680,11 @@ export default function Loans() {
                             value={formData.phone}
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                             placeholder="e.g. 9876543210"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             Email Address
                           </label>
                           <input
@@ -693,14 +692,14 @@ export default function Loans() {
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             placeholder="e.g. anand@domain.com"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             Required Loan Amount (₹) *
                           </label>
                           <input
@@ -709,11 +708,11 @@ export default function Loans() {
                             value={formData.amount}
                             onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                             placeholder="e.g. 25,00,000"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             City / Location *
                           </label>
                           <input
@@ -722,23 +721,23 @@ export default function Loans() {
                             value={formData.city}
                             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                             placeholder="e.g. Noida, Delhi NCR"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                       </div>
 
                       {/* 1. INDIVIDUAL FORM: BUSINESS LOAN */}
                       {selectedLoan.id === "business-loan" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Business Vintage
                               </label>
                               <select
                                 value={formData.businessVintage}
                                 onChange={(e) => setFormData({ ...formData, businessVintage: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="1 to 3 Years">1 to 3 Years</option>
                                 <option value="3 to 5 Years">3 to 5 Years</option>
@@ -747,13 +746,13 @@ export default function Loans() {
                               </select>
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Annual Turnover
                               </label>
                               <select
                                 value={formData.annualTurnover}
                                 onChange={(e) => setFormData({ ...formData, annualTurnover: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="₹20L – ₹50L">₹20L – ₹50 Lakh</option>
                                 <option value="₹50L – ₹1 Crore">₹50L – ₹1 Crore</option>
@@ -763,13 +762,13 @@ export default function Loans() {
                             </div>
                           </div>
                           <div>
-                            <label className="block text-xs font-semibold text-slate-300 mb-1">
+                            <label className="block text-xs font-bold text-slate-700 mb-1">
                               Business Legal Constitution
                             </label>
                             <select
                               value={formData.businessConstitution}
                               onChange={(e) => setFormData({ ...formData, businessConstitution: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                             >
                               <option value="Proprietorship">Sole Proprietorship</option>
                               <option value="Private Limited">Private Limited Company</option>
@@ -782,10 +781,10 @@ export default function Loans() {
 
                       {/* 2. INDIVIDUAL FORM: SALARIED PERSONAL LOAN */}
                       {selectedLoan.id === "personal-loan" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Monthly Net Salary (₹) *
                               </label>
                               <input
@@ -793,11 +792,11 @@ export default function Loans() {
                                 value={formData.monthlySalary}
                                 onChange={(e) => setFormData({ ...formData, monthlySalary: e.target.value })}
                                 placeholder="e.g. ₹55,000"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Employer / Company
                               </label>
                               <input
@@ -805,26 +804,26 @@ export default function Loans() {
                                 value={formData.companyName}
                                 onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                                 placeholder="e.g. TCS, HCL, Govt/PSU"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Salary Credit Mode
                               </label>
                               <select
                                 value={formData.salaryMode}
                                 onChange={(e) => setFormData({ ...formData, salaryMode: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Direct Bank Transfer">Direct Bank Transfer</option>
                                 <option value="Company Cheque">Company Cheque</option>
                               </select>
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Existing Monthly EMIs (₹)
                               </label>
                               <input
@@ -832,7 +831,7 @@ export default function Loans() {
                                 value={formData.existingEmi}
                                 onChange={(e) => setFormData({ ...formData, existingEmi: e.target.value })}
                                 placeholder="e.g. ₹8,000 or Nil"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                           </div>
@@ -841,15 +840,15 @@ export default function Loans() {
 
                       {/* 3. INDIVIDUAL FORM: HOME LOAN */}
                       {selectedLoan.id === "home-loan" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-300 mb-1">
+                            <label className="block text-xs font-bold text-slate-700 mb-1">
                               Property Purchase Status
                             </label>
                             <select
                               value={formData.propertyStage}
                               onChange={(e) => setFormData({ ...formData, propertyStage: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                             >
                               <option value="Ready to Move Property">Ready to Move House / Flat</option>
                               <option value="Under Construction">Under Construction Project</option>
@@ -860,7 +859,7 @@ export default function Loans() {
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Estimated Property Value (₹)
                               </label>
                               <input
@@ -868,17 +867,17 @@ export default function Loans() {
                                 value={formData.propertyCost}
                                 onChange={(e) => setFormData({ ...formData, propertyCost: e.target.value })}
                                 placeholder="e.g. ₹80 Lakh"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Income Profile
                               </label>
                               <select
                                 value={formData.employmentType}
                                 onChange={(e) => setFormData({ ...formData, employmentType: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Salaried Professional">Salaried Professional</option>
                                 <option value="Self Employed Business">Business Owner / MSME</option>
@@ -891,15 +890,15 @@ export default function Loans() {
 
                       {/* 4. INDIVIDUAL FORM: LOAN AGAINST PROPERTY (LAP) */}
                       {selectedLoan.id === "lap" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-300 mb-1">
+                            <label className="block text-xs font-bold text-slate-700 mb-1">
                               Property Type to Mortgage
                             </label>
                             <select
                               value={formData.propertyCategory}
                               onChange={(e) => setFormData({ ...formData, propertyCategory: e.target.value })}
-                              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                              className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                             >
                               <option value="Residential Property">Residential House / Villa / Flat</option>
                               <option value="Commercial Property">Commercial Office / Retail Shop</option>
@@ -908,7 +907,7 @@ export default function Loans() {
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Estimated Market Value (₹)
                               </label>
                               <input
@@ -916,17 +915,17 @@ export default function Loans() {
                                 value={formData.propertyMarketValue}
                                 onChange={(e) => setFormData({ ...formData, propertyMarketValue: e.target.value })}
                                 placeholder="e.g. ₹2.5 Crore"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Property Ownership
                               </label>
                               <select
                                 value={formData.propertyOwnership}
                                 onChange={(e) => setFormData({ ...formData, propertyOwnership: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Self Owned">Single / Self Owned</option>
                                 <option value="Joint Family">Joint / Co-Owned with Family</option>
@@ -939,16 +938,16 @@ export default function Loans() {
 
                       {/* 5. INDIVIDUAL FORM: EDUCATION LOAN */}
                       {selectedLoan.id === "education-loan" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Study Destination
                               </label>
                               <select
                                 value={formData.studyDestination}
                                 onChange={(e) => setFormData({ ...formData, studyDestination: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Abroad - USA / Canada">USA / Canada</option>
                                 <option value="Abroad - UK / Europe">UK / Europe / Germany</option>
@@ -958,13 +957,13 @@ export default function Loans() {
                               </select>
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Degree Level
                               </label>
                               <select
                                 value={formData.degreeLevel}
                                 onChange={(e) => setFormData({ ...formData, degreeLevel: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Masters / MBA / MS">Masters / MBA / MS</option>
                                 <option value="Undergraduate / Bachelors">Undergraduate / Bachelors</option>
@@ -974,7 +973,7 @@ export default function Loans() {
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Co-Applicant Occupation
                               </label>
                               <input
@@ -982,17 +981,17 @@ export default function Loans() {
                                 value={formData.coApplicantOccupation}
                                 onChange={(e) => setFormData({ ...formData, coApplicantOccupation: e.target.value })}
                                 placeholder="e.g. Salaried / Business"
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Admission Status
                               </label>
                               <select
                                 value={formData.admissionStatus}
                                 onChange={(e) => setFormData({ ...formData, admissionStatus: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Confirmed Offer Letter Received">Offer Letter Received</option>
                                 <option value="Applied / Awaiting Decision">Applied / Awaiting Result</option>
@@ -1005,9 +1004,9 @@ export default function Loans() {
 
                       {/* 6. INDIVIDUAL FORM: MACHINERY LOAN */}
                       {selectedLoan.id === "machinery-loan" && (
-                        <div className="space-y-3 pt-1 border-t border-slate-700/60">
+                        <div className="space-y-3 pt-1 border-t border-slate-200">
                           <div>
-                            <label className="block text-xs font-semibold text-slate-300 mb-1">
+                            <label className="block text-xs font-bold text-slate-700 mb-1">
                               Machinery Type / Description
                             </label>
                             <input
@@ -1015,12 +1014,12 @@ export default function Loans() {
                               value={formData.machineryDescription}
                               onChange={(e) => setFormData({ ...formData, machineryDescription: e.target.value })}
                               placeholder="e.g. 5-Axis CNC Machine, Food Packaging Line"
-                              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                              className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Quotation / Invoice Value (₹)
                               </label>
                               <input
@@ -1028,17 +1027,17 @@ export default function Loans() {
                                 value={formData.machineryQuotation}
                                 onChange={(e) => setFormData({ ...formData, machineryQuotation: e.target.value })}
                                 placeholder="e.g. ₹45,00,000"
-                                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500"
+                                className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                              <label className="block text-xs font-bold text-slate-700 mb-1">
                                 Procurement Channel
                               </label>
                               <select
                                 value={formData.procurementType}
                                 onChange={(e) => setFormData({ ...formData, procurementType: e.target.value })}
-                                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500"
+                                className="w-full px-3 py-2 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 shadow-2xs font-medium"
                               >
                                 <option value="Domestic / Indigenous OEM Purchase">Domestic OEM Manufacturer</option>
                                 <option value="Direct Import Machinery">Direct Import Machinery</option>
@@ -1052,7 +1051,7 @@ export default function Loans() {
                       <button
                         type="submit"
                         disabled={formStatus === "loading"}
-                        className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition cursor-pointer flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
+                        className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md transition cursor-pointer flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
                       >
                         {formStatus === "loading" ? (
                           <>
@@ -1070,8 +1069,8 @@ export default function Loans() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-700/60 text-center">
-                  <p className="text-[11px] text-slate-400">
+                <div className="pt-4 mt-4 border-t border-slate-200 text-center">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     🔒 100% Confidential · Free Assessment · Zero Advance Fees
                   </p>
                 </div>

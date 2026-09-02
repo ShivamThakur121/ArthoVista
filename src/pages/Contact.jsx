@@ -93,27 +93,26 @@ export default function Contact() {
   return (
     <div>
       {/* ====== HERO ====== */}
-      <section className="hero-dark relative py-16 px-6 overflow-hidden">
-        <div className="grid-bg" />
+      <section className="relative py-16 px-6 overflow-hidden border-b border-slate-200">
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <span className="inline-flex items-center gap-2 bg-green-500/15 text-green-400 border border-green-500/20 text-xs font-semibold px-4 py-2 rounded-full mb-6">
+          <span className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-4 py-2 rounded-full mb-6">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
             </span>
             Experts Are Online — Available Now
           </span>
           <h1
-            className="font-display font-black text-white"
+            className="font-display font-black text-slate-900"
             style={{ fontSize: "clamp(30px, 5vw, 54px)" }}
           >
-            Get In <span className="gradient-text">Touch</span>
+            Get In <span className="text-teal-600">Touch</span>
           </h1>
-          <p className="text-white/50 mt-4 max-w-xl mx-auto">
+          <p className="text-slate-600 mt-4 max-w-xl mx-auto font-normal">
             Our experts are ready to help you take your business to the next level. Free consultation, no commitment.
           </p>
-          <p className="text-sm text-white/30 mt-3 flex items-center justify-center gap-2">
-            <Clock size={14} className="text-orange-400" />
+          <p className="text-sm text-slate-500 mt-3 flex items-center justify-center gap-2 font-medium">
+            <Clock size={14} className="text-teal-600" />
             Mon-Sat, 9:30 AM - 6:00 PM IST · Free Consultation
           </p>
         </div>
@@ -121,7 +120,7 @@ export default function Contact() {
 
       {/* ====== STATS BAR ====== */}
       <section className="stats-section">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-value">{s.value}</div>
@@ -132,7 +131,7 @@ export default function Contact() {
       </section>
 
       {/* ====== CONTACT CHANNELS ====== */}
-      <section className="py-12 px-6 border-b border-slate-800/40">
+      <section className="py-12 px-6 border-b border-slate-200">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-3 gap-5">
             {channels.map((c) => (
@@ -141,21 +140,21 @@ export default function Contact() {
                 href={c.href}
                 target={c.href.startsWith("http") ? "_blank" : undefined}
                 rel="noreferrer"
-                className="glass-card-dark rounded-2xl overflow-hidden card-3d group border border-slate-700 hover:border-teal-500 transition-all"
+                className="bg-white rounded-2xl overflow-hidden border border-slate-200/90 hover:border-teal-500 shadow-md group transition-all"
               >
                 <div className={`bg-gradient-to-br ${c.color} p-5 relative`}>
                   <span className="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-white/20">
                     {c.badge}
                   </span>
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shadow-sm">
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center shadow-xs">
                     <c.icon size={22} className="text-white" />
                   </div>
                 </div>
-                <div className="p-5">
-                  <h3 className="font-display font-bold text-white text-lg drop-shadow-sm">{c.title}</h3>
-                  <p className="text-slate-100 text-sm font-medium mt-1">{c.desc}</p>
-                  <p className="text-xs font-semibold text-teal-300 mt-2">{c.meta}</p>
-                  <div className="mt-4 inline-flex items-center gap-1 text-teal-400 font-bold text-sm group-hover:gap-3 transition-all">
+                <div className="p-5 bg-white">
+                  <h3 className="font-display font-bold text-slate-900 text-lg">{c.title}</h3>
+                  <p className="text-slate-600 text-sm font-normal mt-1">{c.desc}</p>
+                  <p className="text-xs font-semibold text-teal-700 mt-2">{c.meta}</p>
+                  <div className="mt-4 inline-flex items-center gap-1 text-teal-600 font-bold text-sm group-hover:gap-3 transition-all">
                     {c.action} <ArrowRight size={13} />
                   </div>
                 </div>
@@ -172,31 +171,31 @@ export default function Contact() {
             {/* Left Side */}
             <div>
               <div className="eyebrow">We're Here to Help</div>
-              <h2 className="section-title text-white mb-3">
+              <h2 className="section-title mb-3">
                 Let's <span className="highlight">Talk Business</span>
               </h2>
-              <p className="text-slate-100 text-base font-medium mb-8">
+              <p className="text-slate-600 text-base font-normal mb-8">
                 Choose your preferred way to connect with our MSME experts.
               </p>
 
               {/* Office Info */}
-              <div className="glass-card-dark rounded-2xl p-6 mb-6 card-3d border border-slate-700">
+              <div className="bg-white rounded-2xl p-6 mb-6 border border-slate-200 shadow-xs">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center shrink-0 shadow-sm">
-                    <MapPin size={20} className="text-orange-400" />
+                  <div className="w-12 h-12 bg-teal-50 rounded-xl flex items-center justify-center shrink-0 border border-teal-200 shadow-2xs">
+                    <MapPin size={20} className="text-teal-600" />
                   </div>
                   <div>
-                    <p className="font-bold text-white text-base">Visit Our Office in Noida</p>
-                    <p className="text-sm font-medium text-slate-100 mt-1">Logix Cyber Park, Sector 62, Noida, UP - 201309</p>
+                    <p className="font-bold text-slate-900 text-base">Visit Our Office in Noida</p>
+                    <p className="text-sm font-normal text-slate-600 mt-1">Logix Cyber Park, Sector 62, Noida, UP - 201309</p>
                     <div className="flex flex-wrap gap-2 mt-3">
                       {["Business Registration", "MSME Loans", "Govt. Schemes", "PMEGP"].map((t) => (
-                        <span key={t} className="text-[11px] bg-slate-800 border border-slate-600 rounded-full px-2.5 py-1 text-teal-300 font-bold">
+                        <span key={t} className="text-[11px] bg-slate-100 border border-slate-200 rounded-full px-2.5 py-1 text-slate-700 font-bold">
                           {t}
                         </span>
                       ))}
                     </div>
-                    <p className="text-xs text-slate-200 font-semibold mt-3 flex items-center gap-1.5">
-                      <Clock size={12} className="text-teal-400" />
+                    <p className="text-xs text-slate-500 font-semibold mt-3 flex items-center gap-1.5">
+                      <Clock size={12} className="text-teal-600" />
                       Mon-Sat 9:30 AM - 6:00 PM · 500+ approved visits
                     </p>
                   </div>
@@ -206,23 +205,23 @@ export default function Contact() {
               {/* Quick Links */}
               <div className="grid grid-cols-1 gap-3 mb-6">
                 {quickLinks.map((q) => (
-                  <div key={q.title} className="glass-card-dark rounded-xl p-4 flex items-center gap-3 card-3d border border-slate-700">
+                  <div key={q.title} className="bg-white rounded-xl p-4 flex items-center gap-3 border border-slate-200 shadow-2xs">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${q.color}`}>
                       <q.icon size={18} />
                     </div>
                     <div className="flex-1">
-                      <p className="font-bold text-white text-sm">{q.title}</p>
-                      <p className="text-xs font-medium text-slate-200 mt-0.5">{q.desc}</p>
+                      <p className="font-bold text-slate-900 text-sm">{q.title}</p>
+                      <p className="text-xs font-medium text-slate-600 mt-0.5">{q.desc}</p>
                     </div>
-                    <ArrowRight size={14} className="text-teal-400" />
+                    <ArrowRight size={14} className="text-teal-600" />
                   </div>
                 ))}
               </div>
 
-              <p className="text-xs text-slate-200 font-semibold flex items-center gap-2">
+              <p className="text-xs text-slate-600 font-semibold flex items-center gap-2">
                 <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600" />
                 </span>
                 3 experts online — Ready to assist you right now
               </p>
@@ -230,94 +229,89 @@ export default function Contact() {
 
             {/* Right - Form */}
             <div>
-              <div
-                className="rounded-2xl overflow-hidden border border-slate-700 shadow-2xl"
-              >
-                <div
-                  className="p-5 flex items-center justify-between"
-                  style={{ background: "linear-gradient(135deg, rgba(10,22,40,0.9), rgba(26,48,96,0.9))" }}
-                >
+              <div className="rounded-2xl overflow-hidden border border-slate-200/90 shadow-md bg-white">
+                <div className="p-5 flex items-center justify-between bg-gradient-to-r from-teal-700 to-teal-800 text-white">
                   <div>
-                    <h2 className="font-display font-bold text-white text-lg drop-shadow-sm">Send Us a Message</h2>
-                    <p className="text-slate-200 text-xs font-medium mt-0.5">We'll get back to you within 24 hours</p>
+                    <h2 className="font-display font-bold text-white text-lg">Send Us a Message</h2>
+                    <p className="text-teal-100 text-xs font-medium mt-0.5">We'll get back to you within 24 hours</p>
                   </div>
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={13} className="text-amber-400 fill-amber-400" />
+                      <Star key={i} size={13} className="text-amber-300 fill-amber-300" />
                     ))}
                   </div>
                 </div>
 
-                <div className="bg-slate-900/90 p-7">
+                <div className="bg-white p-7">
                   {submitted ? (
                     <div className="py-12 text-center">
-                      <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle size={32} className="text-green-400" />
+                      <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-200">
+                        <CheckCircle size={32} className="text-green-600" />
                       </div>
-                      <h3 className="font-display font-bold text-white text-xl">Message Sent!</h3>
-                      <p className="text-slate-200 mt-2 text-sm font-medium">Our expert will call you within 24 hours.</p>
+                      <h3 className="font-display font-bold text-slate-900 text-xl">Message Sent!</h3>
+                      <p className="text-slate-600 mt-2 text-sm font-medium">Our expert will call you within 24 hours.</p>
                     </div>
                   ) : (
                     <form className="space-y-4" onSubmit={handleSubmit}>
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs font-bold text-slate-200 block mb-1.5">Full Name *</label>
+                          <label className="text-xs font-bold text-slate-700 block mb-1.5">Full Name *</label>
                           <input
                             type="text"
                             placeholder="Ramesh Kumar"
                             required
-                            className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white placeholder-slate-400 border border-slate-600 text-sm font-medium focus:outline-none focus:border-teal-500 transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 placeholder-slate-400 border border-slate-300 text-sm font-medium focus:outline-none focus:border-teal-600 transition-all shadow-2xs"
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-bold text-slate-200 block mb-1.5">Phone Number *</label>
+                          <label className="text-xs font-bold text-slate-700 block mb-1.5">Phone Number *</label>
                           <input
                             type="tel"
                             placeholder="98999 02568"
                             required
-                            className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white placeholder-slate-400 border border-slate-600 text-sm font-medium focus:outline-none focus:border-teal-500 transition-all"
+                            className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 placeholder-slate-400 border border-slate-300 text-sm font-medium focus:outline-none focus:border-teal-600 transition-all shadow-2xs"
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="text-xs font-bold text-slate-200 block mb-1.5">Email Address</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1.5">Email Address</label>
                         <input
                           type="email"
                           placeholder="ramesh@example.com"
-                          className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white placeholder-slate-400 border border-slate-600 text-sm font-medium focus:outline-none focus:border-teal-500 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 placeholder-slate-400 border border-slate-300 text-sm font-medium focus:outline-none focus:border-teal-600 transition-all shadow-2xs"
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-bold text-slate-200 block mb-1.5">Service Interested In</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1.5">Service Interested In</label>
                         <select
-                          className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white border border-slate-600 text-sm font-medium focus:outline-none focus:border-teal-500 transition-all"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 border border-slate-300 text-sm font-medium focus:outline-none focus:border-teal-600 transition-all shadow-2xs"
                           onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                         >
-                          <option value="" className="bg-slate-900">Select service</option>
-                          <option className="bg-slate-900">Business Registration</option>
-                          <option className="bg-slate-900">Government Schemes</option>
-                          <option className="bg-slate-900">Loan Products</option>
-                          <option className="bg-slate-900">Certifications</option>
-                          <option className="bg-slate-900">GST & Tax</option>
-                          <option className="bg-slate-900">NGO Services</option>
-                          <option className="bg-slate-900">Digital Marketing</option>
-                          <option className="bg-slate-900">DPR & Pitch Deck</option>
+                          <option value="">Select service</option>
+                          <option>Business Registration</option>
+                          <option>Government Schemes</option>
+                          <option>Loan Products</option>
+                          <option>Certifications</option>
+                          <option>GST & Tax</option>
+                          <option>NGO Services</option>
+                          <option>Digital Marketing</option>
+                          <option>DPR & Pitch Deck</option>
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs font-bold text-slate-200 block mb-1.5">Tell Us About Your Business</label>
+                        <label className="text-xs font-bold text-slate-700 block mb-1.5">Tell Us About Your Business</label>
                         <textarea
                           rows={4}
                           placeholder="Tell us what you need help with — business stage, industry, funding requirements..."
-                          className="w-full px-4 py-3 rounded-xl bg-slate-800 text-white placeholder-slate-400 border border-slate-600 text-sm font-medium focus:outline-none focus:border-teal-500 transition-all resize-none"
+                          className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 placeholder-slate-400 border border-slate-300 text-sm font-medium focus:outline-none focus:border-teal-600 transition-all resize-none shadow-2xs"
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         />
                       </div>
                       {error && (
-                        <div className="flex items-center gap-2 bg-red-950/80 border border-red-700 text-red-200 rounded-xl px-4 py-3 text-sm font-semibold">
+                        <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm font-semibold">
                           <span className="shrink-0">⚠️</span>
                           <span>{error}</span>
                         </div>
@@ -325,7 +319,7 @@ export default function Contact() {
                       <button
                         type="submit"
                         disabled={loading}
-                        className="btn-primary-3d w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-teal-500/25"
+                        className="btn-primary-3d w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed shadow-md cursor-pointer"
                       >
                         {loading ? (
                           <>
@@ -339,7 +333,7 @@ export default function Contact() {
                           </>
                         )}
                       </button>
-                      <p className="text-center text-xs font-medium text-slate-300">
+                      <p className="text-center text-xs font-medium text-slate-500">
                         Your information is secure · No hidden fees · 100% Confidential
                       </p>
                     </form>
@@ -352,14 +346,14 @@ export default function Contact() {
       </section>
 
       {/* ====== MAP + ADDRESS ====== */}
-      <section className="py-14 px-6 border-t border-slate-800/40">
+      <section className="py-14 px-6 border-t border-slate-200 bg-white/60">
         <div className="max-w-6xl mx-auto">
-          <div className="glass-card-dark rounded-2xl overflow-hidden border border-slate-700/60">
+          <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md">
             <div className="grid md:grid-cols-2">
               <div className="p-8">
                 <div className="eyebrow">Our Location</div>
-                <h3 className="section-title text-white text-3xl mb-4">Visit Our Office</h3>
-                <p className="text-slate-100 text-sm font-medium mb-6">
+                <h3 className="section-title text-3xl mb-4">Visit Our Office</h3>
+                <p className="text-slate-600 text-sm font-normal mb-6">
                   We'd love to meet you in person and discuss your business growth strategy.
                 </p>
                 <div className="space-y-4">
@@ -369,8 +363,8 @@ export default function Contact() {
                     { icon: Mail, text: "support@arthovista.com" },
                     { icon: Clock, text: "Mon-Sat, 9:30 AM - 6:00 PM IST" },
                   ].map(({ icon: Icon, text }) => (
-                    <div key={text} className="flex items-start gap-3 text-sm text-slate-100 font-medium">
-                      <Icon size={16} className="text-orange-400 mt-0.5 shrink-0" />
+                    <div key={text} className="flex items-start gap-3 text-sm text-slate-700 font-medium">
+                      <Icon size={16} className="text-teal-600 mt-0.5 shrink-0" />
                       <span>{text}</span>
                     </div>
                   ))}
@@ -390,21 +384,20 @@ export default function Contact() {
                 </div>
               </div>
               <div
-                className="min-h-[300px] flex items-center justify-center relative overflow-hidden"
-                style={{ background: "linear-gradient(135deg, rgba(10,22,40,0.85), rgba(26,48,96,0.85))" }}
+                className="min-h-[300px] flex items-center justify-center relative overflow-hidden text-white"
+                style={{ background: "linear-gradient(135deg, #0f766e, #0d9488)" }}
               >
-                <div className="grid-bg" />
                 <div className="relative z-10 text-center p-6">
-                  <div className="w-16 h-16 bg-orange-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-                    <MapPin size={28} className="text-orange-400" />
+                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <MapPin size={28} className="text-white" />
                   </div>
                   <p className="text-white font-bold text-lg">Logix Cyber Park</p>
-                  <p className="text-slate-200 text-sm font-medium mt-1">Noida Sector 62, UP</p>
+                  <p className="text-teal-100 text-sm font-medium mt-1">Noida Sector 62, UP</p>
                   <a
                     href="https://maps.google.com/?q=Logix+Cyber+Park+Noida+Sector+62"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 text-orange-400 text-sm hover:text-orange-300 transition-colors font-bold"
+                    className="inline-flex items-center gap-2 mt-4 text-white bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl text-sm transition-colors font-bold border border-white/20"
                   >
                     Open in Google Maps <ArrowRight size={13} />
                   </a>

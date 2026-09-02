@@ -21,6 +21,7 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Blogs = lazy(() => import("./pages/Blogs"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Newsletter = lazy(() => import("./pages/Newsletter"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 
@@ -40,6 +41,8 @@ const AttendancePortal = lazy(() => import("./pages/attendance/AttendancePortal"
 const LeaveRequests = lazy(() => import("./pages/attendance/LeaveRequests"));
 const HolidaysEvents = lazy(() => import("./pages/attendance/HolidaysEvents"));
 const Announcements = lazy(() => import("./pages/attendance/Announcements"));
+const AdminBlogs = lazy(() => import("./pages/attendance/AdminBlogs"));
+const AdminNewsletters = lazy(() => import("./pages/attendance/AdminNewsletters"));
 const Reports = lazy(() => import("./pages/attendance/Reports"));
 const Profile = lazy(() => import("./pages/attendance/Profile"));
 
@@ -50,10 +53,12 @@ const PageLoader = () => (
 );
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    if (!hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
   return null;
 }
 
@@ -77,7 +82,7 @@ function MainLayoutWrapper() {
 
   if (isAttendanceRoute) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#07192f] text-slate-100 font-sans relative overflow-x-hidden">
+      <div className="min-h-screen flex flex-col bg-[#f1f5f9] text-slate-700 font-sans relative overflow-x-hidden">
         <StarfieldBackground />
         <div className="relative z-10 flex flex-col min-h-screen">
           <Suspense fallback={<PageLoader />}>
@@ -100,6 +105,8 @@ function MainLayoutWrapper() {
                 <Route path="/admin/leaves" element={<LeaveRequests />} />
                 <Route path="/admin/holidays" element={<HolidaysEvents />} />
                 <Route path="/admin/announcements" element={<Announcements />} />
+                <Route path="/admin/blogs" element={<AdminBlogs />} />
+                <Route path="/admin/newsletters" element={<AdminNewsletters />} />
                 <Route path="/admin/reports" element={<Reports />} />
                 <Route path="/admin/profile" element={<Profile />} />
               </Route>
@@ -128,12 +135,12 @@ function MainLayoutWrapper() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#07192f] text-slate-100 font-sans relative overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-[#f1f5f9] text-slate-700 font-sans relative overflow-x-clip">
       <StarfieldBackground />
       <div className="relative z-10 flex flex-col min-h-screen">
         <StickyBar />
         <Navbar />
-        <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
+        <main className="flex-1 w-full max-w-[100vw] overflow-x-clip">
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -142,6 +149,10 @@ function MainLayoutWrapper() {
               <Route path="/loans" element={<Loans />} />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/newsletter" element={<Newsletter />} />
+              <Route path="/resources" element={<Navigate to="/blogs" replace />} />
+              <Route path="/resources/blogs" element={<Navigate to="/blogs" replace />} />
+              <Route path="/resources/newsletter" element={<Navigate to="/newsletter" replace />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />

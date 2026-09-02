@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api, useAuth } from '../../context/AuthContext';
-import { 
-  AreaChart, 
-  Area, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   Legend
 } from 'recharts';
-import { 
-  Users, 
-  Building, 
-  UserCheck, 
-  Clock, 
-  Calendar as CalendarIcon, 
-  UserMinus, 
-  Loader2, 
+import {
+  Users,
+  Building,
+  UserCheck,
+  Clock,
+  Calendar as CalendarIcon,
+  UserMinus,
+  Loader2,
   ShieldCheck,
   AlertCircle,
   ChevronLeft,
@@ -99,7 +99,7 @@ const AdminDashboard = () => {
   const fetchCalendar = async (year, month, empId) => {
     setCalendarLoading(true);
     try {
-      const url = empId 
+      const url = empId
         ? `/attendance/calendar?year=${year}&month=${month}&employeeId=${empId}`
         : `/attendance/calendar?year=${year}&month=${month}`;
       const res = await api.get(url);
@@ -159,7 +159,7 @@ const AdminDashboard = () => {
     const now = new Date();
     const diffTime = Math.abs(now - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 30) return `${diffDays} days`;
     const months = Math.floor(diffDays / 30);
     if (months < 12) return `${months} month${months > 1 ? 's' : ''}`;
@@ -303,11 +303,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      
+
       {/* Top Banner Card with 10:00 AM Shift & Quick Profile Access */}
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 shadow-2xl p-6 md:p-8 text-white">
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-        
+
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -326,10 +326,10 @@ const AdminDashboard = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 text-white">
             <Link
               to="/admin/profile"
-              className="flex items-center gap-2 px-5 py-2.5 bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs rounded-xl shadow-lg transition-all active:scale-[0.98]"
+              className="flex items-center gap-2 px-5 py-2.5 bg-indigo-500/10 text-white hover:bg-blue-100 font-bold text-xs rounded-xl shadow-lg transition-all active:scale-[0.98]"
             >
               <User className="w-4 h-4 text-primary-600" />
               My Profile
@@ -418,8 +418,8 @@ const AdminDashboard = () => {
             const presentPercent = total > 0 ? Math.round((day.Present / total) * 100) : 0;
 
             return (
-              <div 
-                key={idx} 
+              <div
+                key={idx}
                 className="p-4 rounded-2xl border border-slate-200/60 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30 text-center flex flex-col justify-between min-h-[160px] hover:border-primary-500/40 hover:shadow-md transition-all"
               >
                 <div>
@@ -445,8 +445,8 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                  <div 
-                    className="bg-emerald-500 h-full rounded-full transition-all" 
+                  <div
+                    className="bg-emerald-500 h-full rounded-full transition-all"
                     style={{ width: `${presentPercent}%` }}
                   />
                 </div>
@@ -458,7 +458,7 @@ const AdminDashboard = () => {
 
       {/* Interactive Monthly Attendance Calendar View */}
       <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-6">
-        
+
         {/* Calendar Header & Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
           <div className="flex flex-wrap items-center gap-3">
@@ -471,7 +471,7 @@ const AdminDashboard = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              
+
               <span className="px-4 text-sm font-extrabold text-slate-800 dark:text-slate-100 min-w-[140px] text-center">
                 {monthNames[calendarMonth - 1]} {calendarYear}
               </span>
@@ -539,7 +539,7 @@ const AdminDashboard = () => {
           </div>
         ) : (
           <div className="space-y-2">
-            
+
             {/* Headers */}
             <div className="grid grid-cols-7 gap-2 text-center text-[11px] font-bold text-slate-400 uppercase tracking-wider py-2">
               <div>Mon</div>
@@ -624,7 +624,7 @@ const AdminDashboard = () => {
 
       {/* Attendance Activity Logs History Table */}
       <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-6">
-        
+
         {/* Filter Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -753,7 +753,7 @@ const AdminDashboard = () => {
 
       {/* Analytics & Department Breakdown Split Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
+
         {/* Weekly Trend Chart (7 Columns) */}
         <div className="lg:col-span-7 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-4">
           <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -766,12 +766,12 @@ const AdminDashboard = () => {
               <AreaChart data={weeklyTrend} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorPresent" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#4f73ff" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#4f73ff" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#4f73ff" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#4f73ff" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorLate" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.2}/>
-                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -813,7 +813,7 @@ const AdminDashboard = () => {
         const currentProfile = profileData || user;
         return (
           <div className="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm space-y-6">
-            
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-2xl bg-primary-50 dark:bg-primary-950/40 text-primary-600 dark:text-primary-400 flex items-center justify-center shadow-sm">
@@ -843,7 +843,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              
+
               {/* Card 1: Avatar, Name, Employee ID & Security */}
               <div className="p-5 rounded-2xl bg-slate-50/70 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80 flex flex-col justify-between space-y-4">
                 <div className="flex items-center gap-4">
@@ -895,9 +895,8 @@ const AdminDashboard = () => {
 
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400 font-medium">Biometric Descriptor:</span>
-                    <span className={`font-bold flex items-center gap-1 ${
-                      currentProfile?.hasBiometrics ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'
-                    }`}>
+                    <span className={`font-bold flex items-center gap-1 ${currentProfile?.hasBiometrics ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'
+                      }`}>
                       <Fingerprint className="w-3.5 h-3.5" />
                       {currentProfile?.hasBiometrics ? 'Enrolled & Verified' : 'Master Account'}
                     </span>
@@ -911,7 +910,7 @@ const AdminDashboard = () => {
                   <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
                     Role & Operations
                   </span>
-                  
+
                   <div className="flex items-center gap-2 text-xs">
                     <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
                     <div>
@@ -996,7 +995,7 @@ const AdminDashboard = () => {
       {selectedDayDetails && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 max-w-md w-full shadow-2xl space-y-5 animate-scaleUp">
-            
+
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <h4 className="text-base font-bold text-slate-800 dark:text-slate-200">

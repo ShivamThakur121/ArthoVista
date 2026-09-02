@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useDocumentMetadata from "../hooks/useDocumentMetadata";
 import { useConsultation } from "../context/ConsultationContext";
 import {
@@ -256,6 +256,23 @@ export default function Services() {
   const [openFaq, setOpenFaq] = useState(0);
   const [showGuideDetails, setShowGuideDetails] = useState(true);
   const { openConsultationModal } = useConsultation();
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = location.hash ? location.hash.replace("#", "") : "";
+    if (hash) {
+      const validBlock = blocks.find((b) => b.id === hash);
+      if (validBlock) {
+        setActive(hash);
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 150);
+      }
+    }
+  }, [location.hash]);
 
   const openModal = (service) => {
     openConsultationModal(service);
@@ -298,24 +315,26 @@ export default function Services() {
     <div>
 
       {/* ====== HERO ====== */}
-      <section className="hero-dark relative py-16 px-6">
-        <div className="grid-bg" />
+      <section className="relative py-16 px-6 border-b border-slate-200">
         <div className="relative z-10 max-w-6xl mx-auto text-center">
           <div className="eyebrow">Our Expertise</div>
           <h1
-            className="font-display font-black text-white mt-2 drop-shadow-md"
+            className="font-display font-black text-slate-900 mt-2"
             style={{ fontSize: "clamp(32px, 5vw, 56px)" }}
           >
-            Our <span className="gradient-text">Services</span>
+            Our <span className="highlight">Services</span>
           </h1>
-          <p className="text-slate-100 mt-4 max-w-2xl mx-auto text-base font-medium leading-relaxed drop-shadow-sm">
+          <p className="text-slate-600 mt-4 max-w-2xl mx-auto text-base font-normal leading-relaxed">
             Comprehensive end-to-end business support for every stage of your entrepreneurial journey with ArthoVista.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
-            <Link to="/" className="btn-primary-3d">
+            <button
+              onClick={() => openConsultationModal("General Consultation Leads")}
+              className="btn-primary-3d cursor-pointer"
+            >
               Free Consultation <ArrowRight size={15} />
-            </Link>
-            <a href="tel:+919899902568" className="btn-outline-white-3d">
+            </button>
+            <a href="tel:+919899902568" className="btn-outline-3d">
               <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
@@ -324,7 +343,7 @@ export default function Services() {
 
       {/* ====== STATS BAR ====== */}
       <section className="stats-section">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/15">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-value">{s.value}</div>
@@ -335,10 +354,10 @@ export default function Services() {
       </section>
 
       {/* ====== CATEGORY TABS ====== */}
-      <section className="py-10 px-6 border-b border-slate-800/40">
+      <section className="py-10 px-6 border-b border-slate-200 bg-white/60">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
-            <h2 className="section-title text-white">Explore <span className="highlight">All Services</span></h2>
+            <h2 className="section-title">Explore <span className="highlight">All Services</span></h2>
           </div>
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map((c) => (
@@ -348,7 +367,7 @@ export default function Services() {
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${
                   active === c.id
                     ? "bg-teal-600 text-white shadow-md shadow-teal-500/25"
-                    : "bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-600"
+                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-xs"
                 }`}
               >
                 <c.icon size={15} />
@@ -366,26 +385,26 @@ export default function Services() {
             <div
               key={b.id}
               id={b.id}
-              className={`tilt-3d bg-slate-900/80 border border-slate-700/70 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 ${
+              className={`tilt-3d scroll-mt-28 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all duration-500 ${
                 active === b.id
-                  ? "ring-2 ring-teal-500 ring-offset-2 ring-offset-slate-900"
+                  ? "ring-2 ring-teal-500 ring-offset-2 ring-offset-slate-100"
                   : "opacity-100"
               }`}
             >
               <div className="grid md:grid-cols-[300px_1fr]">
-                {/* Left Panel - Clean without huge numbers */}
+                {/* Left Panel */}
                 <div className={`bg-gradient-to-br ${b.color} p-8 flex flex-col justify-between relative overflow-hidden`}>
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-5 shadow-sm">
+                    <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-5 shadow-xs">
                       <b.icon size={22} className="text-white" />
                     </div>
-                    <h3 className="font-display font-bold text-white text-2xl drop-shadow-sm">{b.title}</h3>
+                    <h3 className="font-display font-bold text-white text-2xl drop-shadow-xs">{b.title}</h3>
                     <p className="text-white text-sm mt-3 leading-relaxed font-medium">{b.desc}</p>
                   </div>
                   <div className="flex gap-2 mt-8">
                     <button
                       onClick={() => openBlockDetail(b)}
-                      className="bg-white text-slate-900 text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-slate-100 transition cursor-pointer shadow"
+                      className="bg-white text-slate-900 text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-slate-100 transition cursor-pointer shadow-xs"
                     >
                       Full Details
                     </button>
@@ -399,22 +418,22 @@ export default function Services() {
                 </div>
 
                 {/* Right Panel */}
-                <div className="p-8">
+                <div className="p-8 bg-white">
                   <div className="grid sm:grid-cols-2 gap-4">
                     {b.items.map((item) => (
                       <div
                         key={item.t}
-                        className="border border-slate-700 bg-slate-800/60 rounded-xl p-4 hover:border-teal-500 hover:bg-slate-800 transition-all group cursor-pointer"
+                        className="border border-slate-200 bg-slate-50/70 rounded-xl p-4 hover:border-teal-500 hover:bg-white transition-all group cursor-pointer shadow-2xs"
                         onClick={() => openItemDetail(b, item)}
                       >
                         <div className="flex items-start gap-2.5">
-                          <CheckCircle size={15} className="text-teal-400 mt-0.5 shrink-0" />
+                          <CheckCircle size={15} className="text-teal-600 mt-0.5 shrink-0" />
                           <div>
-                            <p className="font-bold text-white text-sm group-hover:text-teal-300 transition-colors">
+                            <p className="font-bold text-slate-900 text-sm group-hover:text-teal-600 transition-colors">
                               {item.t}
                             </p>
-                            <p className="text-xs font-medium text-slate-200 mt-1.5 leading-relaxed">{item.d}</p>
-                            <span className="inline-block mt-2 text-xs font-bold text-teal-400 group-hover:underline">
+                            <p className="text-xs font-medium text-slate-600 mt-1.5 leading-relaxed">{item.d}</p>
+                            <span className="inline-block mt-2 text-xs font-bold text-teal-600 group-hover:underline">
                               View Details & Enquire →
                             </span>
                           </div>
@@ -430,30 +449,30 @@ export default function Services() {
       </section>
 
       {/* ====== FAQ SECTION ====== */}
-      <section className="py-16 px-6 border-t border-slate-800/40">
+      <section className="py-16 px-6 border-t border-slate-200">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <div className="eyebrow">Got Questions?</div>
-            <h2 className="section-title text-white">Frequently Asked <span className="highlight">Questions</span></h2>
-            <p className="text-slate-200 mt-2 font-medium text-sm">Everything you need to know about our business services, compliance, and timelines.</p>
+            <h2 className="section-title">Frequently Asked <span className="highlight">Questions</span></h2>
+            <p className="text-slate-600 mt-2 font-medium text-sm">Everything you need to know about our business services, compliance, and timelines.</p>
           </div>
 
           <div className="space-y-3">
             {serviceFaqs.map((f, idx) => (
               <div
                 key={f.q}
-                className={`glass-card-dark rounded-xl overflow-hidden transition-all duration-300 border border-slate-700/60 ${
-                  openFaq === idx ? "ring-2 ring-teal-400" : ""
+                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${
+                  openFaq === idx ? "ring-2 ring-teal-500" : ""
                 }`}
               >
                 <button
                   className="w-full text-left p-5 flex items-center justify-between gap-3 cursor-pointer"
                   onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
                 >
-                  <span className="font-bold text-white text-sm sm:text-base">{f.q}</span>
+                  <span className="font-bold text-slate-900 text-sm sm:text-base">{f.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-teal-400 transition-transform duration-300 ${
+                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${
                       openFaq === idx ? "rotate-180" : ""
                     }`}
                   />
@@ -463,7 +482,7 @@ export default function Services() {
                     openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
                   }`}
                 >
-                  <p className="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
+                  <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
                 </div>
               </div>
             ))}
@@ -472,14 +491,14 @@ export default function Services() {
       </section>
 
       {/* ====== JOURNEY CTA ====== */}
-      <section className="py-16 px-6 border-t border-slate-800/40">
+      <section className="py-16 px-6 border-t border-slate-200">
         <div className="max-w-6xl mx-auto">
-          <div className="glass-card-dark rounded-2xl p-8 md:p-12 text-center border border-slate-700/60">
+          <div className="bg-white rounded-2xl p-8 md:p-12 text-center border border-slate-200 shadow-md">
             <span className="badge-orange mb-5 inline-block font-bold">Free Consultation · No Obligation</span>
-            <h2 className="section-title text-white mb-3">
+            <h2 className="section-title text-slate-900 mb-3">
               Not Sure Which <span className="highlight">Service You Need?</span>
             </h2>
-            <p className="text-slate-100 max-w-xl mx-auto font-medium text-base">
+            <p className="text-slate-600 max-w-xl mx-auto font-medium text-base">
               Our experts will map out the exact services, schemes, and subsidies that apply to your business — all in a free 30-minute call.
             </p>
 
@@ -490,30 +509,32 @@ export default function Services() {
                 { icon: Landmark, t: "Subsidy Discovery", d: "Uncover every government scheme you qualify for." },
                 { icon: TrendingUp, t: "Growth Roadmap", d: "Prioritised action plan with timelines and ROI." },
               ].map((j) => (
-                <div key={j.t} className="relative bg-slate-800/80 p-5 rounded-xl border border-slate-700">
-                  <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold mb-3 border border-teal-500/30">
+                <div key={j.t} className="relative bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-2xs">
+                  <div className="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold mb-3 border border-teal-200">
                     <j.icon size={18} />
                   </div>
-                  <p className="font-bold text-white text-sm">{j.t}</p>
-                  <p className="text-xs font-medium text-slate-200 mt-1 leading-relaxed">{j.d}</p>
+                  <p className="font-bold text-slate-900 text-sm">{j.t}</p>
+                  <p className="text-xs font-medium text-slate-600 mt-1 leading-relaxed">{j.d}</p>
                 </div>
               ))}
             </div>
 
             <div
-              className="rounded-xl p-6 mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border border-slate-700"
-              style={{ background: "linear-gradient(135deg, rgba(10,22,40,0.85), rgba(26,48,96,0.85))" }}
+              className="rounded-xl p-6 mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border border-teal-200 bg-teal-50/80"
             >
               <div className="text-left">
-                <p className="text-white font-bold text-base">Talk to an MSME Specialist</p>
-                <p className="text-slate-200 text-xs font-medium mt-1">We have helped 500+ businesses across India with ArthoVista.</p>
+                <p className="text-slate-900 font-bold text-base">Talk to an MSME Specialist</p>
+                <p className="text-slate-600 text-xs font-medium mt-1">We have helped 500+ businesses across India with ArthoVista.</p>
               </div>
               <div className="flex gap-3 shrink-0">
-                <Link to="/contact" className="btn-primary-3d">
+                <button
+                  onClick={() => openConsultationModal("MSME Specialist Consultation")}
+                  className="btn-primary-3d cursor-pointer"
+                >
                   Book Free Session <ArrowRight size={14} />
-                </Link>
-                <a href="tel:+919899902568" className="btn-outline-white-3d">
-                  <PhoneCall size={15} /> +91 98999 02568
+                </button>
+                <a href="tel:+919899902568" className="inline-flex items-center gap-2 bg-white text-slate-900 font-bold px-5 py-2.5 rounded-xl border border-slate-300 shadow-xs hover:bg-slate-50 text-xs">
+                  <PhoneCall size={15} className="text-teal-600" /> +91 98999 02568
                 </a>
               </div>
             </div>
@@ -521,21 +542,21 @@ export default function Services() {
         </div>
       </section>
 
-      {/* ====== SERVICE DETAIL & IN-DEPTH KNOWLEDGE MODAL ====== */}
+      {/* ====== SERVICE DETAIL MODAL ====== */}
       {selectedDetail && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in"
           onClick={() => setSelectedDetail(null)}
         >
           <div
-            className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl custom-scrollbar"
+            className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white border border-slate-200 rounded-3xl shadow-2xl custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className={`bg-gradient-to-r ${selectedDetail.color} p-6 sm:p-8 relative`}>
               <button
                 onClick={() => setSelectedDetail(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/80 hover:text-white transition cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white transition cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -546,14 +567,14 @@ export default function Services() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-xs">
                   <selectedDetail.icon size={28} />
                 </div>
                 <div>
                   <h3 className="font-display font-black text-2xl sm:text-3xl text-white">
                     {selectedDetail.title}
                   </h3>
-                  <p className="text-white/90 font-medium text-xs sm:text-sm mt-1">
+                  <p className="text-white font-semibold text-xs sm:text-sm mt-1">
                     {selectedDetail.desc}
                   </p>
                 </div>
@@ -561,13 +582,13 @@ export default function Services() {
             </div>
 
             {/* Content Body */}
-            <div className="p-6 sm:p-8 space-y-6">
+            <div className="p-6 sm:p-8 space-y-6 bg-white">
               {/* Domain Overview */}
               <div>
-                <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-2 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-2 flex items-center gap-1.5">
                   <Layers size={14} /> Scope & Advisory Overview
                 </h4>
-                <p className="text-slate-200 text-sm sm:text-base leading-relaxed bg-slate-800/50 p-4 rounded-xl border border-slate-700/60">
+                <p className="text-slate-700 text-sm sm:text-base leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200 font-normal">
                   {selectedDetail.longDesc || selectedDetail.desc}
                 </p>
               </div>
@@ -575,7 +596,7 @@ export default function Services() {
               {/* Sub-Services List */}
               {selectedDetail.items && (
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <CheckCircle2 size={14} /> Included Sub-Services & Coverage
                   </h4>
                   <div className="grid sm:grid-cols-2 gap-3">
@@ -584,15 +605,15 @@ export default function Services() {
                         key={it.t}
                         className={`p-3.5 rounded-xl border transition-all ${
                           selectedDetail.activeItem?.t === it.t
-                            ? "bg-teal-950/40 border-teal-500 ring-1 ring-teal-500"
-                            : "bg-slate-800/60 border-slate-700/70"
+                            ? "bg-teal-50 border-teal-500 ring-1 ring-teal-500"
+                            : "bg-slate-50 border-slate-200"
                         }`}
                       >
-                        <p className="font-bold text-white text-sm flex items-center gap-2">
-                          <CheckCircle size={14} className="text-teal-400 shrink-0" />
+                        <p className="font-bold text-slate-900 text-sm flex items-center gap-2">
+                          <CheckCircle size={14} className="text-teal-600 shrink-0" />
                           <span>{it.t}</span>
                         </p>
-                        <p className="text-xs text-slate-300 mt-1.5 ml-5 leading-relaxed">
+                        <p className="text-xs text-slate-600 mt-1.5 ml-5 leading-relaxed font-normal">
                           {it.d}
                         </p>
                       </div>
@@ -602,16 +623,16 @@ export default function Services() {
               )}
 
               {/* Deliverables & Documents */}
-              <div className="grid sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800">
+              <div className="grid sm:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
                 {selectedDetail.deliverables && (
-                  <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50">
-                    <p className="text-xs font-bold uppercase text-amber-400 tracking-wider mb-2 flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <p className="text-xs font-bold uppercase text-amber-700 tracking-wider mb-2 flex items-center gap-1.5">
                       <FileText size={13} /> Official Deliverables
                     </p>
                     <ul className="space-y-1.5">
                       {selectedDetail.deliverables.map((del) => (
-                        <li key={del} className="text-xs text-slate-300 flex items-start gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" />
+                        <li key={del} className="text-xs text-slate-700 flex items-start gap-1.5 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-600 mt-1.5 shrink-0" />
                           <span>{del}</span>
                         </li>
                       ))}
@@ -620,17 +641,17 @@ export default function Services() {
                 )}
 
                 {selectedDetail.documents && (
-                  <div className="p-4 rounded-xl bg-slate-800/40 border border-slate-700/50">
-                    <p className="text-xs font-bold uppercase text-amber-400 tracking-wider mb-2 flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                    <p className="text-xs font-bold uppercase text-amber-700 tracking-wider mb-2 flex items-center gap-1.5">
                       <Clock size={13} /> Documents & Turnaround
                     </p>
-                    <p className="text-xs font-semibold text-teal-300 mb-2">
+                    <p className="text-xs font-bold text-teal-700 mb-2">
                       Timeline: {selectedDetail.timeline || "3–7 Business Days"}
                     </p>
                     <ul className="space-y-1.5">
                       {selectedDetail.documents.map((doc) => (
-                        <li key={doc} className="text-xs text-slate-300 flex items-start gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                        <li key={doc} className="text-xs text-slate-700 flex items-start gap-1.5 font-medium">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
                           <span>{doc}</span>
                         </li>
                       ))}
@@ -641,32 +662,32 @@ export default function Services() {
 
               {/* IN-DEPTH DISTRIBUTED KNOWLEDGE GUIDE (From Knowledge Hub) */}
               {matchedGuide && (
-                <div className="pt-4 border-t border-slate-800">
-                  <div className="p-5 rounded-2xl bg-slate-800/60 border border-slate-700/80 space-y-4">
+                <div className="pt-4 border-t border-slate-200">
+                  <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <BookOpen size={16} className="text-teal-400" />
-                        <h4 className="text-sm font-bold text-white">
+                        <BookOpen size={16} className="text-teal-700" />
+                        <h4 className="text-sm font-bold text-slate-900">
                           In-Depth Regulatory Handbook & Statutory Guidelines
                         </h4>
                       </div>
-                      <span className="text-xs font-semibold text-teal-400 bg-teal-950/60 px-2.5 py-1 rounded-full border border-teal-500/30">
+                      <span className="text-xs font-bold text-teal-700 bg-teal-100/60 px-2.5 py-1 rounded-full border border-teal-200">
                         {matchedGuide.readTime}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
                       {matchedGuide.excerpt}
                     </p>
 
                     {matchedGuide.tableOfContents && (
                       <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                           Key Coverage Topics:
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                           {matchedGuide.tableOfContents.slice(0, 6).map((toc) => (
-                            <span key={toc.id} className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-700">
+                            <span key={toc.id} className="text-[11px] px-2.5 py-1 rounded-lg bg-white text-slate-700 border border-slate-200 font-medium">
                               {toc.label}
                             </span>
                           ))}
@@ -679,14 +700,14 @@ export default function Services() {
             </div>
 
             {/* Footer Actions */}
-            <div className="p-6 bg-slate-950/70 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <p className="text-xs text-slate-300 text-center sm:text-left">
-                Speak directly with an ArthoVista advisor for <span className="text-white font-bold">{selectedDetail.title}</span>.
+            <div className="p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <p className="text-xs text-slate-600 text-center sm:text-left font-medium">
+                Speak directly with an ArthoVista advisor for <span className="text-slate-900 font-bold">{selectedDetail.title}</span>.
               </p>
               <div className="flex gap-2 w-full sm:w-auto">
                 <button
                   onClick={() => setSelectedDetail(null)}
-                  className="px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 text-xs font-bold transition cursor-pointer flex-1 sm:flex-none"
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:text-slate-900 hover:bg-slate-100 text-xs font-bold transition cursor-pointer flex-1 sm:flex-none shadow-2xs"
                 >
                   Close
                 </button>
@@ -694,9 +715,9 @@ export default function Services() {
                   onClick={() => {
                     const title = selectedDetail.title.includes("Leads") ? selectedDetail.title : `${selectedDetail.title} Leads`;
                     setSelectedDetail(null);
-                    openModal(title);
+                    openConsultationModal(title);
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white text-xs font-bold shadow-md transition cursor-pointer flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
                 >
                   <span>Book Free Consultation</span> <ArrowRight size={14} />
                 </button>

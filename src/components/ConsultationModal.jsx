@@ -7,19 +7,36 @@ export default function ConsultationModal() {
   const [form, setForm] = useState({ name: "", phone: "", email: "", service: "" });
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [errMsg, setErrMsg] = useState("");
-  const [animateIn, setAnimateIn] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setForm((prev) => ({ ...prev, service: presetService || "General Consultation" }));
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        service: presetService || "General Consultation",
+      });
       setStatus("idle");
       setErrMsg("");
-      const timer = setTimeout(() => setAnimateIn(true), 10);
-      return () => clearTimeout(timer);
+      document.body.style.overflow = "hidden";
     } else {
-      setAnimateIn(false);
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen, presetService]);
+
+  // Handle ESC key to close
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && isOpen) {
+        closeConsultationModal();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, closeConsultationModal]);
 
   if (!isOpen) return null;
 
@@ -54,23 +71,19 @@ export default function ConsultationModal() {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-        animateIn ? "bg-slate-950/80 backdrop-blur-md opacity-100" : "bg-slate-950/0 opacity-0"
-      }`}
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"
       onClick={(e) => e.target === e.currentTarget && closeConsultationModal()}
+      role="dialog"
+      aria-modal="true"
     >
-      <div
-        className={`relative w-full max-w-lg bg-slate-900 border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden text-white transition-all duration-300 ${
-          animateIn ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
-        }`}
-      >
+      <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden text-slate-900 animate-scale-in">
         {/* Top Glow Accent */}
-        <div className="h-1.5 bg-gradient-to-r from-teal-500 via-emerald-400 to-amber-500" />
+        <div className="h-1.5 bg-gradient-to-r from-green-500 via-blue-500 to-green-500" />
 
         {/* Close Button */}
         <button
           onClick={closeConsultationModal}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 hover:text-slate-900 transition-colors cursor-pointer z-10"
           aria-label="Close Modal"
         >
           <X size={16} />
@@ -79,32 +92,32 @@ export default function ConsultationModal() {
         <div className="p-6 sm:p-8">
           {/* Header */}
           <div className="flex items-center gap-2.5 mb-2">
-            <span className="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+            <span className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700">
               <Sparkles size={16} />
             </span>
-            <span className="text-xs font-semibold text-teal-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
               Free Advisory Session
             </span>
           </div>
-          <h3 className="font-display font-black text-2xl text-white">
+          <h3 className="font-display font-black text-2xl text-slate-900">
             Book Your Free Consultation
           </h3>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 mb-6">
+          <p className="text-slate-600 text-xs sm:text-sm mt-1 mb-6 font-normal">
             Speak with an empanelled MSME advisor — no fees, no commitment required.
           </p>
 
           {status === "success" ? (
             <div className="py-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={36} className="text-emerald-400" />
+              <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle size={36} className="text-emerald-600" />
               </div>
-              <h4 className="font-display font-bold text-xl text-white">Request Submitted!</h4>
-              <p className="text-slate-300 text-sm mt-2">
+              <h4 className="font-display font-bold text-xl text-slate-900">Request Submitted!</h4>
+              <p className="text-slate-600 text-sm mt-2 font-medium">
                 Thank you! Our senior MSME consultant will call you within 24 hours.
               </p>
               <button
                 onClick={closeConsultationModal}
-                className="mt-6 px-6 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition-colors"
+                className="mt-6 px-6 py-2.5 rounded-xl bg-gradient-to-r from-green-500 via-blue-500 to-green-500 text-white font-bold text-xs transition-opacity hover:opacity-95 cursor-pointer shadow-md"
               >
                 Done
               </button>
@@ -112,87 +125,79 @@ export default function ConsultationModal() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Full Name *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Full Name *</label>
                 <input
                   type="text"
                   placeholder="Enter your full name"
                   required
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-teal-500 placeholder-slate-500"
+                  className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 border border-slate-300 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 placeholder-slate-400 text-sm font-medium shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Phone Number *</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Phone Number *</label>
                 <input
                   type="tel"
                   placeholder="+91 98765 43210"
                   required
-                  pattern="[0-9+\s\-]{7,15}"
                   value={form.phone}
                   onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-teal-500 placeholder-slate-500"
+                  className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 border border-slate-300 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 placeholder-slate-400 text-sm font-medium shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  Email Address <span className="text-slate-500">(Optional)</span>
-                </label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Email Address</label>
                 <input
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="your.email@example.com"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="input-3d bg-slate-800/80 text-white border-slate-700 focus:border-teal-500 placeholder-slate-500"
+                  className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 border border-slate-300 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 placeholder-slate-400 text-sm font-medium shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">Service / Lead Type</label>
+                <label className="text-xs font-bold text-slate-700 block mb-1">
+                  Service / Scheme Required
+                </label>
                 <select
                   value={form.service}
                   onChange={(e) => setForm({ ...form, service: e.target.value })}
-                  className="input-3d bg-slate-800 text-white border-slate-700 focus:border-teal-500 rounded-xl w-full p-3 text-xs font-semibold"
+                  className="w-full px-4 py-3 rounded-xl bg-white text-slate-900 border border-slate-300 focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 text-sm font-medium shadow-2xs cursor-pointer"
                 >
-                  {/* Dynamic preset option if not already in list */}
-                  {form.service && (
-                    <option value={form.service} className="bg-slate-900 text-teal-300 font-bold">
-                      ★ {form.service} (Selected)
-                    </option>
-                  )}
-                  <optgroup label="── Loan Leads ──" className="bg-slate-900 text-slate-300">
-                    <option value="Business Loan Leads" className="bg-slate-900 text-white">Business Loan Leads</option>
-                    <option value="Salaried Personal Loan Leads" className="bg-slate-900 text-white">Salaried Personal Loan Leads</option>
-                    <option value="Home Loan Leads" className="bg-slate-900 text-white">Home Loan Leads</option>
-                    <option value="Loan Against Property Leads" className="bg-slate-900 text-white">Loan Against Property Leads</option>
-                    <option value="Education Loan Leads" className="bg-slate-900 text-white">Education Loan Leads</option>
-                    <option value="Machinery Loan Leads" className="bg-slate-900 text-white">Machinery Loan Leads</option>
+                  <optgroup label="── Government Schemes & Subsidies ──">
+                    <option value="PMEGP Subsidy Scheme Leads">PMEGP Subsidy (up to 35% subsidy)</option>
+                    <option value="CGTMSE Collateral-Free Loans Leads">CGTMSE Collateral-Free Loan (up to ₹5Cr)</option>
+                    <option value="Mudra Loans Leads">Mudra Loan (Shishu / Kishor / Tarun)</option>
+                    <option value="PM-FME Food Processing Subsidy Leads">PM-FME Food Processing Subsidy (up to ₹10L)</option>
+                    <option value="MSME Sustainable (ZED) Certification Leads">MSME ZED Certification (up to 80% subsidy)</option>
+                    <option value="Startup India Seed Fund Leads">Startup India Seed Fund & Tax Exemption</option>
                   </optgroup>
-                  <optgroup label="── Government Scheme Leads ──" className="bg-slate-900 text-slate-300">
-                    <option value="PMEGP Scheme Leads" className="bg-slate-900 text-white">PMEGP Scheme Leads</option>
-                    <option value="CGTMSE Scheme Leads" className="bg-slate-900 text-white">CGTMSE Scheme Leads</option>
-                    <option value="Mudra Loan Leads" className="bg-slate-900 text-white">Mudra Loan Leads</option>
-                    <option value="Stand-Up India Scheme Leads" className="bg-slate-900 text-white">Stand-Up India Scheme Leads</option>
-                    <option value="Startup India Seed Fund Leads" className="bg-slate-900 text-white">Startup India Seed Fund Leads</option>
-                    <option value="PM-FME Scheme Leads" className="bg-slate-900 text-white">PM-FME Scheme Leads</option>
+                  <optgroup label="── Loans & Financial Products ──">
+                    <option value="Business & MSME Loan Leads">Business & MSME Unsecured Loan</option>
+                    <option value="Machinery & Equipment Financing Leads">Machinery & Equipment Loan</option>
+                    <option value="Working Capital / CC Limit Leads">Working Capital / CC / OD Limit</option>
+                    <option value="Home Loan & LAP Leads">Home Loan & Loan Against Property (LAP)</option>
+                    <option value="Invoice Discounting Leads">Invoice Discounting & Bill Factoring</option>
                   </optgroup>
-                  <optgroup label="── Business & Compliance Leads ──" className="bg-slate-900 text-slate-300">
-                    <option value="Business Registration Leads" className="bg-slate-900 text-white">Business Registration Leads</option>
-                    <option value="Private Limited Company Leads" className="bg-slate-900 text-white">Private Limited Company Leads</option>
-                    <option value="LLP Registration Leads" className="bg-slate-900 text-white">LLP Registration Leads</option>
-                    <option value="ISO Certification Leads" className="bg-slate-900 text-white">ISO Certification Leads</option>
-                    <option value="FSSAI License Leads" className="bg-slate-900 text-white">FSSAI License Leads</option>
-                    <option value="GST & Tax Compliance Leads" className="bg-slate-900 text-white">GST & Tax Compliance Leads</option>
-                    <option value="Trademark & IP Protection Leads" className="bg-slate-900 text-white">Trademark & IP Protection Leads</option>
-                    <option value="General Consultation Leads" className="bg-slate-900 text-white">General Consultation Leads</option>
+                  <optgroup label="── Business & Compliance Leads ──">
+                    <option value="Business Registration Leads">Business Registration Leads</option>
+                    <option value="Private Limited Company Leads">Private Limited Company Leads</option>
+                    <option value="LLP Registration Leads">LLP Registration Leads</option>
+                    <option value="ISO Certification Leads">ISO Certification Leads</option>
+                    <option value="FSSAI License Leads">FSSAI License Leads</option>
+                    <option value="GST & Tax Compliance Leads">GST & Tax Compliance Leads</option>
+                    <option value="Trademark & IP Protection Leads">Trademark & IP Protection Leads</option>
+                    <option value="General Consultation Leads">General Consultation Leads</option>
                   </optgroup>
                 </select>
               </div>
 
               {status === "error" && (
-                <p className="text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                <p className="text-red-700 text-xs bg-red-50 border border-red-200 rounded-lg px-3 py-2 font-medium">
                   {errMsg}
                 </p>
               )}
@@ -200,7 +205,7 @@ export default function ConsultationModal() {
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="btn-3d w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70"
+                className="btn-3d w-full bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 shadow-md cursor-pointer"
               >
                 {status === "loading" ? (
                   <><Loader2 size={16} className="animate-spin" /> Submitting…</>
@@ -209,9 +214,9 @@ export default function ConsultationModal() {
                 )}
               </button>
 
-              <div className="flex items-center justify-center gap-2 pt-2 text-[11px] text-slate-400">
-                <PhoneCall size={12} className="text-amber-400" />
-                <span>Or call direct: <strong className="text-white">+91 98999 02568</strong></span>
+              <div className="flex items-center justify-center gap-2 pt-2 text-xs text-slate-600 font-medium">
+                <PhoneCall size={13} className="text-green-600" />
+                <span>Or call direct: <strong className="text-slate-900 font-bold">+91 98999 02568</strong></span>
               </div>
             </form>
           )}

@@ -25,6 +25,10 @@ const AttendanceSchema = new mongoose.Schema({
     faceVerified: {
       type: Boolean,
       default: false
+    },
+    livenessVerified: {
+      type: Boolean,
+      default: false
     }
   },
   checkOut: {
@@ -38,7 +42,15 @@ const AttendanceSchema = new mongoose.Schema({
     },
     deviceInfo: String,
     browser: String,
-    ip: String
+    ip: String,
+    faceVerified: {
+      type: Boolean,
+      default: false
+    },
+    livenessVerified: {
+      type: Boolean,
+      default: false
+    }
   },
   status: {
     type: String,

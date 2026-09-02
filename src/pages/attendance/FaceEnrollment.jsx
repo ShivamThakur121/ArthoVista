@@ -34,7 +34,8 @@ const FaceEnrollment = () => {
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('Initialize camera to start face enrollment');
 
-  const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
+  const LOCAL_MODEL_URL = '/models';
+  const CDN_MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
   const TARGET_FRAME_COUNT = 15;
 
   useEffect(() => {
@@ -54,13 +55,21 @@ const FaceEnrollment = () => {
 
   useEffect(() => {
     const loadModels = async () => {
-      setFeedback('Downloading face recognition models...');
+      setFeedback('Initializing biometric engine...');
       try {
-        await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-        await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        // Try local models first for instant loading
+        try {
+          await faceapi.nets.ssdMobilenetv1.loadFromUri(LOCAL_MODEL_URL);
+          await faceapi.nets.faceLandmark68Net.loadFromUri(LOCAL_MODEL_URL);
+          await faceapi.nets.faceRecognitionNet.loadFromUri(LOCAL_MODEL_URL);
+        } catch (localErr) {
+          console.warn('Local models unavailable, falling back to CDN:', localErr);
+          await faceapi.nets.ssdMobilenetv1.loadFromUri(CDN_MODEL_URL);
+          await faceapi.nets.faceLandmark68Net.loadFromUri(CDN_MODEL_URL);
+          await faceapi.nets.faceRecognitionNet.loadFromUri(CDN_MODEL_URL);
+        }
         setModelsLoaded(true);
-        setFeedback('Models loaded. Click "Start Camera" to begin.');
+        setFeedback('Biometric models loaded. Click "Start Camera" to begin.');
       } catch (err) {
         console.error('Error loading face-api models:', err);
         setError('Failed to load face detection models. Check internet connection.');
@@ -71,7 +80,7 @@ const FaceEnrollment = () => {
     loadModels();
 
     return () => { stopCamera(); };
-  }, []);
+  }, [id]);
 
   const startCamera = async () => {
     setError('');

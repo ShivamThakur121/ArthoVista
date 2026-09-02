@@ -198,17 +198,17 @@ const Profile = () => {
         <div className="lg:col-span-2 space-y-6">
           
           {/* Personal Information Card */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-800 p-6 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                   <User className="w-4 h-4" />
                 </div>
-                <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
                   Personal Information
                 </h2>
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
                 View Only
               </span>
             </div>
@@ -216,50 +216,50 @@ const Profile = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               
               {/* Full Name */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Full Legal Name
                 </span>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {currentUser?.fullName || 'Not provided'}
                 </p>
               </div>
 
               {/* Email Address */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                     Official Email
                   </span>
                   <button
                     onClick={() => handleCopy(currentUser?.email, 'email')}
-                    className="text-slate-400 hover:text-primary-500 transition-colors text-xs flex items-center gap-1"
+                    className="text-slate-400 hover:text-teal-600 transition-colors text-xs flex items-center gap-1 cursor-pointer"
                     title="Copy Email"
                   >
-                    {copiedField === 'email' ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                    {copiedField === 'email' ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
                   </button>
                 </div>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1 truncate">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1 truncate">
                   {currentUser?.email || 'Not provided'}
                 </p>
               </div>
 
               {/* Phone Number */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Contact Phone
                 </span>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {currentUser?.phone || 'Not provided'}
                 </p>
               </div>
 
               {/* Residential Address */}
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Residential Address
                 </span>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {currentUser?.address || 'Office Standard Address / On Record'}
                 </p>
               </div>
@@ -268,52 +268,52 @@ const Profile = () => {
           </div>
 
           {/* Organizational & Employment Details */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-800 p-6 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-5">
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center">
                   <Building2 className="w-4 h-4" />
                 </div>
-                <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">
+                <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
                   Employment & Department
                 </h2>
               </div>
-              <span className="text-xs text-slate-400 font-mono">
+              <span className="text-xs text-slate-500 font-mono font-bold">
                 {currentUser?.employeeId}
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Department
                 </span>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {currentUser?.department?.name || 'General Administration'}
                 </p>
-                <span className="text-[10px] text-slate-400 font-mono">
+                <span className="text-[10px] text-slate-500 font-mono font-medium">
                   Code: {currentUser?.department?.code || 'DEPT'}
                 </span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Designation
                 </span>
-                <p className="font-bold text-slate-800 dark:text-slate-200 mt-1">
+                <p className="font-bold text-slate-900 dark:text-slate-100 mt-1">
                   {currentUser?.designation || 'Staff'}
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80">
-                <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wide block">
+              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80">
+                <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">
                   Office Shift Timing
                 </span>
                 <p className="font-bold text-indigo-600 dark:text-indigo-400 mt-1">
                   10:00 AM – 6:00 PM
                 </p>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-slate-500 font-medium">
                   Mon – Sat (6 Working Days)
                 </span>
               </div>
@@ -327,34 +327,34 @@ const Profile = () => {
         <div className="space-y-6">
           
           {/* Biometrics & Facial Security */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-800 p-6 shadow-sm space-y-4">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
             <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="w-8 h-8 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <Fingerprint className="w-4 h-4" />
               </div>
-              <h2 className="text-base font-bold text-slate-800 dark:text-slate-200">
+              <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">
                 Biometrics & Security
               </h2>
             </div>
 
             <div className={`p-4 rounded-2xl border ${
               currentUser?.hasBiometrics 
-                ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200/60 dark:border-emerald-900/30' 
-                : 'bg-amber-50/50 dark:bg-amber-950/20 border-amber-200/60 dark:border-amber-900/30'
+                ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-900/30' 
+                : 'bg-amber-50/70 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30'
             }`}>
               <div className="flex items-start gap-3">
                 {currentUser?.hasBiometrics ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 ) : (
-                  <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                  <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                 )}
                 <div className="space-y-1">
-                  <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                  <p className="text-xs font-bold text-slate-900 dark:text-slate-100">
                     {currentUser?.hasBiometrics 
                       ? 'Face Biometrics Enrolled' 
                       : 'Biometrics Pending Enrollment'}
                   </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                  <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
                     {currentUser?.hasBiometrics 
                       ? 'Your facial recognition embeddings are verified and active for geofenced check-ins.' 
                       : 'Please contact the administrator or HR to complete your facial enrollment.'}
@@ -363,18 +363,18 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800/80 space-y-2 text-xs">
-              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200/80 dark:border-slate-800/80 space-y-2 text-xs font-medium">
+              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                 <span>Geofenced Check-in:</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400">Enabled (200m Radius)</span>
+                <span className="font-bold text-emerald-700 dark:text-emerald-400">Enabled (50m Radius)</span>
               </div>
-              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                 <span>Shift Start Baseline:</span>
-                <strong className="text-slate-800 dark:text-slate-200">10:00 AM IST</strong>
+                <strong className="text-slate-900 dark:text-slate-100 font-bold">10:00 AM IST</strong>
               </div>
-              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
                 <span>Working Days:</span>
-                <strong className="text-slate-800 dark:text-slate-200">Monday – Saturday</strong>
+                <strong className="text-slate-900 dark:text-slate-100 font-bold">Monday – Saturday</strong>
               </div>
             </div>
           </div>

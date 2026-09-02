@@ -227,7 +227,7 @@ router.get('/calendar', protect, async (req, res, next) => {
 });
 
 router.post('/check-in', protect, async (req, res, next) => {
-  const { faceDescriptor, gps, deviceInfo, browser } = req.body;
+  const { faceDescriptor, gps, deviceInfo, browser, livenessVerified } = req.body;
   const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
@@ -261,9 +261,9 @@ router.post('/check-in', protect, async (req, res, next) => {
       });
     }
 
-    const officeLat = parseFloat(process.env.OFFICE_LAT || '28.6139');
-    const officeLng = parseFloat(process.env.OFFICE_LNG || '77.2090');
-    const officeRadius = parseFloat(process.env.OFFICE_RADIUS || '200');
+    const officeLat = parseFloat(process.env.OFFICE_LAT || '28.6126546');
+    const officeLng = parseFloat(process.env.OFFICE_LNG || '77.3660593');
+    const officeRadius = parseFloat(process.env.OFFICE_RADIUS || '50');
 
     const geofenceCheck = checkGeofence(gps.lat, gps.lng, officeLat, officeLng, officeRadius);
     if (!geofenceCheck.inRange) {
@@ -300,7 +300,8 @@ router.post('/check-in', protect, async (req, res, next) => {
       deviceInfo: deviceInfo || 'Unknown Device',
       browser: browser || 'Unknown Browser',
       ip: clientIp,
-      faceVerified: true
+      faceVerified: true,
+      livenessVerified: Boolean(livenessVerified)
     };
 
     if (!record) {
@@ -327,7 +328,7 @@ router.post('/check-in', protect, async (req, res, next) => {
 });
 
 router.post('/check-out', protect, async (req, res, next) => {
-  const { faceDescriptor, gps, deviceInfo, browser } = req.body;
+  const { faceDescriptor, gps, deviceInfo, browser, livenessVerified } = req.body;
   const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
   if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
@@ -372,9 +373,9 @@ router.post('/check-out', protect, async (req, res, next) => {
       });
     }
 
-    const officeLat = parseFloat(process.env.OFFICE_LAT || '28.6139');
-    const officeLng = parseFloat(process.env.OFFICE_LNG || '77.2090');
-    const officeRadius = parseFloat(process.env.OFFICE_RADIUS || '200');
+    const officeLat = parseFloat(process.env.OFFICE_LAT || '28.6126546');
+    const officeLng = parseFloat(process.env.OFFICE_LNG || '77.3660593');
+    const officeRadius = parseFloat(process.env.OFFICE_RADIUS || '50');
 
     const geofenceCheck = checkGeofence(gps.lat, gps.lng, officeLat, officeLng, officeRadius);
     if (!geofenceCheck.inRange) {
@@ -387,14 +388,8 @@ router.post('/check-out', protect, async (req, res, next) => {
     const checkoutTime = new Date();
     const checkinTime = new Date(record.checkIn.time);
     
-    // Shift officially starts from 10:00 AM.
-    // If employee checked in before 10:00 AM, working hours count starts at 10:00 AM.
-    // If employee checked in after 10:00 AM, working hours count starts from their actual check-in time.
-    const shiftStart = new Date(checkinTime);
-    shiftStart.setHours(10, 0, 0, 0);
-
-    const effectiveStartTime = checkinTime < shiftStart ? shiftStart : checkinTime;
-    const diffMs = Math.max(0, checkoutTime - effectiveStartTime);
+    // Accurate working duration from actual check-in to check-out
+    const diffMs = Math.max(0, checkoutTime.getTime() - checkinTime.getTime());
     const workHoursRaw = diffMs / (1000 * 60 * 60);
     const workHours = Math.round(workHoursRaw * 100) / 100;
 
@@ -403,7 +398,15 @@ router.post('/check-out', protect, async (req, res, next) => {
       overtime = Math.round((workHours - 8) * 100) / 100;
     }
 
-    if (workHours < 8) {
+    // Determine status based on actual work hours and check-in timeliness
+    if (workHours >= 8) {
+      // Full working day: preserve 'Late' if checked in late, otherwise 'Present'
+      if (record.status !== 'Late') {
+        record.status = 'Present';
+      }
+    } else if (workHours >= 4 && workHours < 8) {
+      record.status = 'Half Day';
+    } else {
       record.status = 'Half Day';
     }
 
@@ -416,7 +419,9 @@ router.post('/check-out', protect, async (req, res, next) => {
       },
       deviceInfo: deviceInfo || 'Unknown Device',
       browser: browser || 'Unknown Browser',
-      ip: clientIp
+      ip: clientIp,
+      faceVerified: true,
+      livenessVerified: Boolean(livenessVerified)
     };
 
     record.workHours = workHours;

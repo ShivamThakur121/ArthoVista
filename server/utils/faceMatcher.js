@@ -11,7 +11,7 @@ const calculateEuclideanDistance = (vec1, vec2) => {
   return Math.sqrt(sum);
 };
 
-const verifyFace = (liveDescriptor, registeredEmbeddings, threshold = 0.45) => {
+const verifyFace = (liveDescriptor, registeredEmbeddings, threshold = 0.58) => {
   if (!registeredEmbeddings || registeredEmbeddings.length === 0) {
     return { verified: false, minDistance: 1.0, medianDistance: 1.0, matchCount: 0, message: 'No registered biometrics' };
   }
@@ -42,7 +42,8 @@ const verifyFace = (liveDescriptor, registeredEmbeddings, threshold = 0.45) => {
   const matchCount = distances.filter(d => d < threshold).length;
   const matchRatio = matchCount / distances.length;
 
-  const verified = medianDistance < threshold && matchRatio >= 0.40;
+  // Verified if closest matching frame is within threshold or median distance is within threshold
+  const verified = minDistance < threshold || (medianDistance < threshold && matchRatio >= 0.25);
 
   console.log(`[FaceVerify] min=${minDistance.toFixed(4)} median=${medianDistance.toFixed(4)} matchCount=${matchCount}/${distances.length} ratio=${(matchRatio*100).toFixed(1)}% threshold=${threshold} → ${verified ? 'PASS' : 'FAIL'}`);
 

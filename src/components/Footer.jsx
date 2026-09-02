@@ -18,19 +18,21 @@ const navigation = [
   { to: "/services", label: "Services" },
   { to: "/government-schemes", label: "Government Schemes" },
   { to: "/loans", label: "Loans" },
+  { to: "/blogs", label: "Blogs" },
+  { to: "/newsletter", label: "Newslatter" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
   { to: "/employee", label: "Employee" },
 ];
 
 const services = [
-  "Business Registration",
-  "Legal & Protection",
-  "Certifications",
-  "Grants & Funding",
-  "Business Finance",
-  "Digital Services",
-  "GST Compliance",
+  { label: "Business Registration", to: "/services#registration" },
+  { label: "Legal & Protection", to: "/services#legal" },
+  { label: "Certifications", to: "/services#certifications" },
+  { label: "Grants & Funding", to: "/services#grants" },
+  { label: "Business Finance", to: "/services#finance" },
+  { label: "Digital Services", to: "/services#digital" },
+  { label: "GST Compliance", to: "/services#compliance" },
 ];
 
 const schemes = [
@@ -50,35 +52,35 @@ export default function Footer() {
       {/* ====== PRE-FOOTER CTA ====== */}
       <div
         className="relative py-16 px-6 overflow-hidden border-t border-b border-white/10"
-        style={{ background: "linear-gradient(135deg, #060b18 0%, #0d172e 40%, #042f2c 100%)" }}
+        style={{ background: "linear-gradient(135deg, #041b18 0%, #062e2a 40%, #042420 100%)" }}
       >
-        <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-teal-500/10 blur-[130px] rounded-full pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[250px] bg-emerald-600/15 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[500px] h-[300px] bg-teal-500/15 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[250px] bg-emerald-600/20 blur-[100px] rounded-full pointer-events-none" />
         
-        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <div className="relative z-10 max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center text-white">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-xs font-semibold uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-400/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-3 shadow-xs">
               Fast Track Your MSME Funding
             </div>
-            <h3 className="font-display font-black text-white text-3xl md:text-4xl leading-tight">
+            <h3 className="font-display font-black text-3xl md:text-4xl leading-tight text-white drop-shadow-sm">
               Ready to Accelerate Your Business Growth?
             </h3>
-            <p className="text-slate-300 mt-3 text-sm md:text-base leading-relaxed">
+            <p className="text-slate-100 mt-3 text-sm md:text-base leading-relaxed font-normal">
               Book a 1-on-1 strategy session with our empanelled MSME advisors. Discover applicable government grants, subsidies, and credit options with zero upfront commitment.
             </p>
           </div>
           <div className="flex flex-wrap gap-4 md:justify-end">
             <button
               onClick={() => openConsultationModal("Strategy Session")}
-              className="btn-3d inline-flex items-center gap-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold px-7 py-4 rounded-xl shadow-lg shadow-teal-500/25 transition-all cursor-pointer"
+              className="btn-3d inline-flex items-center gap-2.5 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold px-7 py-4 rounded-xl shadow-lg shadow-green-500/25 transition-all cursor-pointer"
             >
               <span>Book Free Session</span> <ArrowRight size={16} />
             </button>
             <a
               href="tel:+919899902568"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white font-semibold px-6 py-4 rounded-xl border border-white/20 transition-all hover:scale-105 backdrop-blur-md"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-4 rounded-xl border border-white/20 transition-all hover:scale-105 backdrop-blur-md"
             >
-              <Phone size={16} className="text-orange-400" /> +91 98999 02568
+              <Phone size={16} className="text-amber-400" /> +91 98999 02568
             </a>
           </div>
         </div>
@@ -105,9 +107,13 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
-          <div className="font-display font-black text-xl text-white mb-3">
-            Artho<span className="text-orange-500">Vista</span>
-          </div>
+          <Link to="/" className="inline-block bg-white p-2.5 rounded-2xl mb-4 shadow-md hover:opacity-95 transition-opacity">
+            <img
+              src="/logo.png"
+              alt="ArthoVista - सपनों से समृद्धि तक"
+              className="h-14 w-auto object-contain"
+            />
+          </Link>
           <p className="text-sm text-white/40 leading-relaxed mb-5">
             India's trusted MSME & startup support platform. End-to-end business support from registration and certifications to government funding and digital growth.
           </p>
@@ -151,13 +157,13 @@ export default function Footer() {
           <h4 className="font-semibold text-orange-400 text-xs uppercase tracking-widest mb-5">Our Services</h4>
           <ul className="space-y-3">
             {services.map((s) => (
-              <li key={s}>
+              <li key={s.to}>
                 <Link
-                  to="/services"
+                  to={s.to}
                   className="text-white/50 hover:text-orange-400 text-sm transition-colors flex items-center gap-2 group"
                 >
                   <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                  {s}
+                  {s.label}
                 </Link>
               </li>
             ))}

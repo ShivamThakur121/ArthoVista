@@ -282,27 +282,26 @@ export default function GovernmentSchemes() {
     <div>
 
       {/* ====== HERO ====== */}
-      <section className="hero-dark relative py-16 px-6">
-        <div className="grid-bg" />
+      <section className="relative py-16 px-6 border-b border-slate-200">
         <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <div className="eyebrow text-white/60">Government Initiatives</div>
+          <div className="eyebrow">Government Initiatives</div>
           <h1
-            className="font-display font-black text-white mt-2"
+            className="font-display font-black text-slate-900 mt-2"
             style={{ fontSize: "clamp(30px, 5vw, 54px)" }}
           >
-            Government <span className="gradient-text">Schemes</span>
+            Government <span className="highlight">Schemes</span>
           </h1>
-          <p className="text-white/50 mt-4 max-w-2xl mx-auto">
+          <p className="text-slate-600 mt-4 max-w-2xl mx-auto font-normal leading-relaxed">
             Unlock financial assistance, subsidies, and credit guarantee schemes designed to empower MSMEs and innovative startups across India.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
             <button
               onClick={() => openConsultationModal("Government Schemes & Subsidies Leads")}
-              className="btn-3d inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3 rounded-xl cursor-pointer"
+              className="btn-3d inline-flex items-center gap-2 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold text-sm px-6 py-3 rounded-xl cursor-pointer shadow-md shadow-green-500/20"
             >
               Check Scheme Eligibility <ArrowRight size={15} />
             </button>
-            <a href="tel:+919899902568" className="btn-outline-white-3d">
+            <a href="tel:+919899902568" className="btn-outline-3d">
               <PhoneCall size={15} /> +91 98999 02568
             </a>
           </div>
@@ -311,7 +310,7 @@ export default function GovernmentSchemes() {
 
       {/* ====== STATS BAR ====== */}
       <section className="stats-section">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 divide-x divide-slate-200">
           {stats.map((s) => (
             <div key={s.label} className="stat-card">
               <div className="stat-value">{s.value}</div>
@@ -326,47 +325,47 @@ export default function GovernmentSchemes() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <div className="eyebrow">Key Programmes</div>
-            <h2 className="section-title text-white">
+            <h2 className="section-title">
               Featured <span className="highlight">Government Schemes</span>
             </h2>
-            <p className="text-slate-100 mt-3 font-medium text-base max-w-xl mx-auto">
+            <p className="text-slate-600 mt-3 font-medium text-base max-w-xl mx-auto">
               Our team assists with documentation, DPR preparation, application filing, and end-to-end follow-up with nodal agencies.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {schemes.map((s) => (
-              <div key={s.code} className="tilt-3d rounded-2xl overflow-hidden bg-slate-900/80 border border-slate-700/70 shadow-xl hover:border-teal-500 transition-all">
+              <div key={s.code} className="tilt-3d rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 transition-all">
                 {/* Card Header */}
                 <div className={`bg-gradient-to-br ${s.color} p-6`}>
                   <div className="flex items-center justify-between">
                     <span className="font-display font-black text-white text-xs bg-black/30 backdrop-blur-sm px-3 py-1 rounded-full uppercase tracking-wider">
                       {s.type}
                     </span>
-                    <span className="text-teal-200 text-xs font-semibold bg-white/15 px-2.5 py-0.5 rounded-full">{s.tag}</span>
+                    <span className="text-teal-100 text-xs font-semibold bg-white/15 px-2.5 py-0.5 rounded-full">{s.tag}</span>
                   </div>
-                  <h3 className="font-display font-black text-white text-2xl mt-4 drop-shadow-sm">{s.code}</h3>
+                  <h3 className="font-display font-black text-white text-2xl mt-4 drop-shadow-xs">{s.code}</h3>
                   <p className="text-white text-xs mt-1 line-clamp-1 font-semibold">{s.name}</p>
-                  <div className="text-white font-black text-3xl mt-2 drop-shadow-sm">{s.amount}</div>
+                  <div className="text-white font-black text-3xl mt-2 drop-shadow-xs">{s.amount}</div>
                   <div className="text-white/80 text-xs mt-0.5">Maximum Support / Grant</div>
                 </div>
 
                 {/* Card Body */}
-                <div className="p-5">
+                <div className="p-5 bg-white">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="text-xs text-slate-300 font-semibold">
+                    <div className="text-xs text-slate-500 font-semibold">
                       Processing Time
                     </div>
-                    <div className="flex items-center gap-1 text-xs font-bold text-slate-100 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
-                      <Clock size={11} className="text-teal-400" />
+                    <div className="flex items-center gap-1 text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                      <Clock size={11} className="text-teal-600" />
                       {s.timeline}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 mb-5">
                     {s.features.map((f) => (
-                      <div key={f} className="flex items-center gap-1.5 text-xs font-medium text-slate-100">
-                        <CheckCircle size={12} className="text-teal-400 shrink-0" />
+                      <div key={f} className="flex items-center gap-1.5 text-xs font-medium text-slate-700">
+                        <CheckCircle size={12} className="text-teal-600 shrink-0" />
                         {f}
                       </div>
                     ))}
@@ -385,7 +384,7 @@ export default function GovernmentSchemes() {
                         setFormStatus("idle");
                         setFormMsg("");
                       }}
-                      className="flex-1 text-center border border-slate-600 text-slate-200 hover:text-white text-xs font-bold py-2.5 rounded-lg hover:bg-slate-800 transition-all flex items-center justify-center gap-1 cursor-pointer"
+                      className="flex-1 text-center border border-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold py-2.5 rounded-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-1 cursor-pointer shadow-2xs"
                     >
                       <span>Full Details</span> <ArrowRight size={12} />
                     </button>
@@ -398,30 +397,30 @@ export default function GovernmentSchemes() {
       </section>
 
       {/* ====== FAQ SECTION ====== */}
-      <section className="py-16 px-6 border-t border-slate-800/40">
+      <section className="py-16 px-6 border-t border-slate-200 bg-white/60">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
             <div className="eyebrow">Scheme Guidance</div>
-            <h2 className="section-title text-white">Common <span className="highlight">Scheme Questions</span></h2>
-            <p className="text-slate-200 mt-2 font-medium text-sm">Key information regarding subsidy percentages, collateral waivers, and sanction procedures.</p>
+            <h2 className="section-title">Common <span className="highlight">Scheme Questions</span></h2>
+            <p className="text-slate-600 mt-2 font-medium text-sm">Key information regarding subsidy percentages, collateral waivers, and sanction procedures.</p>
           </div>
 
           <div className="space-y-3">
             {schemeFaqs.map((f, idx) => (
               <div
                 key={f.q}
-                className={`glass-card-dark rounded-xl overflow-hidden transition-all duration-300 border border-slate-700/60 ${
-                  openFaq === idx ? "ring-2 ring-teal-400" : ""
+                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${
+                  openFaq === idx ? "ring-2 ring-teal-500" : ""
                 }`}
               >
                 <button
                   className="w-full text-left p-5 flex items-center justify-between gap-3 cursor-pointer"
                   onClick={() => setOpenFaq(openFaq === idx ? -1 : idx)}
                 >
-                  <span className="font-bold text-white text-sm sm:text-base">{f.q}</span>
+                  <span className="font-bold text-slate-900 text-sm sm:text-base">{f.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-teal-400 transition-transform duration-300 ${
+                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${
                       openFaq === idx ? "rotate-180" : ""
                     }`}
                   />
@@ -431,7 +430,7 @@ export default function GovernmentSchemes() {
                     openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
                   }`}
                 >
-                  <p className="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
+                  <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
                 </div>
               </div>
             ))}
@@ -440,12 +439,12 @@ export default function GovernmentSchemes() {
       </section>
 
       {/* ====== CTA ====== */}
-      <section className="relative py-16 px-6 overflow-hidden border-t border-slate-800/40">
+      <section className="relative py-16 px-6 overflow-hidden border-t border-slate-200">
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h2 className="font-display font-black text-white" style={{ fontSize: "clamp(24px, 4vw, 40px)" }}>
+          <h2 className="font-display font-black text-slate-900" style={{ fontSize: "clamp(24px, 4vw, 40px)" }}>
             Not Sure Which Scheme Fits Your Business?
           </h2>
-          <p className="text-slate-100 mt-3 font-medium text-base max-w-xl mx-auto">
+          <p className="text-slate-600 mt-3 font-medium text-base max-w-xl mx-auto">
             Our MSME experts will evaluate your business profile and recommend the scheme with the highest approval chance — for free.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-7">
@@ -462,18 +461,18 @@ export default function GovernmentSchemes() {
       {/* ====== SCHEME DETAIL & APPLICATION MODAL ====== */}
       {selectedScheme && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-fade-in"
           onClick={() => setSelectedScheme(null)}
         >
           <div
-            className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-slate-900 border border-slate-700 rounded-3xl shadow-2xl custom-scrollbar"
+            className="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-white border border-slate-200 rounded-3xl shadow-2xl custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
             <div className={`bg-gradient-to-r ${selectedScheme.color} p-6 sm:p-8 relative`}>
               <button
                 onClick={() => setSelectedScheme(null)}
-                className="absolute top-5 right-5 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white/80 hover:text-white transition cursor-pointer"
+                className="absolute top-5 right-5 p-2 rounded-full bg-black/25 hover:bg-black/50 text-white transition cursor-pointer"
                 title="Close"
               >
                 <X size={20} />
@@ -489,17 +488,17 @@ export default function GovernmentSchemes() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-lg">
+                <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-white shrink-0 shadow-xs">
                   <Landmark size={28} />
                 </div>
                 <div>
                   <h3 className="font-display font-black text-2xl sm:text-3xl text-white">
                     {selectedScheme.code}
                   </h3>
-                  <p className="text-white/90 font-medium text-xs sm:text-sm mt-0.5">
+                  <p className="text-white font-semibold text-xs sm:text-sm mt-0.5">
                     {selectedScheme.name}
                   </p>
-                  <div className="flex flex-wrap items-center gap-3 text-white/80 text-xs font-semibold mt-2">
+                  <div className="flex flex-wrap items-center gap-3 text-white/90 text-xs font-semibold mt-2">
                     <span>Max Assistance: {selectedScheme.amount}</span>
                     <span>•</span>
                     <span>Timeline: {selectedScheme.timeline}</span>
@@ -509,28 +508,28 @@ export default function GovernmentSchemes() {
             </div>
 
             {/* Modal Content: 2-Column Responsive Layout */}
-            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8">
+            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
               
               {/* Left Column: Scheme Specifications */}
               <div className="lg:col-span-7 space-y-6">
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-2 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-2 flex items-center gap-1.5">
                     <Layers size={14} /> Scheme Overview & Purpose
                   </h4>
-                  <p className="text-slate-200 text-sm leading-relaxed bg-slate-800/50 p-4 rounded-xl border border-slate-700/60">
+                  <p className="text-slate-700 text-sm leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200 font-normal">
                     {selectedScheme.overview}
                   </p>
                 </div>
 
                 {/* Subsidy & Financial Structure */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <Sparkles size={14} /> Subsidy & Financial Structure
                   </h4>
-                  <div className="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium">
                     {selectedScheme.subsidyDetails.map((sub, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                        <CheckCircle size={14} className="text-teal-400 shrink-0 mt-0.5" />
+                      <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                        <CheckCircle size={14} className="text-teal-600 shrink-0 mt-0.5" />
                         <span>{sub}</span>
                       </div>
                     ))}
@@ -539,13 +538,13 @@ export default function GovernmentSchemes() {
 
                 {/* Eligibility Criteria */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-teal-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <CheckCircle2 size={14} /> Who Can Apply (Eligibility)
                   </h4>
-                  <div className="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium">
                     {selectedScheme.eligibility.map((el, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" />
+                      <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-600 mt-1.5 shrink-0" />
                         <span>{el}</span>
                       </div>
                     ))}
@@ -554,13 +553,13 @@ export default function GovernmentSchemes() {
 
                 {/* Documents Checklist */}
                 <div>
-                  <h4 className="text-xs font-bold uppercase text-amber-400 tracking-wider mb-3 flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase text-amber-700 tracking-wider mb-3 flex items-center gap-1.5">
                     <FileText size={14} /> Required Project Documents
                   </h4>
-                  <div className="space-y-2 bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="space-y-2 bg-slate-50 p-4 rounded-xl border border-slate-200 font-medium">
                     {selectedScheme.documents.map((doc, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs text-slate-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                      <div key={i} className="flex items-start gap-2 text-xs text-slate-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-600 mt-1.5 shrink-0" />
                         <span>{doc}</span>
                       </div>
                     ))}
@@ -569,19 +568,19 @@ export default function GovernmentSchemes() {
 
                 {/* Distributed In-Depth Knowledge Base Guide */}
                 <div className="pt-2">
-                  <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700 space-y-2.5">
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2.5 shadow-2xs">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <BookOpen size={14} className="text-teal-400" />
-                        <span className="text-xs font-bold text-white">
+                        <BookOpen size={14} className="text-teal-700" />
+                        <span className="text-xs font-bold text-slate-900">
                           Official 2026 Scheme Guidelines & DPR Blueprint
                         </span>
                       </div>
-                      <span className="text-[10px] font-bold text-teal-300 bg-teal-950 px-2 py-0.5 rounded border border-teal-500/40">
+                      <span className="text-[10px] font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
                         KVIC Empanelled
                       </span>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
                       Our certified financial analysts prepare full bankable Detailed Project Reports (DPR), CMA data, and handle portal filing until margin money subsidy credit.
                     </p>
                   </div>
@@ -589,31 +588,31 @@ export default function GovernmentSchemes() {
               </div>
 
               {/* Right Column: Scheme Assessment & Application Form */}
-              <div className="lg:col-span-5 bg-slate-800/80 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+              <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/15 border border-teal-500/30 text-teal-400 text-xs font-bold mb-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold mb-3">
                     <Sparkles size={13} /> Official Scheme Application
                   </div>
-                  <h4 className="font-display font-black text-xl text-white">
+                  <h4 className="font-display font-black text-xl text-slate-900">
                     Apply for {selectedScheme.code}
                   </h4>
-                  <p className="text-slate-300 text-xs mt-1 mb-5">
+                  <p className="text-slate-600 text-xs mt-1 mb-5 font-normal">
                     Submit your project parameters for our KVIC-empanelled team to draft your DPR and file your subsidy application.
                   </p>
 
                   {formStatus === "success" ? (
-                    <div className="p-5 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-center space-y-3">
-                      <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                    <div className="p-5 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
+                      <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
                         <CheckCircle size={28} />
                       </div>
-                      <p className="font-bold text-white text-sm">Assessment Request Received!</p>
-                      <p className="text-xs text-emerald-200 leading-relaxed">{formMsg}</p>
+                      <p className="font-bold text-slate-900 text-sm">Assessment Request Received!</p>
+                      <p className="text-xs text-emerald-800 leading-relaxed font-medium">{formMsg}</p>
                       <button
                         onClick={() => {
                           setFormStatus("idle");
                           setFormMsg("");
                         }}
-                        className="mt-2 text-xs text-emerald-400 underline font-semibold"
+                        className="mt-2 text-xs text-teal-700 underline font-bold cursor-pointer"
                       >
                         Submit another application
                       </button>
@@ -621,14 +620,14 @@ export default function GovernmentSchemes() {
                   ) : (
                     <form onSubmit={handleSchemeFormSubmit} className="space-y-3.5">
                       {formStatus === "error" && (
-                        <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-red-300 text-xs flex items-center gap-2">
+                        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2 font-medium">
                           <AlertCircle size={15} className="shrink-0" />
                           <span>{formMsg}</span>
                         </div>
                       )}
 
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
                           Applicant Full Name *
                         </label>
                         <input
@@ -637,12 +636,12 @@ export default function GovernmentSchemes() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. Anand Verma"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
                           Mobile Phone Number *
                         </label>
                         <input
@@ -651,12 +650,12 @@ export default function GovernmentSchemes() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="e.g. 9876543210"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
                           Email Address
                         </label>
                         <input
@@ -664,13 +663,13 @@ export default function GovernmentSchemes() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="e.g. anand@company.in"
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             Project Cost (₹)
                           </label>
                           <input
@@ -678,11 +677,11 @@ export default function GovernmentSchemes() {
                             value={formData.projectCost}
                             onChange={(e) => setFormData({ ...formData, projectCost: e.target.value })}
                             placeholder="e.g. 25,00,000"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                         <div>
-                          <label className="block text-xs font-semibold text-slate-300 mb-1">
+                          <label className="block text-xs font-bold text-slate-700 mb-1">
                             State / Location
                           </label>
                           <input
@@ -690,19 +689,19 @@ export default function GovernmentSchemes() {
                             value={formData.state}
                             onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                             placeholder="e.g. Uttar Pradesh"
-                            className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-teal-500 transition"
+                            className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs placeholder:text-slate-400 focus:outline-none focus:border-teal-600 transition shadow-2xs font-medium"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        <label className="block text-xs font-bold text-slate-700 mb-1">
                           Business / Unit Sector
                         </label>
                         <select
                           value={formData.sector}
                           onChange={(e) => setFormData({ ...formData, sector: e.target.value })}
-                          className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-teal-500 transition cursor-pointer"
+                          className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 text-xs focus:outline-none focus:border-teal-600 transition cursor-pointer shadow-2xs font-medium"
                         >
                           <option value="Manufacturing Unit">Manufacturing & Engineering Unit</option>
                           <option value="Food Processing / Agro">Food Processing & Agro Enterprise</option>
@@ -715,7 +714,7 @@ export default function GovernmentSchemes() {
                       <button
                         type="submit"
                         disabled={formStatus === "loading"}
-                        className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-lg shadow-teal-500/25 transition cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
+                        className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold shadow-md transition cursor-pointer flex items-center justify-center gap-2 mt-2 disabled:opacity-50"
                       >
                         {formStatus === "loading" ? (
                           <>
@@ -733,8 +732,8 @@ export default function GovernmentSchemes() {
                   )}
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-700/60 text-center">
-                  <p className="text-[11px] text-slate-400">
+                <div className="pt-4 mt-4 border-t border-slate-200 text-center">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     🏛️ KVIC & MSME Empanelled Advisory · 98% Approval Success
                   </p>
                 </div>
