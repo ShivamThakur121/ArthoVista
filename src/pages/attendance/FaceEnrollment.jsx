@@ -14,6 +14,8 @@ import {
   RotateCcw
 } from 'lucide-react';
 
+import { loadEssentialFaceModels, areFaceModelsLoaded } from '../../utils/faceModelLoader';
+
 const FaceEnrollment = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,18 +26,16 @@ const FaceEnrollment = () => {
   const videoReadyRef = useRef(false);
 
   const [employee, setEmployee] = useState(null);
-  const [modelsLoaded, setModelsLoaded] = useState(false);
+  const [modelsLoaded, setModelsLoaded] = useState(areFaceModelsLoaded());
   const [cameraActive, setCameraActive] = useState(false);
   const [capturing, setCapturing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [capturedEmbeddings, setCapturedEmbeddings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!areFaceModelsLoaded());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('Initialize camera to start face enrollment');
 
-  const LOCAL_MODEL_URL = '/models';
-  const CDN_MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/';
   const TARGET_FRAME_COUNT = 15;
 
   useEffect(() => {
@@ -55,19 +55,15 @@ const FaceEnrollment = () => {
 
   useEffect(() => {
     const loadModels = async () => {
+      if (areFaceModelsLoaded()) {
+        setModelsLoaded(true);
+        setLoading(false);
+        setFeedback('Biometric models loaded. Click "Start Camera" to begin.');
+        return;
+      }
       setFeedback('Initializing biometric engine...');
       try {
-        // Try local models first for instant loading
-        try {
-          await faceapi.nets.ssdMobilenetv1.loadFromUri(LOCAL_MODEL_URL);
-          await faceapi.nets.faceLandmark68Net.loadFromUri(LOCAL_MODEL_URL);
-          await faceapi.nets.faceRecognitionNet.loadFromUri(LOCAL_MODEL_URL);
-        } catch (localErr) {
-          console.warn('Local models unavailable, falling back to CDN:', localErr);
-          await faceapi.nets.ssdMobilenetv1.loadFromUri(CDN_MODEL_URL);
-          await faceapi.nets.faceLandmark68Net.loadFromUri(CDN_MODEL_URL);
-          await faceapi.nets.faceRecognitionNet.loadFromUri(CDN_MODEL_URL);
-        }
+        await loadEssentialFaceModels();
         setModelsLoaded(true);
         setFeedback('Biometric models loaded. Click "Start Camera" to begin.');
       } catch (err) {
@@ -82,7 +78,10 @@ const FaceEnrollment = () => {
     return () => { stopCamera(); };
   }, [id]);
 
+  const isAdminEmployee = employee?.role === 'Admin' || employee?.email?.toLowerCase() === 'shivamthakur12012@gmail.com' || employee?.employeeId === 'ADMIN001';
+
   const startCamera = async () => {
+    if (isAdminEmployee) return;
     setError('');
     videoReadyRef.current = false;
 
@@ -98,26 +97,18 @@ const FaceEnrollment = () => {
       }
 
       streamRef.current = stream;
-      const video = videoRef.current;
-      video.srcObject = stream;
-
-      await new Promise((resolve, reject) => {
-        video.onloadedmetadata = () => {
-          video.play()
-            .then(() => {
-              videoReadyRef.current = true;
-              resolve();
-            })
-            .catch(reject);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.onloadedmetadata = () => {
+          videoRef.current.play();
+          videoReadyRef.current = true;
         };
-        video.onerror = reject;
-        setTimeout(resolve, 3000);
-      });
+      }
 
       setCameraActive(true);
       setFeedback('Camera active. Align your face in the circle, then click "Capture Face".');
     } catch (err) {
-      console.error('Webcam start error:', err.name, err.message);
+      console.error('Camera access error:', err);
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         setError('Camera permission denied. Click the 🔒 icon in the address bar → Camera → Allow, then refresh.');
       } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
@@ -125,11 +116,7 @@ const FaceEnrollment = () => {
       } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
         setError('Camera is in use by another app (Teams, Zoom, etc.). Close it and try again.');
       } else {
-        setError(`Webcam error: ${err.message || err.name}`);
-      }
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop());
-        streamRef.current = null;
+        setError(`Unable to access camera (${err.message}). Check permissions.`);
       }
     }
   };
@@ -140,7 +127,7 @@ const FaceEnrollment = () => {
       intervalRef.current = null;
     }
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
     if (videoRef.current) {
@@ -151,86 +138,73 @@ const FaceEnrollment = () => {
     setCapturing(false);
   }, []);
 
-  const resetEnrollment = () => {
-    setCapturedEmbeddings([]);
+  const resetCapture = () => {
+    stopCamera();
     setProgress(0);
-    setCapturing(false);
+    setCapturedEmbeddings([]);
+    setError('');
     setFeedback('Reset. Start camera and capture again.');
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
   };
 
-  const startEnrollmentCapture = () => {
+  const captureFrames = async () => {
+    if (isAdminEmployee) return;
     if (!cameraActive || !modelsLoaded) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-
-    if (!video || video.videoWidth === 0 || video.videoHeight === 0) {
+    if (!videoRef.current || !videoReadyRef.current) {
       setError('Camera feed not ready yet. Please wait a moment and try again.');
       return;
     }
 
     setCapturing(true);
+    setError('');
     setFeedback('Scanning... Keep still and look directly at the camera.');
 
-    const embeddingsList = [];
+    const tempEmbeddings = [];
+    let frameCount = 0;
 
     intervalRef.current = setInterval(async () => {
-      if (!videoRef.current || !canvasRef.current) return;
+      try {
+        if (!videoRef.current || videoRef.current.paused || videoRef.current.ended) return;
 
-      const vid = videoRef.current;
-      const cvs = canvasRef.current;
+        const detection = await faceapi
+          .detectSingleFace(videoRef.current, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }))
+          .withFaceLandmarks()
+          .withFaceDescriptor();
 
-      if (vid.readyState < 2 || vid.videoWidth === 0) return;
+        if (detection) {
+          tempEmbeddings.push(Array.from(detection.descriptor));
+          frameCount++;
+          const currentProgress = Math.min(100, Math.round((frameCount / TARGET_FRAME_COUNT) * 100));
+          setProgress(currentProgress);
+          setFeedback(`Enrolling biometrics: ${frameCount}/${TARGET_FRAME_COUNT} angles scanned...`);
 
-      const displaySize = { width: vid.videoWidth, height: vid.videoHeight };
+          if (frameCount >= TARGET_FRAME_COUNT) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+            setCapturedEmbeddings(tempEmbeddings);
+            setCapturing(false);
+            setFeedback('Capture complete! Click "Save Biometrics" to register.');
 
-      if (cvs.width !== displaySize.width || cvs.height !== displaySize.height) {
-        cvs.width = displaySize.width;
-        cvs.height = displaySize.height;
-        faceapi.matchDimensions(cvs, displaySize);
-      }
-
-      const detection = await faceapi
-        .detectSingleFace(vid, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }))
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-
-      const ctx = cvs.getContext('2d');
-      ctx.clearRect(0, 0, cvs.width, cvs.height);
-
-      if (detection) {
-        const resized = faceapi.resizeResults(detection, displaySize);
-        faceapi.draw.drawDetections(cvs, resized);
-        faceapi.draw.drawFaceLandmarks(cvs, resized);
-
-        const descriptorArray = Array.from(detection.descriptor);
-        embeddingsList.push(descriptorArray);
-
-        const count = embeddingsList.length;
-        setProgress((count / TARGET_FRAME_COUNT) * 100);
-        setFeedback(`Captured ${count} / ${TARGET_FRAME_COUNT} frames...`);
-
-        if (count >= TARGET_FRAME_COUNT) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-          setCapturedEmbeddings(embeddingsList);
-          setCapturing(false);
-          setFeedback('✅ Biometric capture complete! Click "Save Biometrics" to enroll.');
-          stopCamera();
-          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            confetti({
+              particleCount: 50,
+              spread: 60,
+              origin: { y: 0.6 }
+            });
+          }
+        } else {
+          setFeedback('Face not detected clearly. Move slightly closer and center your face.');
         }
-      } else {
-        setFeedback('No face detected — position your face in the circle and ensure good lighting.');
+      } catch (err) {
+        console.error('Frame detection error:', err);
       }
-    }, 700);
+    }, 200);
   };
 
-  const handleSaveEmbeddings = async () => {
-    if (capturedEmbeddings.length < TARGET_FRAME_COUNT) return;
+  const handleSave = async () => {
+    if (isAdminEmployee) return;
+    if (capturedEmbeddings.length < TARGET_FRAME_COUNT) {
+      setError('Insufficient facial frames. Please complete the full capture scan.');
+      return;
+    }
 
     setSubmitting(true);
     setError('');
@@ -239,13 +213,20 @@ const FaceEnrollment = () => {
       const res = await api.post(`/employees/${id}/face-embeddings`, {
         embeddings: capturedEmbeddings
       });
+
       if (res.data.success) {
-        alert('Biometric credentials saved successfully!');
-        navigate('/admin/employees');
+        stopCamera();
+        confetti({
+          particleCount: 100,
+          spread: 80,
+          origin: { y: 0.6 }
+        });
+        setTimeout(() => {
+          navigate('/admin/employees');
+        }, 1500);
       }
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || 'Failed to save biometric profile.');
+      setError(err.response?.data?.message || 'Failed to save face embeddings to server.');
     } finally {
       setSubmitting(false);
     }
@@ -256,6 +237,42 @@ const FaceEnrollment = () => {
       <div className="flex flex-col items-center justify-center min-h-[50vh] text-slate-400">
         <Loader2 className="w-8 h-8 animate-spin text-primary-500 mb-2" />
         <p className="text-sm font-medium">Loading biometric engine...</p>
+      </div>
+    );
+  }
+
+  if (isAdminEmployee) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6 animate-fadeIn py-6">
+        <button
+          onClick={() => navigate('/admin/employees')}
+          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Employee List
+        </button>
+
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-xl text-center space-y-5">
+          <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 mx-auto flex items-center justify-center border border-indigo-100 dark:border-indigo-900/40">
+            <Scan className="w-8 h-8" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              Biometric Enrollment Exempt
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto">
+              System Administrator accounts (<strong className="font-mono text-slate-900 dark:text-slate-200">{employee?.email || 'shivamthakur12012@gmail.com'}</strong>) are permanently exempt from biometric facial scans and attendance tracking.
+            </p>
+          </div>
+          <div className="pt-2">
+            <button
+              onClick={() => navigate('/admin/employees')}
+              className="px-6 py-2.5 rounded-2xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs transition-colors"
+            >
+              Return to Employee Management
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

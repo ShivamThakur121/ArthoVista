@@ -307,7 +307,7 @@ export default function Services() {
     }
   };
 
-  const matchedGuide = selectedDetail?.guideSlug 
+  const matchedGuide = selectedDetail?.guideSlug
     ? blogPosts.find(p => p.slug === selectedDetail.guideSlug)
     : null;
 
@@ -364,11 +364,10 @@ export default function Services() {
               <button
                 key={c.id}
                 onClick={() => handleCategoryClick(c.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${
-                  active === c.id
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${active === c.id
                     ? "bg-teal-600 text-white shadow-md shadow-teal-500/25"
                     : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-xs"
-                }`}
+                  }`}
               >
                 <c.icon size={15} />
                 {c.label}
@@ -385,11 +384,10 @@ export default function Services() {
             <div
               key={b.id}
               id={b.id}
-              className={`tilt-3d scroll-mt-28 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all duration-500 ${
-                active === b.id
+              className={`tilt-3d scroll-mt-28 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all duration-500 ${active === b.id
                   ? "ring-2 ring-teal-500 ring-offset-2 ring-offset-slate-100"
                   : "opacity-100"
-              }`}
+                }`}
             >
               <div className="grid md:grid-cols-[300px_1fr]">
                 {/* Left Panel */}
@@ -461,9 +459,8 @@ export default function Services() {
             {serviceFaqs.map((f, idx) => (
               <div
                 key={f.q}
-                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${
-                  openFaq === idx ? "ring-2 ring-teal-500" : ""
-                }`}
+                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${openFaq === idx ? "ring-2 ring-teal-500" : ""
+                  }`}
               >
                 <button
                   className="w-full text-left p-5 flex items-center justify-between gap-3 cursor-pointer"
@@ -472,15 +469,13 @@ export default function Services() {
                   <span className="font-bold text-slate-900 text-sm sm:text-base">{f.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${
-                      openFaq === idx ? "rotate-180" : ""
-                    }`}
+                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${openFaq === idx ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ${openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
+                    }`}
                 >
                   <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
                 </div>
@@ -603,11 +598,10 @@ export default function Services() {
                     {selectedDetail.items.map((it) => (
                       <div
                         key={it.t}
-                        className={`p-3.5 rounded-xl border transition-all ${
-                          selectedDetail.activeItem?.t === it.t
+                        className={`p-3.5 rounded-xl border transition-all ${selectedDetail.activeItem?.t === it.t
                             ? "bg-teal-50 border-teal-500 ring-1 ring-teal-500"
                             : "bg-slate-50 border-slate-200"
-                        }`}
+                          }`}
                       >
                         <p className="font-bold text-slate-900 text-sm flex items-center gap-2">
                           <CheckCircle size={14} className="text-teal-600 shrink-0" />

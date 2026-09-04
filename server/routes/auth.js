@@ -112,7 +112,7 @@ router.post('/refresh', async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    
+
     const user = await User.findById(decoded.id);
     if (!user) {
       return res.status(401).json({
@@ -145,27 +145,31 @@ router.post('/refresh', async (req, res, next) => {
 router.get('/me', protect, async (req, res, next) => {
   try {
     const user = req.user;
-    if (user.department && typeof user.populate === 'function') {
-      await user.populate('department', 'name code');
+    let dept = user.department;
+    if (dept && typeof dept === 'object' && dept._id) {
+      // already populated object
+    } else if (dept) {
+      const Department = require('../models/Department');
+      dept = await Department.findById(dept).select('name code').lean();
     }
-      
+
     res.status(200).json({
       success: true,
       user: {
-        id: user._id,
+        id: user._id || user.id,
         fullName: user.fullName,
         employeeId: user.employeeId,
         email: user.email,
         phone: user.phone,
         role: user.role,
-        department: user.department,
+        department: dept || user.department,
         designation: user.designation,
         joiningDate: user.joiningDate,
         status: user.status,
         address: user.address || '',
         profilePhoto: user.profilePhoto,
-        hasBiometrics: user.faceEmbeddings && user.faceEmbeddings.length > 0,
-        faceEmbeddingsCount: user.faceEmbeddings ? user.faceEmbeddings.length : 0
+        hasBiometrics: Boolean(user.hasBiometrics || (user.faceEmbeddings && user.faceEmbeddings.length > 0)),
+        faceEmbeddingsCount: user.faceEmbeddingsCount !== undefined ? user.faceEmbeddingsCount : (user.faceEmbeddings ? user.faceEmbeddings.length : 0)
       }
     });
   } catch (error) {

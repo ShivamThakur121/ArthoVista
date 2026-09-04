@@ -81,7 +81,7 @@ function scheduleHolidayCheck() {
   const checkHoliday = async () => {
     try {
       const todayStr = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-      
+
       const Holiday = require('./models/Holiday');
       const holiday = await Holiday.findOne({ date: todayStr });
       if (holiday) {

@@ -544,11 +544,10 @@ Bullets:
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                selectedCategory === cat
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${selectedCategory === cat
                   ? 'bg-teal-600 text-white shadow-xs'
                   : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50'
-              }`}
+                }`}
             >
               {cat}
             </button>
@@ -620,11 +619,10 @@ Bullets:
                     </td>
 
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                        blog.status === 'Published'
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${blog.status === 'Published'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                           : 'bg-amber-50 text-amber-800 border border-amber-200'
-                      }`}>
+                        }`}>
                         {blog.status}
                       </span>
                     </td>
@@ -669,7 +667,7 @@ Bullets:
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="relative w-full max-w-3xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 overflow-y-auto space-y-6">
-            
+
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div>
@@ -678,16 +676,15 @@ Bullets:
                 </h3>
                 <p className="text-xs text-slate-400">Fill in the fields or use the integrated AI assistant to auto-fill.</p>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setAiAssistantOpen(!aiAssistantOpen)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    aiAssistantOpen
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${aiAssistantOpen
                       ? 'bg-gradient-to-r from-teal-600 to-indigo-600 text-white shadow-sm'
                       : 'bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100'
-                  }`}
+                    }`}
                 >
                   <Sparkles size={14} className={aiAssistantOpen ? 'text-amber-300' : 'text-teal-600'} />
                   <span>{aiAssistantOpen ? 'Close AI Studio' : '✨ AI Prompt & Auto-Fill'}</span>
@@ -783,11 +780,10 @@ Bullets:
             )}
 
             {message && (
-              <div className={`p-4 rounded-xl text-xs font-bold flex items-center gap-2 ${
-                message.type === 'success'
+              <div className={`p-4 rounded-xl text-xs font-bold flex items-center gap-2 ${message.type === 'success'
                   ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                   : 'bg-rose-50 text-rose-800 border border-rose-200'
-              }`}>
+                }`}>
                 {message.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
                 <span>{message.text}</span>
               </div>

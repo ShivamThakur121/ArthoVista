@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, useAuth } from '../../context/AuthContext';
-import { 
-  Plus, 
-  Search, 
-  Edit, 
-  Trash2, 
-  Camera, 
-  Upload, 
-  CheckCircle2, 
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
+  Camera,
+  Upload,
+  CheckCircle2,
   XCircle,
-  Building, 
-  Mail, 
+  Building,
+  Mail,
   Phone,
   X,
   Loader2,
@@ -28,7 +28,7 @@ const EmployeeManagement = () => {
   const { user } = useAuth();
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
-  
+
   const [search, setSearch] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
   const [loading, setLoading] = useState(true);
@@ -55,18 +55,34 @@ const EmployeeManagement = () => {
     address: ''
   });
 
-  const fetchData = async () => {
+  const fetchData = async (refreshDept = false) => {
     setLoading(true);
     setError('');
     try {
-      const deptRes = await api.get('/departments');
-      if (deptRes.data.success) {
-        setDepartments(deptRes.data.data);
-      }
-
-      const empRes = await api.get(`/employees?search=${search}&department=${deptFilter}`);
-      if (empRes.data.success) {
-        setEmployees(empRes.data.data);
+      if (departments.length === 0 || refreshDept) {
+        const [deptRes, empRes] = await Promise.all([
+          api.get('/departments'),
+          api.get(`/employees?search=${search}&department=${deptFilter}`)
+        ]);
+        if (deptRes.data.success) {
+          setDepartments(deptRes.data.data);
+        }
+        if (empRes.data.success) {
+          setEmployees(
+            empRes.data.data.filter(
+              emp => emp.role !== 'Admin' && emp.email?.toLowerCase() !== 'shivamthakur12012@gmail.com' && emp.employeeId !== 'ADMIN001'
+            )
+          );
+        }
+      } else {
+        const empRes = await api.get(`/employees?search=${search}&department=${deptFilter}`);
+        if (empRes.data.success) {
+          setEmployees(
+            empRes.data.data.filter(
+              emp => emp.role !== 'Admin' && emp.email?.toLowerCase() !== 'shivamthakur12012@gmail.com' && emp.employeeId !== 'ADMIN001'
+            )
+          );
+        }
       }
     } catch (err) {
       console.error(err);
@@ -106,6 +122,14 @@ const EmployeeManagement = () => {
   };
 
   const openEditModal = (employee) => {
+    if (
+      employee.role === 'Admin' ||
+      employee.email?.toLowerCase() === 'shivamthakur12012@gmail.com' ||
+      employee.employeeId === 'ADMIN001'
+    ) {
+      setError('System Administrator profile (shivamthakur12012@gmail.com) is permanently protected and cannot be edited.');
+      return;
+    }
     setActiveEmployee(employee);
     setFormData({
       fullName: employee.fullName,
@@ -204,7 +228,7 @@ const EmployeeManagement = () => {
 
   return (
     <div className="space-y-6">
-      
+
       {successMsg && (
         <div className="flex items-center gap-3 p-4 bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-sm font-medium rounded-2xl animate-fade-in">
           <CheckCircle2 className="w-5 h-5 shrink-0" />
@@ -222,7 +246,7 @@ const EmployeeManagement = () => {
       )}
 
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-sm">
-        
+
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
@@ -260,9 +284,17 @@ const EmployeeManagement = () => {
 
       <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm overflow-hidden">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-            <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
-            <span className="mt-2 text-sm">Loading employees...</span>
+          <div className="flex flex-col items-center justify-center py-20 text-slate-500 dark:text-slate-400 space-y-3 animate-fadeIn">
+            <div className="relative flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
+                <Users className="w-6 h-6 text-indigo-600 dark:text-indigo-400 animate-pulse" />
+              </div>
+              <Loader2 className="w-14 h-14 animate-spin text-primary-500 absolute -inset-1 opacity-70" />
+            </div>
+            <div className="text-center space-y-0.5">
+              <span className="text-sm font-bold text-slate-800 dark:text-slate-200 block">Loading Employees Directory</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">Synchronizing staff roster, biometrics status & departments...</span>
+            </div>
           </div>
         ) : employees.length === 0 ? (
           <div className="text-center py-16 text-slate-400">
@@ -284,115 +316,129 @@ const EmployeeManagement = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                {employees.map((emp) => (
-                  <tr key={emp._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="relative group cursor-pointer w-10 h-10 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary-600 font-bold border border-slate-200 dark:border-slate-700 overflow-hidden">
-                          {emp.profilePhoto ? (
-                            <img src={emp.profilePhoto} alt={emp.fullName} className="w-full h-full object-cover" />
-                          ) : (
-                            emp.fullName.charAt(0).toUpperCase()
-                          )}
-                          {user?.role === 'Admin' && (
-                            <label className="absolute inset-0 bg-slate-900/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                              <Upload className="w-3.5 h-3.5 text-white" />
-                              <input 
-                                type="file" 
-                                accept="image/*" 
-                                onChange={(e) => handlePhotoUpload(e, emp._id)} 
-                                className="hidden" 
-                              />
-                            </label>
-                          )}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-slate-800 dark:text-slate-200">{emp.fullName}</div>
-                          <div className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                            <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-500 uppercase">{emp.employeeId}</span>
-                            <span>•</span>
-                            <span className="capitalize">{emp.role}</span>
+                {employees
+                  .filter((emp) => emp.role !== 'Admin' && emp.email?.toLowerCase() !== 'shivamthakur12012@gmail.com' && emp.employeeId !== 'ADMIN001')
+                  .map((emp) => (
+                    <tr key={emp._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="relative group cursor-pointer w-10 h-10 shrink-0 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-primary-600 font-bold border border-slate-200 dark:border-slate-700 overflow-hidden">
+                            {emp.profilePhoto ? (
+                              <img src={emp.profilePhoto} alt={emp.fullName} className="w-full h-full object-cover" />
+                            ) : (
+                              emp.fullName.charAt(0).toUpperCase()
+                            )}
+                            {user?.role === 'Admin' && (
+                              <label className="absolute inset-0 bg-slate-900/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                                <Upload className="w-3.5 h-3.5 text-white" />
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => handlePhotoUpload(e, emp._id)}
+                                  className="hidden"
+                                />
+                              </label>
+                            )}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-slate-800 dark:text-slate-200">{emp.fullName}</div>
+                            <div className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
+                              <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-500 uppercase">{emp.employeeId}</span>
+                              <span>•</span>
+                              <span className="capitalize">{emp.role}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="px-6 py-4">
-                      <div className="space-y-0.5 text-xs text-slate-500 dark:text-slate-400">
-                        <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /> {emp.email}</div>
-                        {emp.phone && <div className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" /> {emp.phone}</div>}
-                      </div>
-                    </td>
-
-                    <td className="px-6 py-4">
-                      <div className="font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                        <Building className="w-3.5 h-3.5 text-slate-400" />
-                        {emp.department?.name || 'Unassigned'}
-                      </div>
-                      <div className="text-xs text-slate-400 mt-0.5">{emp.designation || 'Staff'}</div>
-                    </td>
-
-                    <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                        emp.status === 'Active' 
-                          ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400' 
-                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
-                      }`}>
-                        {emp.status}
-                      </span>
-                    </td>
-
-                    <td className="px-6 py-4 text-center">
-                      {emp.faceEmbeddings && emp.faceEmbeddings.length > 0 ? (
-                        <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
-                          <CheckCircle2 className="w-4 h-4 shrink-0" />
-                          Enrolled ({emp.faceEmbeddings.length})
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-slate-400 text-xs">
-                          <XCircle className="w-4 h-4 shrink-0" />
-                          Not Enrolled
-                        </span>
-                      )}
-                    </td>
-
-                    {user?.role === 'Admin' && (
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => setSelectedProfileEmp(emp)}
-                            className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30 transition-all"
-                            title="View Full Profile"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => navigate(`/admin/employees/enroll/${emp._id}`)}
-                            className="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/20 border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30 transition-all"
-                            title="Enroll Webcam Face"
-                          >
-                            <Camera className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => openEditModal(emp)}
-                            className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
-                            title="Edit Details"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(emp._id, emp.fullName)}
-                            className="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
-                            title="Delete Employee"
-                            disabled={emp.employeeId === 'ADMIN001'}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                      <td className="px-6 py-4">
+                        <div className="space-y-0.5 text-xs text-slate-500 dark:text-slate-400">
+                          <div className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5 text-slate-400" /> {emp.email}</div>
+                          {emp.phone && <div className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5 text-slate-400" /> {emp.phone}</div>}
                         </div>
                       </td>
-                    )}
-                  </tr>
-                ))}
+
+                      <td className="px-6 py-4">
+                        <div className="font-medium text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                          <Building className="w-3.5 h-3.5 text-slate-400" />
+                          {emp.department?.name || 'Unassigned'}
+                        </div>
+                        <div className="text-xs text-slate-400 mt-0.5">{emp.designation || 'Staff'}</div>
+                      </td>
+
+                      <td className="px-6 py-4 text-center">
+                        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${emp.status === 'Active'
+                          ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400'
+                          : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                          }`}>
+                          {emp.status}
+                        </span>
+                      </td>
+
+                      <td className="px-6 py-4 text-center">
+                        {emp.role === 'Admin' || emp.email?.toLowerCase() === 'shivamthakur12012@gmail.com' || emp.employeeId === 'ADMIN001' ? (
+                          <span className="inline-flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-xs font-medium">
+                            <ShieldCheck className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                            Exempt (Admin)
+                          </span>
+                        ) : emp.hasBiometrics || emp.faceEmbeddingsCount > 0 || (emp.faceEmbeddings && emp.faceEmbeddings.length > 0) ? (
+                          <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-xs font-semibold">
+                            <CheckCircle2 className="w-4 h-4 shrink-0" />
+                            Enrolled {emp.faceEmbeddingsCount > 0 ? `(${emp.faceEmbeddingsCount})` : ''}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-slate-400 text-xs">
+                            <XCircle className="w-4 h-4 shrink-0" />
+                            Not Enrolled
+                          </span>
+                        )}
+                      </td>
+
+                      {user?.role === 'Admin' && (
+                        <td className="px-6 py-4 text-right">
+                          {emp.role === 'Admin' || emp.email?.toLowerCase() === 'shivamthakur12012@gmail.com' || emp.employeeId === 'ADMIN001' ? (
+                            <div className="flex items-center justify-end">
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40">
+                                <ShieldCheck className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                                Permanent Admin
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => setSelectedProfileEmp(emp)}
+                                className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border border-transparent hover:border-indigo-100 dark:hover:border-indigo-900/30 transition-all"
+                                title="View Full Profile"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => navigate(`/admin/employees/enroll/${emp._id}`)}
+                                className="p-2 rounded-xl text-slate-500 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/20 border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30 transition-all"
+                                title="Enroll Webcam Face"
+                              >
+                                <Camera className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => openEditModal(emp)}
+                                className="p-2 rounded-xl text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                                title="Edit Details"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(emp._id, emp.fullName)}
+                                className="p-2 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
+                                title="Delete Employee"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+                        </td>
+                      )}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -402,12 +448,12 @@ const EmployeeManagement = () => {
       {(showAddModal || showEditModal) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded-3xl shadow-xl max-h-[90vh] overflow-y-auto">
-            
+
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200">
                 {showAddModal ? 'Register New Employee' : 'Edit Employee Profile'}
               </h3>
-              <button 
+              <button
                 onClick={() => { setShowAddModal(false); setShowEditModal(false); resetForm(); }}
                 className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
@@ -416,7 +462,7 @@ const EmployeeManagement = () => {
             </div>
 
             <form onSubmit={showAddModal ? handleAddSubmit : handleEditSubmit} className="p-6 space-y-4">
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Full Name</label>
@@ -598,7 +644,7 @@ const EmployeeManagement = () => {
       {selectedProfileEmp && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fadeIn">
           <div className="w-full max-w-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 md:p-8 space-y-6 animate-scaleUp">
-            
+
             {/* Header */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
               <div className="flex items-center gap-3.5">
@@ -616,7 +662,7 @@ const EmployeeManagement = () => {
                   <p className="text-xs text-slate-400 font-mono">{selectedProfileEmp.employeeId} • <span className="capitalize">{selectedProfileEmp.role}</span></p>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setSelectedProfileEmp(null)}
                 className="p-2 rounded-xl text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
@@ -655,7 +701,7 @@ const EmployeeManagement = () => {
                 <span className="text-[10px] uppercase font-bold text-slate-400">Biometric Status</span>
                 <p className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  {selectedProfileEmp.faceEmbeddings?.length > 0 ? `Enrolled (${selectedProfileEmp.faceEmbeddings.length} frames)` : 'Not Enrolled'}
+                  {selectedProfileEmp.hasBiometrics || selectedProfileEmp.faceEmbeddingsCount > 0 || selectedProfileEmp.faceEmbeddings?.length > 0 ? `Enrolled (${selectedProfileEmp.faceEmbeddingsCount || selectedProfileEmp.faceEmbeddings?.length || 1} frames)` : 'Not Enrolled'}
                 </p>
               </div>
             </div>

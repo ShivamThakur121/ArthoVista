@@ -348,21 +348,19 @@ FULL_BODY_DISPATCH:
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab('editions')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'editions'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
-            }`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === 'editions'
+              ? 'bg-amber-600 text-white shadow-xs'
+              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
+              }`}
           >
             Gazette Editions ({newsletters.length})
           </button>
           <button
             onClick={() => setActiveTab('subscribers')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'subscribers'
-                ? 'bg-amber-600 text-white shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
-            }`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeTab === 'subscribers'
+              ? 'bg-amber-600 text-white shadow-xs'
+              : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800'
+              }`}
           >
             Subscribers List ({subscribers.length})
           </button>
@@ -507,11 +505,10 @@ FULL_BODY_DISPATCH:
                 <button
                   type="button"
                   onClick={() => setAiAssistantOpen(!aiAssistantOpen)}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    aiAssistantOpen
-                      ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm'
-                      : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
-                  }`}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${aiAssistantOpen
+                    ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-sm'
+                    : 'bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100'
+                    }`}
                 >
                   <Sparkles size={14} className={aiAssistantOpen ? 'text-amber-300' : 'text-amber-600'} />
                   <span>{aiAssistantOpen ? 'Close AI Studio' : '✨ AI Prompt & Auto-Fill'}</span>
@@ -607,11 +604,10 @@ FULL_BODY_DISPATCH:
             )}
 
             {message && (
-              <div className={`p-4 rounded-xl text-xs font-bold flex items-center gap-2 ${
-                message.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                  : 'bg-rose-50 text-rose-800 border border-rose-200'
-              }`}>
+              <div className={`p-4 rounded-xl text-xs font-bold flex items-center gap-2 ${message.type === 'success'
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'bg-rose-50 text-rose-800 border border-rose-200'
+                }`}>
                 {message.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
                 <span>{message.text}</span>
               </div>

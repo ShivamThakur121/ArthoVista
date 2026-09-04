@@ -5,7 +5,7 @@ const { protect, authorize } = require('../middleware/auth');
 
 router.get('/', protect, async (req, res, next) => {
   try {
-    const departments = await Department.find();
+    const departments = await Department.find().sort({ name: 1 }).lean();
     res.status(200).json({
       success: true,
       count: departments.length,

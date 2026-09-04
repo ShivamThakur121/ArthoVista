@@ -20,7 +20,10 @@ const protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id)
+      .select('-password')
+      .lean();
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -35,11 +38,14 @@ const protect = async (req, res, next) => {
       });
     }
 
+    user.id = user._id.toString();
+    user.hasBiometrics = Boolean(user.faceEmbeddings && user.faceEmbeddings.length > 0);
+    user.faceEmbeddingsCount = user.faceEmbeddings ? user.faceEmbeddings.length : 0;
     req.user = user;
     next();
   } catch (error) {
     console.error('Token validation error:', error.message);
-    
+
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
         success: false,

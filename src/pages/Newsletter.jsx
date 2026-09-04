@@ -115,7 +115,7 @@ export default function Newsletter() {
           setEditions([...apiEditions, ...fallbackNonDup]);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
     return () => { isMounted = false; };
   }, []);
 

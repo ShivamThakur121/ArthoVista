@@ -89,7 +89,11 @@ const AdminDashboard = () => {
     try {
       const res = await api.get('/employees');
       if (res.data.success) {
-        setEmployeesList(res.data.data);
+        // Attendance is not for Admin - only list active employees & managers in calendar selector
+        const nonAdminStaff = res.data.data.filter(
+          emp => emp.role !== 'Admin' && emp.email?.toLowerCase() !== 'shivamthakur12012@gmail.com'
+        );
+        setEmployeesList(nonAdminStaff);
       }
     } catch (err) {
       console.error('Failed to load employee list:', err);
@@ -113,15 +117,24 @@ const AdminDashboard = () => {
     }
   };
 
+  const getTodayString = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const fetchLogs = async () => {
     setLogsLoading(true);
     try {
-      const res = await api.get('/attendance/history');
+      const today = getTodayString();
+      const res = await api.get(`/attendance/history?date=${today}`);
       if (res.data.success) {
         setAllLogs(res.data.data);
       }
     } catch (err) {
-      console.error('Failed to fetch all logs:', err);
+      console.error('Failed to fetch today logs:', err);
     } finally {
       setLogsLoading(false);
     }
@@ -278,17 +291,23 @@ const AdminDashboard = () => {
     { label: 'Absent Today', value: kpis.absentToday, icon: UserMinus, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-950/20' },
   ];
 
-  // Filter logs
+  // Filter logs to strictly today's attendance
+  const todayStr = getTodayString();
   const filteredLogs = allLogs.filter(log => {
+    // Only show today's logs
+    if (log.date !== todayStr) return false;
+
+    // Filter out Admin account
+    if (log.employee?.role === 'Admin' || log.employee?.email?.toLowerCase() === 'shivamthakur12012@gmail.com') {
+      return false;
+    }
+
     const empName = log.employee?.fullName || '';
     const empId = log.employee?.employeeId || '';
-    const dateStr = log.date || '';
     const searchLow = logsSearch.toLowerCase();
 
     const matchesSearch = empName.toLowerCase().includes(searchLow) ||
-      empId.toLowerCase().includes(searchLow) ||
-      dateStr.includes(searchLow) ||
-      (log.checkIn?.gps?.address && log.checkIn.gps.address.toLowerCase().includes(searchLow));
+      empId.toLowerCase().includes(searchLow);
 
     const matchesStatus = logsStatusFilter === 'All' || log.status === logsStatusFilter;
     return matchesSearch && matchesStatus;
@@ -628,11 +647,17 @@ const AdminDashboard = () => {
         {/* Filter Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">
-              Live Attendance Activity Logs
-            </h3>
+            <div className="flex items-center gap-2.5">
+              <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">
+                Live Attendance Activity Logs
+              </h3>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Today ({todayStr})
+              </span>
+            </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Live biometric logs, timestamps, work hours, and geofence locations for all employees.
+              Live biometric logs, timestamps, and work hours for today's active shift.
             </p>
           </div>
 
@@ -642,7 +667,7 @@ const AdminDashboard = () => {
               <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
               <input
                 type="text"
-                placeholder="Search employee, ID, date..."
+                placeholder="Search employee, ID..."
                 value={logsSearch}
                 onChange={(e) => setLogsSearch(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-primary-500 text-slate-800 dark:text-slate-200"
@@ -668,12 +693,12 @@ const AdminDashboard = () => {
         {logsLoading ? (
           <div className="py-16 text-center text-slate-400 flex flex-col items-center justify-center">
             <Loader2 className="w-8 h-8 animate-spin text-primary-500 mb-2" />
-            <p className="text-xs font-medium">Loading attendance activity logs...</p>
+            <p className="text-xs font-medium">Loading today's attendance logs...</p>
           </div>
         ) : filteredLogs.length === 0 ? (
           <div className="text-center py-16 text-slate-400 space-y-2">
             <CalendarIcon className="w-10 h-10 mx-auto opacity-30" />
-            <p className="text-sm font-semibold">No attendance log records matching criteria.</p>
+            <p className="text-sm font-semibold">No attendance log records found for today.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -686,8 +711,6 @@ const AdminDashboard = () => {
                   <th className="py-3 px-4">Check-In</th>
                   <th className="py-3 px-4">Check-Out</th>
                   <th className="py-3 px-4">Work Hours</th>
-                  <th className="py-3 px-4">Verification</th>
-                  <th className="py-3 px-4 text-right">Location</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
@@ -732,15 +755,6 @@ const AdminDashboard = () => {
                       {log.overtime > 0 && (
                         <span className="text-[10px] text-emerald-500 ml-1">(+{log.overtime} OT)</span>
                       )}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        <span className="text-[11px] font-semibold">Face & GPS Verified</span>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-right text-slate-500 dark:text-slate-400 text-[11px] truncate max-w-[180px]" title={log.checkIn?.gps?.address}>
-                      {log.checkIn?.gps?.address || 'Office Geofenced Zone'}
                     </td>
                   </tr>
                 ))}
@@ -895,10 +909,9 @@ const AdminDashboard = () => {
 
                   <div className="flex justify-between items-center">
                     <span className="text-slate-400 font-medium">Biometric Descriptor:</span>
-                    <span className={`font-bold flex items-center gap-1 ${currentProfile?.hasBiometrics ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'
-                      }`}>
-                      <Fingerprint className="w-3.5 h-3.5" />
-                      {currentProfile?.hasBiometrics ? 'Enrolled & Verified' : 'Master Account'}
+                    <span className="font-bold flex items-center gap-1 text-slate-500 dark:text-slate-400">
+                      <ShieldCheck className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+                      Exempt (System Admin)
                     </span>
                   </div>
                 </div>
@@ -922,8 +935,8 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2 text-xs">
                     <Clock className="w-4 h-4 text-indigo-500 shrink-0" />
                     <div>
-                      <span className="text-slate-400 text-[10px] block">Shift Timings:</span>
-                      <strong className="text-indigo-600 dark:text-indigo-400">10:00 AM – 06:00 PM (Mon–Sat)</strong>
+                      <span className="text-slate-400 text-[10px] block">Operations:</span>
+                      <strong className="text-indigo-600 dark:text-indigo-400">Executive System Administration</strong>
                     </div>
                   </div>
                 </div>

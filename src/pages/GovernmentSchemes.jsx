@@ -409,9 +409,8 @@ export default function GovernmentSchemes() {
             {schemeFaqs.map((f, idx) => (
               <div
                 key={f.q}
-                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${
-                  openFaq === idx ? "ring-2 ring-teal-500" : ""
-                }`}
+                className={`bg-white rounded-xl overflow-hidden transition-all duration-300 border border-slate-200 shadow-xs ${openFaq === idx ? "ring-2 ring-teal-500" : ""
+                  }`}
               >
                 <button
                   className="w-full text-left p-5 flex items-center justify-between gap-3 cursor-pointer"
@@ -420,15 +419,13 @@ export default function GovernmentSchemes() {
                   <span className="font-bold text-slate-900 text-sm sm:text-base">{f.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${
-                      openFaq === idx ? "rotate-180" : ""
-                    }`}
+                    className={`shrink-0 text-teal-600 transition-transform duration-300 ${openFaq === idx ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ${openFaq === idx ? "max-h-60 pb-5 px-5" : "max-h-0"
+                    }`}
                 >
                   <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">{f.a}</p>
                 </div>
@@ -509,7 +506,7 @@ export default function GovernmentSchemes() {
 
             {/* Modal Content: 2-Column Responsive Layout */}
             <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
-              
+
               {/* Left Column: Scheme Specifications */}
               <div className="lg:col-span-7 space-y-6">
                 <div>

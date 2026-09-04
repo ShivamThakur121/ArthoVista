@@ -11,7 +11,7 @@ import axisLogo from "../assets/banks/Axis.png";
 import iciciLogo from "../assets/banks/ICICI.png";
 import hdfcLogo from "../assets/banks/HDFC.png";
 import kotakLogo from "../assets/banks/kotak.png";
-import idfcFirstLogo from "../assets/banks/IDFC-First.png"; 
+import idfcFirstLogo from "../assets/banks/IDFC-First.png";
 import sbiLogo from "../assets/banks/sbi.png";
 import standardLogo from "../assets/banks/standard_bank.png";
 import adityaBirlaLogo from "../assets/banks/Aditya-Birlaa.png";
@@ -465,9 +465,8 @@ export default function Loans() {
             {faqs.map((f, idx) => (
               <div
                 key={f.q}
-                className={`glass-card-dark rounded-xl overflow-hidden transition-all duration-300 border border-slate-700/60 ${
-                  openFaq === idx ? "ring-2 ring-teal-400" : ""
-                }`}
+                className={`glass-card-dark rounded-xl overflow-hidden transition-all duration-300 border border-slate-700/60 ${openFaq === idx ? "ring-2 ring-teal-400" : ""
+                  }`}
               >
                 <button
                   className="w-full text-left p-5 flex items-center justify-between gap-3"
@@ -476,15 +475,13 @@ export default function Loans() {
                   <span className="font-bold text-white text-sm">{f.q}</span>
                   <ChevronDown
                     size={18}
-                    className={`shrink-0 text-teal-400 transition-transform duration-300 ${
-                      openFaq === idx ? "rotate-180" : ""
-                    }`}
+                    className={`shrink-0 text-teal-400 transition-transform duration-300 ${openFaq === idx ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openFaq === idx ? "max-h-40 pb-5 px-5" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-all duration-300 ${openFaq === idx ? "max-h-40 pb-5 px-5" : "max-h-0"
+                    }`}
                 >
                   <p className="text-slate-100 text-sm font-medium leading-relaxed">{f.a}</p>
                 </div>
@@ -508,7 +505,7 @@ export default function Loans() {
             Our loan experts will evaluate your profile and recommend the best product with the highest approval chance — completely free.
           </p>
           <div className="flex flex-wrap gap-3 justify-center mt-8">
-            <button 
+            <button
               onClick={() => openConsultationModal("Business & MSME Loan Leads")}
               className="btn-primary-3d"
             >
@@ -572,7 +569,7 @@ export default function Loans() {
 
             {/* Modal Content: 2-Column Responsive Layout */}
             <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
-              
+
               {/* Left Column: Loan Specifications */}
               <div className="lg:col-span-6 space-y-6">
                 <div>

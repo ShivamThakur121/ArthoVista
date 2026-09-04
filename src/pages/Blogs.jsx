@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { 
-  Search, BookOpen, Clock, Calendar, ArrowRight, 
-  Sparkles, Filter, ShieldCheck, Tag, CheckCircle2, TrendingUp 
+import {
+  Search, BookOpen, Clock, Calendar, ArrowRight,
+  Sparkles, Filter, ShieldCheck, Tag, CheckCircle2, TrendingUp
 } from "lucide-react";
 import useDocumentMetadata from "../hooks/useDocumentMetadata";
 import { blogPosts, categories } from "../data/blogData";
@@ -31,7 +31,7 @@ export default function Blogs() {
           setAllBlogs([...apiBlogs, ...nonDuplicateStatic]);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
     return () => { isMounted = false; };
   }, []);
 
@@ -109,11 +109,10 @@ export default function Blogs() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                  isSelected
+                className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${isSelected
                     ? "bg-teal-600 text-white shadow-md shadow-teal-600/20 scale-105"
                     : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 hover:text-slate-900 shadow-2xs"
-                }`}
+                  }`}
               >
                 {cat}
               </button>

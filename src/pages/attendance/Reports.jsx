@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../context/AuthContext';
-import { 
-  Calendar, 
-  Search, 
-  Mail, 
-  FileSpreadsheet, 
-  AlertTriangle, 
-  CheckCircle, 
-  Loader2, 
+import {
+  Calendar,
+  Search,
+  Mail,
+  FileSpreadsheet,
+  AlertTriangle,
+  CheckCircle,
+  Loader2,
   Users,
   AlertCircle
 } from 'lucide-react';
@@ -17,7 +17,7 @@ const Reports = () => {
   const getInitialDates = () => {
     const today = new Date();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-    
+
     const formatDate = (date) => {
       const y = date.getFullYear();
       const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -46,7 +46,7 @@ const Reports = () => {
       setError('Please select both start and end dates.');
       return;
     }
-    
+
     if (new Date(startDate) > new Date(endDate)) {
       setError('Start date cannot be after end date.');
       return;
@@ -96,35 +96,69 @@ const Reports = () => {
   const handleExportCSV = () => {
     if (reportData.length === 0) return;
 
-    // Headers
-    const headers = ['Employee Name', 'Employee ID', 'Email', 'Department', 'Designation', 'Days Present', 'Days Absent', 'Late Days', 'Half Days', 'Leaves', 'Attendance %'];
-    
-    // Rows
-    const rows = filteredData.map(row => [
-      row.employee.fullName,
-      row.employee.employeeId,
-      row.employee.email,
-      row.employee.department,
-      row.employee.designation,
-      row.presentDays,
-      row.absentDays,
-      row.lateDays,
-      row.halfDays,
-      row.leaveDays,
-      `${row.attendancePercentage}%`
-    ]);
+    const isSingleDay = startDate === endDate;
 
-    // CSV construction
-    const csvContent = "data:text/csv;charset=utf-8," 
-      + [headers.join(','), ...rows.map(e => e.map(val => `"${val}"`).join(','))].join('\n');
-    
-    const encodedUri = encodeURI(csvContent);
+    // Headers
+    const headers = [
+      'Employee Name',
+      'Employee ID',
+      'Email',
+      'Department',
+      'Designation',
+      isSingleDay ? 'Punch In Time' : 'Latest Punch In Time',
+      isSingleDay ? 'Punch Out Time' : 'Latest Punch Out Time',
+      'Total Work Hours (hrs)',
+      'Days Present',
+      'Days Absent',
+      'Late Days',
+      'Half Days',
+      'Leaves',
+      'Attendance %'
+    ];
+
+    if (!isSingleDay) {
+      headers.push('Punch In/Out History');
+    }
+
+    // Rows
+    const rows = filteredData.map(row => {
+      const rowData = [
+        row.employee.fullName,
+        row.employee.employeeId,
+        row.employee.email,
+        row.employee.department,
+        row.employee.designation,
+        row.punchInTime || 'Not Punched In',
+        row.punchOutTime || 'Not Punched Out',
+        row.totalWorkHours !== undefined ? row.totalWorkHours : 0,
+        row.presentDays,
+        row.absentDays,
+        row.lateDays,
+        row.halfDays,
+        row.leaveDays,
+        `${row.attendancePercentage}%`
+      ];
+
+      if (!isSingleDay) {
+        rowData.push(row.punchDetails || 'No punch logs in range');
+      }
+
+      return rowData;
+    });
+
+    // CSV construction with UTF-8 BOM so Excel opens it with perfect column formatting
+    const csvContent = "\uFEFF"
+      + [headers.join(','), ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))].join('\r\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
+    link.setAttribute("href", url);
     link.setAttribute("download", `attendance_report_${startDate}_to_${endDate}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const filteredData = reportData.filter(row => {
@@ -138,14 +172,14 @@ const Reports = () => {
 
   return (
     <div className="space-y-6">
-      
+
       {/* Title & Description */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Custom Date Range Attendance Report</h2>
           <p className="text-slate-600 dark:text-slate-300 text-xs sm:text-sm font-medium mt-1">Generate and export employee attendance sheets for customized timelines.</p>
         </div>
-        
+
         {reportData.length > 0 && (
           <button
             onClick={handleExportCSV}
@@ -251,6 +285,7 @@ const Reports = () => {
                 <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/90 text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-100">
                   <th className="px-6 py-4">Employee</th>
                   <th className="px-6 py-4">Department & Role</th>
+                  <th className="px-6 py-4 text-center">{startDate === endDate ? 'Punch In / Out' : 'Latest Punch'}</th>
                   <th className="px-6 py-4 text-center">Present</th>
                   <th className="px-6 py-4 text-center">Absent</th>
                   <th className="px-6 py-4 text-center">Late</th>
@@ -274,6 +309,23 @@ const Reports = () => {
                       <td className="px-6 py-4">
                         <p className="font-bold text-slate-800 dark:text-slate-100">{row.employee.department}</p>
                         <p className="text-xs font-medium text-slate-500 dark:text-slate-300 mt-0.5">{row.employee.designation}</p>
+                      </td>
+
+                      <td className="px-6 py-4 text-center">
+                        <div className="text-xs space-y-0.5">
+                          <div className="font-semibold text-slate-800 dark:text-slate-200 flex items-center justify-center gap-1">
+                            <span className="text-[10px] text-slate-400 font-bold uppercase">In:</span>
+                            <span className={row.punchInTime && !row.punchInTime.includes('Not Punched') && !row.punchInTime.includes('Absent') ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                              {row.punchInTime || 'Not Punched In'}
+                            </span>
+                          </div>
+                          {row.punchOutTime && (
+                            <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-center gap-1">
+                              <span className="text-[10px] text-slate-400 font-bold uppercase">Out:</span>
+                              <span>{row.punchOutTime}</span>
+                            </div>
+                          )}
+                        </div>
                       </td>
 
                       <td className="px-6 py-4 text-center font-bold text-sm text-emerald-600 dark:text-emerald-400">

@@ -62,7 +62,13 @@ function ScrollToTop() {
   return null;
 }
 
+import { preloadFaceModelsInBackground } from "./utils/faceModelLoader";
+
 const AttendanceDashboardLayout = () => {
+  useEffect(() => {
+    preloadFaceModelsInBackground();
+  }, []);
+
   return (
     <Layout>
       <Outlet />
@@ -72,12 +78,12 @@ const AttendanceDashboardLayout = () => {
 
 function MainLayoutWrapper() {
   const location = useLocation();
-  const isAttendanceRoute = 
-    location.pathname === '/login' || 
-    location.pathname === '/forgot-password' || 
-    location.pathname === '/verify-otp' || 
-    location.pathname === '/reset-password' || 
-    location.pathname.startsWith('/admin') || 
+  const isAttendanceRoute =
+    location.pathname === '/login' ||
+    location.pathname === '/forgot-password' ||
+    location.pathname === '/verify-otp' ||
+    location.pathname === '/reset-password' ||
+    location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/employee');
 
   if (isAttendanceRoute) {

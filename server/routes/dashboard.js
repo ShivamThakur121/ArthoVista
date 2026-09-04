@@ -33,7 +33,7 @@ const calculateCurrentMonthAttendance = async (employeeId, holidayDates, leaveRe
     const empLogs = await Attendance.find({
       employee: employeeId,
       date: { $in: monthDates }
-    });
+    }).lean();
     logs = {};
     empLogs.forEach(log => {
       logs[log.date] = log;
@@ -48,8 +48,8 @@ const calculateCurrentMonthAttendance = async (employeeId, holidayDates, leaveRe
     const d = new Date(dateStr);
     return leaveRequests.some(leave => {
       return leave.employee.toString() === employeeId.toString() &&
-             new Date(leave.startDate) <= d &&
-             new Date(leave.endDate) >= d;
+        new Date(leave.startDate) <= d &&
+        new Date(leave.endDate) >= d;
     });
   };
 
@@ -85,8 +85,8 @@ const calculateCurrentMonthAttendance = async (employeeId, holidayDates, leaveRe
   });
 
   const totalWorkingDays = presentDays + absentDays;
-  const attendancePercentage = totalWorkingDays > 0 
-    ? Math.round((presentDays / totalWorkingDays) * 100) 
+  const attendancePercentage = totalWorkingDays > 0
+    ? Math.round((presentDays / totalWorkingDays) * 100)
     : 100;
 
   return {
@@ -127,35 +127,61 @@ const getTodayDateString = () => {
 router.get('/admin', protect, authorize('Admin', 'Manager'), async (req, res, next) => {
   try {
     const today = getTodayDateString();
+    const weekDates = getCurrentWeekDateStrings();
+    const monthDates = getMonthDateStrings();
+    const startRange = new Date(monthDates[0]);
+    const endRange = new Date(monthDates[monthDates.length - 1]);
 
-    const totalEmployees = await User.countDocuments({ role: { $in: ['Employee', 'Manager'] }, status: 'Active' });
-    const totalDepartments = await Department.countDocuments();
+    const dToday = new Date();
+    dToday.setHours(0, 0, 0, 0);
 
-    const todayLogs = await Attendance.find({ date: today }).populate('employee', 'fullName employeeId department');
+    // Run bulk queries concurrently in parallel
+    const [
+      totalEmployees,
+      totalDepartments,
+      todayLogs,
+      leavesTodayCount,
+      recentLogs,
+      allWeekLogs,
+      departments,
+      holidays,
+      activeStaff,
+      leaveRequests
+    ] = await Promise.all([
+      User.countDocuments({ role: { $in: ['Employee', 'Manager'] }, status: 'Active' }),
+      Department.countDocuments(),
+      Attendance.find({ date: today }).populate('employee', 'fullName employeeId department').lean(),
+      LeaveRequest.countDocuments({
+        status: 'Approved',
+        startDate: { $lte: dToday },
+        endDate: { $gte: dToday }
+      }),
+      Attendance.find()
+        .populate({
+          path: 'employee',
+          select: 'fullName employeeId profilePhoto department designation',
+          populate: { path: 'department', select: 'name code' }
+        })
+        .sort({ updatedAt: -1 })
+        .limit(8)
+        .lean(),
+      Attendance.find({ date: { $in: weekDates } }).lean(),
+      Department.find().lean(),
+      Holiday.find({ date: { $in: monthDates } }).lean(),
+      User.find({
+        role: { $in: ['Employee', 'Manager'] },
+        status: 'Active'
+      }).select('fullName employeeId email department').lean(),
+      LeaveRequest.find({
+        status: 'Approved',
+        startDate: { $lte: endRange },
+        endDate: { $gte: startRange }
+      }).lean()
+    ]);
+
     const presentTodayCount = todayLogs.filter(log => log.status === 'Present' || log.status === 'Late').length;
     const lateTodayCount = todayLogs.filter(log => log.status === 'Late').length;
-    
-    const dToday = new Date();
-    dToday.setHours(0,0,0,0);
-    const leavesTodayCount = await LeaveRequest.countDocuments({
-      status: 'Approved',
-      startDate: { $lte: dToday },
-      endDate: { $gte: dToday }
-    });
-
     const absentTodayCount = Math.max(0, totalEmployees - presentTodayCount - leavesTodayCount);
-
-    const recentLogs = await Attendance.find()
-      .populate({
-        path: 'employee',
-        select: 'fullName employeeId profilePhoto department designation',
-        populate: { path: 'department', select: 'name code' }
-      })
-      .sort({ updatedAt: -1 })
-      .limit(8);
-
-    const weekDates = getCurrentWeekDateStrings();
-    const allWeekLogs = await Attendance.find({ date: { $in: weekDates } });
 
     // Group week logs by date
     const logsByDateMap = {};
@@ -173,9 +199,8 @@ router.get('/admin', protect, authorize('Admin', 'Manager'), async (req, res, ne
       const dayLogs = logsByDateMap[dStr] || [];
       const presentCount = dayLogs.filter(log => log.status === 'Present' || log.status === 'Late').length;
       const lateCount = dayLogs.filter(log => log.status === 'Late').length;
-      
       const dayName = new Date(dStr).toLocaleDateString('en-US', { weekday: 'short' });
-      
+
       weeklyChartData.push({
         day: dayName,
         date: dStr,
@@ -185,49 +210,26 @@ router.get('/admin', protect, authorize('Admin', 'Manager'), async (req, res, ne
       });
     }
 
-    const departments = await Department.find();
-    const departmentChartData = [];
-
-    for (const dept of departments) {
-      const employeeCount = await User.countDocuments({ department: dept._id, role: { $in: ['Employee', 'Manager'] }, status: 'Active' });
-      // Re-use todayLogs instead of re-querying inside the loop!
+    const departmentChartData = departments.map(dept => {
+      const employeeCount = activeStaff.filter(emp => emp.department && emp.department.toString() === dept._id.toString()).length;
       const presentCount = todayLogs.filter(log => log.employee && log.employee.department && log.employee.department.toString() === dept._id.toString()).length;
 
-      departmentChartData.push({
+      return {
         department: dept.code,
         name: dept.name,
         Total: employeeCount,
         Present: presentCount
-      });
-    }
+      };
+    });
 
     // Calculate short attendance for the current month in batch
-    const monthDates = getMonthDateStrings();
-    const holidays = await Holiday.find({
-      date: { $in: monthDates }
-    });
     const holidayDates = new Set(holidays.map(h => h.date));
-    
-    const activeStaff = await User.find({
-      role: { $in: ['Employee', 'Manager'] },
-      status: 'Active'
-    });
-    
-    const startRange = new Date(monthDates[0]);
-    const endRange = new Date(monthDates[monthDates.length - 1]);
-    const leaveRequests = await LeaveRequest.find({
-      status: 'Approved',
-      startDate: { $lte: endRange },
-      endDate: { $gte: startRange }
-    });
-
     const activeStaffIds = activeStaff.map(emp => emp._id);
     const allMonthLogs = await Attendance.find({
       employee: { $in: activeStaffIds },
       date: { $in: monthDates }
-    });
+    }).lean();
 
-    // Group logs by employee and date
     const logsByEmployee = {};
     activeStaffIds.forEach(id => {
       logsByEmployee[id.toString()] = {};
@@ -237,7 +239,7 @@ router.get('/admin', protect, authorize('Admin', 'Manager'), async (req, res, ne
         logsByEmployee[log.employee.toString()][log.date] = log;
       }
     });
-    
+
     const shortAttendanceEmployees = [];
     for (const emp of activeStaff) {
       const employeeLogsMap = logsByEmployee[emp._id.toString()] || {};
@@ -279,40 +281,80 @@ router.get('/admin', protect, authorize('Admin', 'Manager'), async (req, res, ne
 
 router.get('/employee', protect, async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user.id || req.user._id;
     const today = getTodayDateString();
 
     const monthAgo = new Date();
     monthAgo.setDate(monthAgo.getDate() - 30);
 
-    const monthLogs = await Attendance.find({
-      employee: userId,
-      checkIn: { $ne: null },
-      createdAt: { $gte: monthAgo }
-    });
+    const weekDates = getCurrentWeekDateStrings();
+    const monthDates = getMonthDateStrings();
+    const startRange = new Date(monthDates[0]);
+    const endRange = new Date(monthDates[monthDates.length - 1]);
+
+    // Execute all database queries concurrently in parallel with .lean() for blazing speed!
+    const [
+      monthLogs,
+      approvedLeavesCount,
+      weekLogs,
+      announcements,
+      holidays,
+      leaveRequests,
+      employeeMonthLogs,
+      todayLog
+    ] = await Promise.all([
+      Attendance.find({
+        employee: userId,
+        checkIn: { $ne: null },
+        createdAt: { $gte: monthAgo }
+      }).select('status date checkIn checkOut workHours').lean(),
+      LeaveRequest.countDocuments({
+        employee: userId,
+        status: 'Approved',
+        startDate: { $gte: monthAgo }
+      }),
+      Attendance.find({
+        employee: userId,
+        date: { $in: weekDates }
+      }).select('date checkIn checkOut status workHours').lean(),
+      Announcement.find()
+        .populate('author', 'fullName designation')
+        .sort({ createdAt: -1 })
+        .limit(3)
+        .lean(),
+      Holiday.find({
+        date: { $in: monthDates }
+      }).lean(),
+      LeaveRequest.find({
+        employee: userId,
+        status: 'Approved',
+        startDate: { $lte: endRange },
+        endDate: { $gte: startRange }
+      }).lean(),
+      Attendance.find({
+        employee: userId,
+        date: { $in: monthDates }
+      }).lean(),
+      Attendance.findOne({
+        employee: userId,
+        date: today
+      }).lean()
+    ]);
 
     const presentCount = monthLogs.filter(log => log.status === 'Present' || log.status === 'Late').length;
     const lateCount = monthLogs.filter(log => log.status === 'Late').length;
-    
-    const approvedLeavesCount = await LeaveRequest.countDocuments({
-      employee: userId,
-      status: 'Approved',
-      startDate: { $gte: monthAgo }
-    });
 
-    const weekDates = getCurrentWeekDateStrings();
-    const weekLogs = await Attendance.find({ employee: userId, date: { $in: weekDates } });
-    
     const weekLogsByDate = {};
     weekLogs.forEach(log => {
       weekLogsByDate[log.date] = log;
     });
 
+    const now = new Date();
     const weeklyLogs = [];
     for (const dStr of weekDates) {
       const log = weekLogsByDate[dStr];
       const dayName = new Date(dStr).toLocaleDateString('en-US', { weekday: 'short' });
-      const isPastOrToday = new Date(dStr) <= new Date();
+      const isPastOrToday = new Date(dStr) <= now;
 
       weeklyLogs.push({
         day: dayName,
@@ -324,37 +366,12 @@ router.get('/employee', protect, async (req, res, next) => {
       });
     }
 
-    const announcements = await Announcement.find()
-      .populate('author', 'fullName designation')
-      .sort({ createdAt: -1 })
-      .limit(3);
-
-    // Calculate current month attendance percentage for alert warning in batch
-    const monthDates = getMonthDateStrings();
-    const holidays = await Holiday.find({
-      date: { $in: monthDates }
-    });
     const holidayDates = new Set(holidays.map(h => h.date));
-    
-    const startRange = new Date(monthDates[0]);
-    const endRange = new Date(monthDates[monthDates.length - 1]);
-    const leaveRequests = await LeaveRequest.find({
-      employee: userId,
-      status: 'Approved',
-      startDate: { $lte: endRange },
-      endDate: { $gte: startRange }
-    });
-
-    const employeeMonthLogs = await Attendance.find({
-      employee: userId,
-      date: { $in: monthDates }
-    });
-    
     const monthLogsByDate = {};
     employeeMonthLogs.forEach(log => {
       monthLogsByDate[log.date] = log;
     });
-    
+
     const details = await calculateCurrentMonthAttendance(userId, holidayDates, leaveRequests, monthDates, monthLogsByDate);
     const shortAttendanceAlert = details.attendancePercentage < 75;
 
@@ -368,7 +385,7 @@ router.get('/employee', protect, async (req, res, next) => {
         },
         weeklyGrid: weeklyLogs,
         announcements,
-        todayLog: await Attendance.findOne({ employee: userId, date: today }),
+        todayLog,
         shortAttendanceAlert,
         attendancePercentage: details.attendancePercentage
       }
@@ -393,9 +410,9 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
 
   try {
     // 1. Get all active employees (Employee or Manager)
-    const employees = await User.find({ 
-      role: { $in: ['Employee', 'Manager'] }, 
-      status: 'Active' 
+    const employees = await User.find({
+      role: { $in: ['Employee', 'Manager'] },
+      status: 'Active'
     }).populate('department', 'name code');
 
     // 2. Fetch all holidays
@@ -412,7 +429,7 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
     // 4. Fetch all approved leave requests that might overlap this range
     const startRange = new Date(startDate);
     const endRange = new Date(endDate);
-    
+
     const leaveRequests = await LeaveRequest.find({
       status: 'Approved',
       startDate: { $lte: endRange },
@@ -423,8 +440,8 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
       const d = new Date(dateStr);
       return leaveRequests.some(leave => {
         return leave.employee.toString() === employeeId.toString() &&
-               new Date(leave.startDate) <= d &&
-               new Date(leave.endDate) >= d;
+          new Date(leave.startDate) <= d &&
+          new Date(leave.endDate) >= d;
       });
     };
 
@@ -445,12 +462,95 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
       let lateDays = 0;
       let halfDays = 0;
       let leaveDays = 0;
+      let totalWorkHours = 0;
 
       const empLogs = attendanceLogs.filter(log => log.employee.toString() === emp._id.toString());
       const logsByDate = {};
       empLogs.forEach(log => {
         logsByDate[log.date] = log;
       });
+
+      // Sort logs by date ascending
+      const sortedLogs = [...empLogs].sort((a, b) => a.date.localeCompare(b.date));
+      const punchDetails = [];
+
+      sortedLogs.forEach(log => {
+        if (log.workHours) {
+          totalWorkHours += log.workHours;
+        }
+        if (log.checkIn && log.checkIn.time) {
+          const inTime = new Date(log.checkIn.time).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+          const outTime = log.checkOut && log.checkOut.time
+            ? new Date(log.checkOut.time).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: true
+            })
+            : 'Pending Check-Out';
+          punchDetails.push(`${log.date}: In ${inTime} - Out ${outTime}`);
+        }
+      });
+
+      let punchInTime = 'Not Punched In';
+      let punchOutTime = 'Not Punched Out';
+
+      if (startDate === endDate) {
+        const dayLog = logsByDate[startDate];
+        if (dayLog && dayLog.checkIn && dayLog.checkIn.time) {
+          punchInTime = new Date(dayLog.checkIn.time).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+        } else if (dayLog && dayLog.status) {
+          punchInTime = dayLog.status;
+        } else {
+          punchInTime = 'Not Punched In';
+        }
+
+        if (dayLog && dayLog.checkOut && dayLog.checkOut.time) {
+          punchOutTime = new Date(dayLog.checkOut.time).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+        } else if (dayLog && dayLog.checkIn && dayLog.checkIn.time) {
+          punchOutTime = 'Pending Check-Out';
+        } else {
+          punchOutTime = 'Not Punched Out';
+        }
+      } else {
+        const lastLogWithPunchIn = [...sortedLogs].reverse().find(l => l.checkIn && l.checkIn.time);
+        if (lastLogWithPunchIn) {
+          const inTime = new Date(lastLogWithPunchIn.checkIn.time).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+          });
+          punchInTime = `${lastLogWithPunchIn.date} ${inTime}`;
+
+          if (lastLogWithPunchIn.checkOut && lastLogWithPunchIn.checkOut.time) {
+            const outTime = new Date(lastLogWithPunchIn.checkOut.time).toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: true
+            });
+            punchOutTime = `${lastLogWithPunchIn.date} ${outTime}`;
+          } else {
+            punchOutTime = 'Pending Check-Out';
+          }
+        }
+      }
 
       datesInRange.forEach(dateStr => {
         const log = logsByDate[dateStr];
@@ -486,8 +586,8 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
       });
 
       const totalWorkingDays = presentDays + absentDays;
-      const attendancePercentage = totalWorkingDays > 0 
-        ? Math.round((presentDays / totalWorkingDays) * 100) 
+      const attendancePercentage = totalWorkingDays > 0
+        ? Math.round((presentDays / totalWorkingDays) * 100)
         : 100;
 
       return {
@@ -504,7 +604,11 @@ router.get('/attendance-report', protect, authorize('Admin', 'Manager'), async (
         lateDays,
         halfDays,
         leaveDays,
-        attendancePercentage
+        attendancePercentage,
+        punchInTime,
+        punchOutTime,
+        totalWorkHours: Math.round(totalWorkHours * 100) / 100,
+        punchDetails: punchDetails.join(' | ')
       };
     });
 
