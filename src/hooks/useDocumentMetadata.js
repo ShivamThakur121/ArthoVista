@@ -5,27 +5,23 @@ import { useEffect } from "react";
  *
  * @param {string} title - Page title
  * @param {string} description - Meta description
- * @param {string} canonicalPath - Canonical path, e.g. "/about"
  * @param {string} image - Social sharing image URL
  */
 export default function useDocumentMetadata(
   title,
   description,
-  canonicalPath = "/",
   image = "https://www.arthovista.com/logo.png"
 ) {
   useEffect(() => {
     const siteUrl = "https://www.arthovista.com";
 
-    // Make sure canonical path starts with /
-    const normalizedPath = canonicalPath.startsWith("/")
-      ? canonicalPath
-      : `/${canonicalPath}`;
+    // Get current page path automatically
+    const currentPath = window.location.pathname;
 
     const canonicalUrl =
-      normalizedPath === "/"
+      currentPath === "/"
         ? siteUrl
-        : `${siteUrl}${normalizedPath}`;
+        : `${siteUrl}${currentPath}`;
 
     // -----------------------------------------
     // Document title
@@ -99,5 +95,5 @@ export default function useDocumentMetadata(
     }
 
     canonical.setAttribute("href", canonicalUrl);
-  }, [title, description, canonicalPath, image]);
+  }, [title, description, image]);
 }
