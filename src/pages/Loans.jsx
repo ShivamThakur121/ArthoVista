@@ -202,8 +202,8 @@ const faqs = [
 
 export default function Loans() {
   useDocumentMetadata(
-    "Business & MSME Loans | ArthoVista",
-    "Get hassle-free business loans, MSME financing, working capital, and term loans with competitive interest rates and direct assistance from ArthoVista."
+    "Business Loans & MSME Funding | ArthoVista",
+    "Explore business loans and MSME funding assistance from ArthoVista for startups, entrepreneurs and growing businesses."
   );
   const [openFaq, setOpenFaq] = useState(0);
   const [selectedLoan, setSelectedLoan] = useState(null);

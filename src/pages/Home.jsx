@@ -199,8 +199,8 @@ function StatCard({ value, label, icon: Icon, delay }) {
 /* ---------- MAIN HOME ---------- */
 export default function Home() {
   useDocumentMetadata(
-    "ArthoVista | MSME & Startup Business Support",
-    "End-to-end support for MSMEs and startups — registration, certifications, government funding and digital growth with ArthoVista."
+    "ArthoVista | MSME, Loans & Government Scheme Consultants",
+    "ArthoVista helps MSMEs and startups with business consulting, loans, government schemes, funding and financial support across India."
   );
   const { openConsultationModal } = useConsultation();
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "" });

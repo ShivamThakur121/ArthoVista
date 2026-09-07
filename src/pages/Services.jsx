@@ -248,8 +248,8 @@ const stats = [
 
 export default function Services() {
   useDocumentMetadata(
-    "Business Services & Registrations | ArthoVista",
-    "Explore our professional services including Private Limited Company setup, LLP registration, GST filing, and ISO/FSSAI certifications with ArthoVista."
+    "Business Consulting Services | ArthoVista",
+    "Explore ArthoVista's MSME consulting, DPR preparation, funding assistance, government scheme and business support services."
   );
   const [active, setActive] = useState("registration");
   const [selectedDetail, setSelectedDetail] = useState(null);

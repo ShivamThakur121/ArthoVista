@@ -225,8 +225,8 @@ const schemes = [
 
 export default function GovernmentSchemes() {
   useDocumentMetadata(
-    "Government Schemes & Subsidies | ArthoVista",
-    "Access central government schemes and subsidies like PMEGP, CGTMSE, Startup India, and Mudra loans with ArthoVista."
+    "Government Schemes for MSMEs | ArthoVista",
+    "Get assistance with PMEGP, MSME government schemes, subsidies and funding programs through ArthoVista."
   );
   const [selectedScheme, setSelectedScheme] = useState(null);
   const [openFaq, setOpenFaq] = useState(0);

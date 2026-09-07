@@ -54,8 +54,8 @@ const quickLinks = [
 
 export default function Contact() {
   useDocumentMetadata(
-    "Contact Us | ArthoVista",
-    "Get in touch with ArthoVista for business registration, subsidies, loans, and startup consulting. Contact our team in Noida."
+    "Contact ArthoVista | MSME & Business Consultants",
+    "Contact ArthoVista for MSME consulting, government schemes, business loans, funding assistance and business support."
   );
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "", message: "" });
   const [submitted, setSubmitted] = useState(false);

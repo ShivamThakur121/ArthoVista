@@ -44,8 +44,8 @@ const team = [
 export default function About() {
   const { openConsultationModal } = useConsultation();
   useDocumentMetadata(
-    "About Us | ArthoVista",
-    "Learn about ArthoVista — KVIC empanelled MSME consulting and government scheme facilitation specialists based in Noida."
+    "About ArthoVista | MSME & Government Scheme Consultants",
+    "Learn about ArthoVista, a KVIC empanelled MSME consulting and government scheme facilitation specialist helping businesses access funding and government support."
   );
   return (
     <div>
