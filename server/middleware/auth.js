@@ -50,7 +50,7 @@ const protect = async (req, res, next) => {
       return res.status(401).json({
         success: false,
         code: 'TOKEN_EXPIRED',
-        message: 'Token has expired.'
+        message: 'Your session has expired (1 hour limit). Please login again.'
       });
     }
 

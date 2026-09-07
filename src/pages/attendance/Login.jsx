@@ -20,9 +20,18 @@ const Login = () => {
   // Determine where to redirect after success
   const from = location.state?.from?.pathname || '';
 
-  // Handle success message from redirect state (e.g., after password reset)
+  // Handle messages from redirect state or sessionStorage session expiration
   useEffect(() => {
-    if (location.state?.successMessage) {
+    const sessionAuthError = sessionStorage.getItem('authErrorMessage');
+    if (sessionAuthError) {
+      setError(sessionAuthError);
+      sessionStorage.removeItem('authErrorMessage');
+    }
+
+    if (location.state?.errorMessage) {
+      setError(location.state.errorMessage);
+      navigate(location.pathname, { replace: true, state: {} });
+    } else if (location.state?.successMessage) {
       setSuccess(location.state.successMessage);
       // Clear the state so it doesn't show again on refresh
       navigate(location.pathname, { replace: true, state: {} });

@@ -119,7 +119,7 @@ function MainLayoutWrapper() {
 
               {/* Employee Protected Routes */}
               <Route element={
-                <ProtectedRoute allowedRoles={['Employee']}>
+                <ProtectedRoute allowedRoles={['Employee', 'Admin', 'Manager']}>
                   <AttendanceDashboardLayout />
                 </ProtectedRoute>
               }>
