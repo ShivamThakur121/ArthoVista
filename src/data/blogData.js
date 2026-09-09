@@ -339,4 +339,275 @@ The ODOP approach seeks to promote:
       { q: "Is an FSSAI licence compulsory?", a: "Yes, all food processing units must comply with food safety standards and obtain the required FSSAI Registration or State/Central Licence." },
     ],
   },
+  {
+    id: 3,
+    slug: "pmegp-loan-scheme",
+    title: "PMEGP Loan: Eligibility, Subsidy, Documents, Project Cost & Application Process",
+    category: "Government Schemes",
+    readTime: "9 min read",
+    date: "Aug 21, 2026",
+    author: "ArthoVista Advisory Team",
+    featured: true,
+    excerpt: "Everything you need to know about Prime Minister's Employment Generation Programme (PMEGP). Margin money subsidy from 15% to 35%, project limits up to ₹50 lakh, and 2nd loan upgradation.",
+    metaDescription: "Comprehensive guide to PMEGP Loan scheme. Discover 15%-35% margin money subsidy, ₹50L manufacturing limit, ₹20L service limit, DPR requirements, KVIC e-portal filing, and 2nd loan rules.",
+    keywords: ["PMEGP loan scheme", "PMEGP subsidy percentage", "KVIC margin money loan", "PMEGP project cost limit", "PMEGP DPR preparation"],
+    tableOfContents: [
+      { id: "what-is-pmegp", label: "What Is PMEGP?" },
+      { id: "project-limits", label: "Project Cost Limits" },
+      { id: "subsidy-rates", label: "Subsidy Percentages & Contribution" },
+      { id: "eligibility", label: "Who Is Eligible?" },
+      { id: "permitted-businesses", label: "Permitted & Restricted Activities" },
+      { id: "documents", label: "Documents Required" },
+      { id: "application-process", label: "Step-by-Step Application Process" },
+      { id: "second-loan", label: "2nd Loan for Upgradation (Up to ₹1 Cr)" },
+      { id: "mistakes", label: "Common Mistakes to Avoid" },
+      { id: "faqs", label: "Frequently Asked Questions" },
+    ],
+    sections: [
+      {
+        id: "intro",
+        type: "lead",
+        content: "Starting a small business often requires more capital than an entrepreneur can arrange personally.For eligible applicants, the Prime Minister's Employment Generation Programme (PMEGP) provides a structured route to finance a new micro-enterprise through a combination of beneficiary contribution, bank finance and government margin-money subsidy. PMEGP is implemented nationally through the Khadi and Village Industries Commission (KVIC), along with State KVIBs, District Industries Centres (DICs) and participating banks.",
+      },
+      {
+        id: "project-limits",
+        title: "PMEGP Project Cost Limits (New Enterprises)",
+        type: "table",
+        tableData: {
+          headers: ["Sector", "Maximum Admissible Project Cost for Subsidy"],
+          rows: [
+            ["Manufacturing Sector", "₹50 Lakh"],
+            ["Business / Service Sector", "₹20 Lakh"],
+          ],
+        },
+      },
+      {
+        id: "subsidy-rates",
+        title: "PMEGP Margin-Money Subsidy & Beneficiary Contribution",
+        type: "table",
+        description: "The subsidy rate depends on the applicant's category and the geographic location of the proposed enterprise:",
+        tableData: {
+          headers: ["Applicant Category", "Beneficiary Own Contribution", "Urban Area Subsidy", "Rural Area Subsidy"],
+          rows: [
+            ["General Category", "10% of project cost", "15% of project cost", "25% of project cost"],
+            ["Special Category (SC, ST, OBC, Women, Minorities, Ex-Servicemen, PwD, Transgender, Hill/NER)", "5% of project cost", "25% of project cost", "35% of project cost"],
+          ],
+        },
+      },
+      {
+        id: "eligibility",
+        title: "PMEGP Eligibility Criteria",
+        type: "list",
+        items: [
+          "Individual must be at least 18 years of age.",
+          "No family income ceiling for assistance.",
+          "Minimum educational qualification: 8th standard pass for projects costing above ₹10 lakh in manufacturing or above ₹5 lakh in business/service.",
+          "Only one person from one family (applicant, spouse, unmarried children) is eligible.",
+          "Assistance is available only for new projects (existing units that received prior govt subsidy are ineligible for the new-unit component).",
+        ],
+      },
+      {
+        id: "permitted-businesses",
+        title: "Permitted & Negative List Activities",
+        type: "content",
+        content: `PMEGP covers eligible viable micro-enterprises in the non-farm sector.
+
+          *Eligible Sectors:*
+          * Agro-based and food processing units
+          * Forest-based and organic products
+          * Hand-made paper and fiber products
+          * Mineral and chemical-based products
+          * Engineering and non-conventional energy units
+          * Service activities (clinics, labs, salons, transport, catering, IT centres)
+
+          *Specific Trading Permissions:*
+          While general trading is restricted, specific retail outlets are permitted: Khadi retail outlets, products procured from KVI institutions, PMEGP/SFURTI cluster products, and retail units in the North Eastern Region, LWE districts, and Andaman & Nicobar.`,
+      },
+      {
+        id: "documents",
+        title: "Documents Required for PMEGP Loan",
+        type: "documents",
+        businessDocs: [
+          "Aadhaar card, PAN card, and Passport photographs",
+          "Address proof and Caste / Category certificate (for Special Category subsidy)",
+          "Educational qualification certificates (8th standard or higher marksheets)",
+          "Proposed business premises details (ownership proof or rent agreement)",
+          "EDP training certificate (if completed beforehand; can also be completed post-sanction)",
+        ],
+        systemDocs: [
+          "Comprehensive Detailed Project Report (DPR) covering business model, machinery, raw materials, manpower, and cash flows",
+          "Itemized machinery and equipment quotations from registered vendors",
+          "Working capital calculation and projected repayment schedule",
+        ],
+      },
+      {
+        id: "application-process",
+        title: "Step-by-Step PMEGP Loan Process",
+        type: "steps",
+        steps: [
+          { step: "1", title: "Define Business & Project Cost", desc: "Structure the capital expenditure and working capital requirements within scheme limits." },
+          { step: "2", title: "Prepare Comprehensive DPR", desc: "Draft a bankable project report with realistic sales, expenditure, and repayment projections." },
+          { step: "3", title: "Submit Online on KVIC Portal", desc: "File Form on the official PMEGP e-portal (selecting sponsoring agency: KVIC, KVIB, or DIC)." },
+          { step: "4", title: "Agency Scrutiny & Forwarding", desc: "The selected agency verifies documents and electronically forwards the application to the chosen financing bank." },
+          { step: "5", title: "Bank Credit Appraisal", desc: "The bank evaluates technical feasibility, economic viability, and borrower creditworthiness." },
+          { step: "6", title: "Sanction & Promoter Contribution", desc: "Upon approval, the bank issues sanction letter and borrower deposits the 5% or 10% own contribution." },
+          { step: "7", title: "EDP Training & Disbursement", desc: "Borrower completes mandatory Entrepreneurship Development Programme (EDP) training, and loan is disbursed." },
+          { step: "8", title: "Physical Verification & Subsidy Adjustment", desc: "Udyam Registration is obtained; after physical inspection, the margin money subsidy is locked for 3 years in TDR before final adjustment." },
+        ],
+      },
+      {
+        id: "second-loan",
+        title: "Second Loan for Upgradation of Existing PMEGP Units",
+        type: "cards",
+        cards: [
+          { title: "Maximum Cost (Manufacturing)", desc: "Up to ₹1.00 Crore for expanding existing manufacturing units." },
+          { title: "Maximum Cost (Service)", desc: "Up to ₹25.00 Lakh for expanding existing service enterprises." },
+          { title: "Subsidy Rate", desc: "15% for all categories (20% for units located in North Eastern and Hill States)." },
+          { title: "Eligibility", desc: "First loan must be fully repaid without defaults, unit must be profitable for past 3 consecutive years, and have Udyam registration." },
+        ],
+      },
+      {
+        id: "mistakes",
+        title: "Common PMEGP Application Mistakes",
+        type: "callout",
+        calloutType: "warning",
+        items: [
+          "Assuming PMEGP is free grant money—it is a credit-linked subsidy that requires disciplined bank loan repayment.",
+          "Submitting weak or copied DPRs without realistic sales projections and DSCR calculations.",
+          "Applying without valid caste/special category certificates when claiming 25% or 35% subsidy rates.",
+          "Failing to deposit the mandatory 5% or 10% beneficiary contribution into the bank account.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "What is PMEGP?", a: "PMEGP is a national credit-linked subsidy scheme administered by KVIC to promote self-employment through non-farm micro-enterprises." },
+      { q: "What is the maximum subsidy under PMEGP?", a: "The subsidy is up to 35% of eligible project cost for special categories in rural areas, and up to 25% for general categories in rural areas." },
+      { q: "Is there any income limit to apply for PMEGP?", a: "No, there is no family income ceiling to apply for setting up a new project under PMEGP." },
+      { q: "Can women apply for PMEGP?", a: "Yes, women applicants are classified under the Special Category and are eligible for higher subsidy rates (25% in urban, 35% in rural)." },
+      { q: "Does PMEGP guarantee bank loan sanction?", a: "No. Loan sanction is solely at the discretion of the lending bank based on project viability and credit appraisal." },
+    ],
+  },
+  {
+    id: 4,
+    slug: "machinery-loan-india",
+    title: "Machinery Loan in India: Eligibility, Documents, Process & Financing Options",
+    category: "Business Finance",
+    readTime: "8 min read",
+    date: "Aug 21, 2026",
+    author: "ArthoVista Advisory Team",
+    featured: false,
+    excerpt: "Comprehensive guide to machinery and equipment financing in India. SIDBI direct loan schemes, bank assessment factors, interest rates, and document checklists.",
+    metaDescription: "Guide to Machinery Loans in India for MSMEs. Learn about equipment financing, SIDBI direct loans, FIT Rank credit assessments, required documents, and interest factors.",
+    keywords: ["Machinery loan India", "equipment finance MSME", "SIDBI machinery loan", "industrial equipment loan", "machinery financing process"],
+    tableOfContents: [
+      { id: "what-is-machinery-loan", label: "What Is a Machinery Loan?" },
+      { id: "eligible-sectors", label: "Eligible Sectors & Equipment" },
+      { id: "eligibility", label: "Who Can Apply & Assessment Factors" },
+      { id: "documents", label: "Documents Required" },
+      { id: "process", label: "8-Step Application & Disbursement Process" },
+      { id: "costs", label: "Interest Rates & Cost Factors" },
+      { id: "benefits", label: "Key Benefits of Machinery Finance" },
+      { id: "mistakes", label: "Common Pitfalls to Avoid" },
+      { id: "faqs", label: "Frequently Asked Questions" },
+    ],
+    sections: [
+      {
+        id: "intro",
+        type: "lead",
+        content: "Buying new machinery can change the economics of a business.A faster production line can increase capacity, modern equipment can improve quality, and specialised machinery can allow a business to take on work that was previously out of reach.For many MSMEs, paying the entire machinery cost from working capital puts severe pressure on liquidity.A machinery loan spreads that capital expenditure over 3 to 7 years.",
+      },
+      {
+        id: "eligible-sectors",
+        title: "Eligible Sectors & Examples of Financed Equipment",
+        type: "table",
+        tableData: {
+          headers: ["Business Sector", "Examples of Eligible Equipment"],
+          rows: [
+            ["Manufacturing", "Production lines, CNC machines, injection molding, lathes, boilers, cutting tools"],
+            ["Food Processing", "Pulping, pasteurizing, packaging, cold storage, automated bottling units"],
+            ["Textile & Garment", "Spinning machines, computerized embroidery, automated stitching, laser cutters"],
+            ["Construction", "Excavators, cranes, concrete mixers, road compactors, earthmovers"],
+            ["Printing & Packaging", "Offset printing presses, digital packaging machines, corrugation plants"],
+            ["Healthcare & Diagnostics", "MRI, CT scanners, ultrasound equipment, surgical and ICU tools"],
+            ["Engineering & Fabrication", "Laser welding, plasma cutting, hydraulic press brakes, inspection gear"],
+          ],
+        },
+      },
+      {
+        id: "eligibility",
+        title: "Eligibility & Assessment Parameters",
+        type: "content",
+        content: `Lenders (including Commercial Banks, NBFCs, and SIDBI) evaluate both the borrower's credit standing and the equipment being purchased.
+
+          *Key Assessment Factors:*
+          * *Business Vintage:* Typically at least 2 to 3 years of profitable operations (though SIDBI & greenfield schemes have specific windows).
+          * *Financial Health:* Turnover stability, EBITDA margins, and positive net cash flows.
+          * *Credit Profile & FIT Rank:* Lenders use frameworks like SIDBI's FIT Rank (evaluating GST returns, ITR filings, and banking transaction velocity).
+          * *Asset Quality:* OEM reputation, expected operational lifespan, and resale marketability.`,
+      },
+      {
+        id: "documents",
+        title: "Documents Required for Machinery Loan",
+        type: "documents",
+        businessDocs: [
+          "Business Registration (Udyam Certificate, Certificate of Incorporation, GST Registration)",
+          "PAN cards and Aadhaar of Directors / Partners / Proprietor",
+          "Audited Financial Statements (Balance Sheet, P&L, Tax Audit Report) for last 2–3 years",
+          "Bank Statements for the primary business account (last 12 months)",
+          "Income Tax Returns (ITR) with computation of income",
+          "Existing loan sanction letters and repayment track records",
+        ],
+        systemDocs: [
+          "Official Proforma Invoice / Quotation from machine manufacturer or authorized dealer",
+          "Technical specifications and expected operational capacity enhancement report",
+          "Installation, electrification, and civil foundation cost estimates (where applicable)",
+          "Projected financial statements demonstrating additional cash flow generation",
+        ],
+      },
+      {
+        id: "process",
+        title: "Machinery Loan Workflow: Step-by-Step",
+        type: "steps",
+        steps: [
+          { step: "1", title: "Equipment Finalization", desc: "Select machinery and obtain verified proforma invoice with warranty and delivery terms." },
+          { step: "2", title: "Financial Assessment", desc: "Calculate required margin money (usually 15%-25%) and evaluate monthly EMI repayment capacity." },
+          { step: "3", title: "Lender Selection", desc: "Compare public banks, private financiers, and SIDBI direct loan schemes." },
+          { step: "4", title: "File Submission", desc: "Submit complete business, KYC, financial, and machine technical documentation." },
+          { step: "5", title: "Technical & Financial Appraisal", desc: "Lender assesses business viability, supplier credentials, and machines' asset value." },
+          { step: "6", title: "Sanction Letter", desc: "Lender issues sanction letter with interest rate, tenure, and hypothecation terms." },
+          { step: "7", title: "Margin Deposit & Documentation", desc: "Borrower pays promoter margin, executes loan agreements, and signs hypothecation deed." },
+          { step: "8", title: "Direct Supplier Disbursement", desc: "Lender disburses payment directly to the machine OEM/supplier upon inspection." },
+        ],
+      },
+      {
+        id: "costs",
+        title: "Interest Rates & Cost Factors",
+        type: "cards",
+        cards: [
+          { title: "Interest Rate Structure", desc: "Ranges based on credit rating, business vintage, and collateral security (competitive rates under SIDBI/CGTMSE schemes)." },
+          { title: "Processing & Valuation Fees", desc: "Typically 0.5% to 2% of the sanctioned loan amount, plus statutory stamp duties." },
+          { title: "Loan Tenure", desc: "Generally 3 to 7 years, often structured with a moratorium covering machine installation and commissioning." },
+          { title: "Margin Requirement", desc: "Promoters typically contribute 15% to 25% of the total landed cost of the machine." },
+        ],
+      },
+      {
+        id: "mistakes",
+        title: "Common Mistakes in Machinery Financing",
+        type: "callout",
+        calloutType: "warning",
+        items: [
+          "Ordering machinery or paying non-refundable advances before securing loan sanction.",
+          "Ignoring ancillary expenses like customs duty, transit insurance, electrical load increase, and installation.",
+          "Overestimating immediate capacity utilization and revenue ramp-up from new equipment.",
+          "Choosing unverified second-hand machinery without verifying lender used-equipment financing policies.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is a machinery loan only for manufacturing companies?", a: "No. Machinery and equipment loans are available for service businesses (hospitals, diagnostic labs, IT infra) as well as manufacturing units." },
+      { q: "Can MSMEs get collateral-free machinery loans?", a: "Yes. Under CGTMSE or specific SIDBI schemes, machinery loans can be sanctioned with hypothecation of the purchased asset as primary security." },
+      { q: "Can second-hand machinery be financed?", a: "Some lenders finance imported or domestic refurbished equipment subject to residual life certification by a chartered engineer." },
+      { q: "How are funds disbursed for a machinery loan?", a: "Lenders almost always disburse funds directly to the equipment manufacturer or authorized dealer against the proforma invoice." },
+    ],
+  },
 ];
