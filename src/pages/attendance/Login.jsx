@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Shield, Lock, User, AlertCircle, Eye, EyeOff, ArrowLeft, Globe, CheckCircle2 } from 'lucide-react';
 import StarfieldBackground from '../../components/StarfieldBackground';
+import Logo from '../../components/Logo';
 
 const Login = () => {
   const { login, user } = useAuth();
@@ -92,9 +93,9 @@ const Login = () => {
         </div>
 
         {/* Brand Banner */}
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-gradient-to-tr from-teal-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-teal-500/20 mb-3 animate-pulse-ring">
-            <Shield className="w-6 h-6" />
+        <div className="flex flex-col items-center mb-6">
+          <div className="mb-4">
+            <Logo variant="dark" size="lg" />
           </div>
           <h2 className="text-2xl font-display font-black tracking-tight text-white">
             Welcome Back

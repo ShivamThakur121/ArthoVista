@@ -5,6 +5,7 @@ import {
   Home, Briefcase, Landmark, PiggyBank, Info, LogIn, BookOpen
 } from "lucide-react";
 import { useConsultation } from "../context/ConsultationContext";
+import Logo from "./Logo";
 
 const navLinks = [
   { to: "/", label: "Home", icon: Home },
@@ -88,13 +89,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
 
         {/* ================= LEFT: LOGO (OFFICIAL ARTHOVISTA LOGO) ================= */}
-        <Link to="/" className="flex items-center gap-2 group shrink-0 pr-3 z-10 py-0.5">
-          <img
-            src="/logo.png"
-            alt="ArthoVista - सपनों से समृद्धि तक"
-            className="h-14 sm:h-16 lg:h-18 w-auto max-w-[200px] sm:max-w-[240px] object-contain transition-transform duration-200 group-hover:scale-105"
-          />
-        </Link>
+        <Logo variant="light" size="md" className="pr-2" />
 
         {/* ================= RIGHT: BLUE RIBBON WITH ROUND CURVE ================= */}
         <div className="hidden lg:flex items-center justify-between flex-1 relative bg-gradient-to-r from-green-500 via-blue-500 to-green-500 py-1.5 px-6 rounded-full shadow-sm">

@@ -4,6 +4,7 @@ import {
   Home, Briefcase, Landmark, PiggyBank, Info, Phone,
   TrendingUp, PhoneCall, X, LogIn, Sparkles, ChevronRight
 } from "lucide-react";
+import Logo from "./Logo";
 
 const navItems = [
   { to: "/", label: "Home", icon: Home },
@@ -66,14 +67,7 @@ export default function Sidebar() {
         {/* Logo */}
         <div className="nav-logo border-b border-white/10 pb-5">
           <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center gap-2.5 font-display text-2xl font-black text-white tracking-tight" onClick={closeSidebar}>
-              <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-amber-500 flex items-center justify-center text-sm font-black text-white shadow-lg shadow-blue-500/20">
-                A
-              </span>
-              <span>
-                Artho<span className="text-orange-400">Vista</span>
-              </span>
-            </Link>
+            <Logo variant="dark" size="md" onClick={closeSidebar} />
             <button
               className="md:hidden text-white/60 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
               onClick={closeSidebar}

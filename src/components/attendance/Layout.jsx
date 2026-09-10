@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../Logo';
 import {
   LayoutDashboard,
   Users,
@@ -82,15 +83,8 @@ const Layout = ({ children }) => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Brand Banner */}
-        <div className="flex items-center justify-between h-16 px-6 border-b border-slate-100 dark:border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-600 text-white shadow-md shadow-primary-500/20">
-              <UserCheck className="w-5 h-5" />
-            </div>
-            <span className="text-lg font-black tracking-tight text-slate-900 dark:text-white">
-              Attendance<span className="text-primary-600 dark:text-primary-400">Hub</span>
-            </span>
-          </div>
+        <div className="flex items-center justify-between h-16 px-5 border-b border-slate-100 dark:border-slate-800">
+          <Logo size="sm" />
           <button
             onClick={() => setSidebarOpen(false)}
             className="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 lg:hidden"

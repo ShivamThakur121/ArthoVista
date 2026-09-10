@@ -96,9 +96,9 @@ const blocks = [
     items: [
       { t: "ISO Certification", d: "Boosts your business credibility with quality internationally recognised standards for goods and services.", guideSlug: "iso-certification-india" },
       { t: "FSSAI License", d: "Mandatory for all food businesses — manufacturing, transporting, or distributing food products (2026 revised rules).", guideSlug: "fssai-license-india" },
-      { t: "GeM / Import-Export", d: "Get onboarded on the Government e-Marketplace to sell products and services to government buyers.", guideSlug: "iso-certification-india" },
-      { t: "Udyam Registration", d: "Official MSME registration for benefits like subsidies, priority lending, and government schemes.", guideSlug: "pmegp-loan-scheme" },
-      { t: "Startup India", d: "Government's flagship startup initiative offering regulatory, tax relaxations, and access to funding.", guideSlug: "venture-capital-fund-india" },
+      { t: "GeM / Import-Export", d: "Get onboarded on the Government e-Marketplace to sell products and services to government buyers.", guideSlug: "gem-and-import-export-registration" },
+      { t: "Udyam Registration", d: "Official MSME registration for benefits like subsidies, priority lending, and government schemes.", guideSlug: "udyam-registration-guide" },
+      { t: "Startup India", d: "Government's flagship startup initiative offering regulatory, tax relaxations, and access to funding.", guideSlug: "startup-india-registration-benefits" },
     ],
   },
   {
@@ -175,12 +175,12 @@ const blocks = [
       "Google Business Profile optimization for local search",
       "Automated lead capture & WhatsApp chat integration"
     ],
-    guideSlug: "seo-and-digital-marketing-guide",
+    guideSlug: "digital-services-for-msme-growth",
     items: [
-      { t: "Website Development", d: "Professional, conversion-optimised websites built for e-commerce, service, and portfolio businesses.", guideSlug: "seo-and-digital-marketing-guide" },
+      { t: "Website Development", d: "Professional, conversion-optimised websites built for e-commerce, service, and portfolio businesses.", guideSlug: "website-development-guide-business" },
       { t: "SEO & Digital Marketing", d: "Improve organic reach, search rankings, and paid ads with data-driven digital marketing strategy.", guideSlug: "seo-and-digital-marketing-guide" },
-      { t: "CRM Solutions", d: "Custom relationship-management software to manage leads, sales, and improve customer retention.", guideSlug: "seo-and-digital-marketing-guide" },
-      { t: "Social Media Management", d: "Build brand presence on Facebook, Instagram, LinkedIn with engaging and targeted campaigns.", guideSlug: "seo-and-digital-marketing-guide" },
+      { t: "CRM Solutions", d: "Custom relationship-management software to manage leads, sales, and improve customer retention.", guideSlug: "crm-solutions-for-growing-business" },
+      { t: "Social Media Management", d: "Build brand presence on Facebook, Instagram, LinkedIn with engaging and targeted campaigns.", guideSlug: "social-media-management-strategy" },
     ],
   },
   {
@@ -202,12 +202,12 @@ const blocks = [
       "Statutory Audit & Tax Audit coordination",
       "Compliance calendar & penalty-free advisory"
     ],
-    guideSlug: "private-limited-company-registration",
+    guideSlug: "roc-compliance-annual-filing-guide",
     items: [
-      { t: "ROC Compliance", d: "Annual filings, KYC, board resolutions, and Registrar of Companies compliance management.", guideSlug: "private-limited-company-registration" },
-      { t: "GST Filing", d: "Monthly, quarterly, and annual GST return filing, tax reconciliation, and credit management.", guideSlug: "private-limited-company-registration" },
-      { t: "Income Tax Returns", d: "Income tax filing for individuals, businesses, and firms — tax planning and assessment support.", guideSlug: "salaried-personal-loan-india" },
-      { t: "Audit Support", d: "Ready audit-ready documentation, whether it's a statutory audit, tax audit, or government inspection.", guideSlug: "iso-certification-india" },
+      { t: "ROC Compliance", d: "Annual filings, KYC, board resolutions, and Registrar of Companies compliance management.", guideSlug: "roc-compliance-annual-filing-guide" },
+      { t: "GST Filing", d: "Monthly, quarterly, and annual GST return filing, tax reconciliation, and credit management.", guideSlug: "gst-registration-and-filing-guide" },
+      { t: "Income Tax Returns", d: "Income tax filing for individuals, businesses, and firms — tax planning and assessment support.", guideSlug: "income-tax-returns-filing-guide" },
+      { t: "Audit Support", d: "Ready audit-ready documentation, whether it's a statutory audit, tax audit, or government inspection.", guideSlug: "audit-support-and-compliance-guide" },
     ],
   },
   {
@@ -233,8 +233,8 @@ const blocks = [
     items: [
       { t: "Trademark Registration", d: "Protect your brand name, logo, and slogan from unauthorised use — prevent copycats, theft & misuse.", guideSlug: "trademark-registration-india" },
       { t: "Copyright Protection", d: "Protect original content — software, content, music, literature, and art from infringement and piracy.", guideSlug: "copyright-protection-india" },
-      { t: "Patent Filing", d: "Secure up to 20 years of exclusive rights over your invention, blocking others from making or selling it.", guideSlug: "trademark-registration-india" },
-      { t: "Legal Compliance", d: "Ensure your business complies with Indian labour, industry, and regulatory legal requirements.", guideSlug: "terms-of-service" },
+      { t: "Patent Filing", d: "Secure up to 20 years of exclusive rights over your invention, blocking others from making or selling it.", guideSlug: "patent-filing-process-india" },
+      { t: "Legal Compliance", d: "Ensure your business complies with Indian labour, industry, and regulatory legal requirements.", guideSlug: "legal-compliance-checklist-businesses" },
     ],
   },
 ];

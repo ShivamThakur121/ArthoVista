@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Clock, MapPin, Phone, MessageCircle, ArrowRight, Shield } from "lucide-react";
 import { useConsultation } from "../context/ConsultationContext";
+import Logo from "./Logo";
 
 const SocialIcon = ({ path }) => (
   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
@@ -107,13 +108,9 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
         {/* Brand */}
         <div>
-          <Link to="/" className="inline-block bg-white p-2.5 rounded-2xl mb-4 shadow-md hover:opacity-95 transition-opacity">
-            <img
-              src="/logo.png"
-              alt="ArthoVista - सपनों से समृद्धि तक"
-              className="h-14 w-auto object-contain"
-            />
-          </Link>
+          <div className="mb-4">
+            <Logo variant="dark" size="lg" />
+          </div>
           <p className="text-sm text-slate-300 leading-relaxed mb-5">
             India's trusted MSME & startup support platform. End-to-end business support from registration and certifications to government funding and digital growth.
           </p>
