@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { 
-  Clock, Calendar, ArrowLeft, ArrowRight, Share2, 
-  CheckCircle2, AlertTriangle, Info, FileText, 
-  ChevronDown, ChevronUp, Sparkles, MessageCircle, 
+import {
+  Clock, Calendar, ArrowLeft, ArrowRight, Share2,
+  CheckCircle2, AlertTriangle, Info, FileText,
+  ChevronDown, ChevronUp, Sparkles, MessageCircle,
   Copy, Check, ShieldCheck, Tag, Landmark
 } from "lucide-react";
 import useDocumentMetadata from "../hooks/useDocumentMetadata";
@@ -35,7 +35,7 @@ export default function BlogPost() {
             setDynamicPost(res.data.data);
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     }
   }, [slug, staticPost]);
 
@@ -107,7 +107,7 @@ export default function BlogPost() {
       const isBullet = line.trim().startsWith("•") || line.trim().startsWith("-");
       const cleanLine = isBullet ? line.trim().replace(/^[•-]\s*/, "") : line;
       const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
-      
+
       const parsedParts = parts.map((part, pIdx) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
@@ -193,7 +193,7 @@ export default function BlogPost() {
               title="Share on LinkedIn"
             >
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
               </svg>
               <span>LinkedIn</span>
             </a>
@@ -205,7 +205,7 @@ export default function BlogPost() {
               title="Share on Twitter"
             >
               <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
               <span>X / Twitter</span>
             </a>
@@ -223,10 +223,10 @@ export default function BlogPost() {
 
       {/* ====== MAIN ARTICLE LAYOUT ====== */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 relative z-10">
-        <div className="grid lg:grid-cols-12 gap-10">
-          
+        <div className="grid md:grid-cols-12 gap-8 lg:gap-10">
+
           {/* Article Main Content (8 cols) */}
-          <main className="lg:col-span-8 space-y-12">
+          <main className="md:col-span-7 lg:col-span-8 space-y-12">
             {post.sections.map((section) => {
               switch (section.type) {
                 case "lead":
@@ -401,11 +401,10 @@ export default function BlogPost() {
                         </h2>
                       )}
                       <div
-                        className={`p-6 rounded-2xl border ${
-                          section.calloutType === "warning"
+                        className={`p-6 rounded-2xl border ${section.calloutType === "warning"
                             ? "bg-rose-50 border-rose-200 text-slate-800"
                             : "bg-teal-50/90 border-teal-200 text-slate-800"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center gap-2 font-bold mb-3">
                           {section.calloutType === "warning" ? (
@@ -524,9 +523,9 @@ export default function BlogPost() {
           </main>
 
           {/* Sidebar / Sticky Table of Contents (4 cols) */}
-          <aside className="lg:col-span-4 space-y-8">
+          <aside className="md:col-span-5 lg:col-span-4 space-y-8">
             <div className="sticky top-24 space-y-6">
-              
+
               {/* Table of Contents */}
               <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-md">
                 <h4 className="font-display font-bold text-slate-900 text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
@@ -539,11 +538,10 @@ export default function BlogPost() {
                       <a
                         key={toc.id}
                         href={`#${toc.id}`}
-                        className={`block py-1.5 px-3 rounded-lg transition-all ${
-                          isActive
+                        className={`block py-1.5 px-3 rounded-lg transition-all ${isActive
                             ? "bg-teal-600 text-white font-bold translate-x-1 shadow-xs"
                             : "text-slate-600 hover:text-teal-600 hover:bg-slate-50"
-                        }`}
+                          }`}
                       >
                         {toc.label}
                       </a>

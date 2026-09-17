@@ -3,10 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import * as faceapi from '@vladmandic/face-api';
 import confetti from 'canvas-confetti';
 import { api } from '../../context/AuthContext';
-import { 
-  ArrowLeft, 
-  Loader2, 
-  CheckCircle, 
+import {
+  ArrowLeft,
+  Loader2,
+  CheckCircle,
   Scan,
   AlertCircle,
   Video,
@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 
 import { loadEssentialFaceModels, areFaceModelsLoaded } from '../../utils/faceModelLoader';
+import { generate256dEmbedding } from '../../utils/faceEmbedding256';
+import { AntiSpoofDetector } from '../../utils/antiSpoofing';
 
 const FaceEnrollment = () => {
   const { id } = useParams();
@@ -24,6 +26,7 @@ const FaceEnrollment = () => {
   const streamRef = useRef(null);
   const intervalRef = useRef(null);
   const videoReadyRef = useRef(false);
+  const antiSpoofRef = useRef(new AntiSpoofDetector());
 
   const [employee, setEmployee] = useState(null);
   const [modelsLoaded, setModelsLoaded] = useState(areFaceModelsLoaded());
@@ -36,7 +39,7 @@ const FaceEnrollment = () => {
   const [error, setError] = useState('');
   const [feedback, setFeedback] = useState('Initialize camera to start face enrollment');
 
-  const TARGET_FRAME_COUNT = 15;
+  const TARGET_FRAME_COUNT = 8;
 
   useEffect(() => {
     const fetchEmployee = async () => {
@@ -89,24 +92,23 @@ const FaceEnrollment = () => {
       let stream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 640 }, height: { ideal: 480 } },
+          video: { width: 640, height: 480, facingMode: 'user' },
           audio: false
         });
-      } catch (constraintErr) {
+      } catch (_e) {
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       }
 
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current.play();
-          videoReadyRef.current = true;
-        };
-      }
-
       setCameraActive(true);
       setFeedback('Camera active. Align your face in the circle, then click "Capture Face".');
+
+      const video = videoRef.current;
+      if (video) {
+        video.srcObject = stream;
+        videoReadyRef.current = true;
+        video.play().catch((playErr) => console.warn('Video play warning:', playErr));
+      }
     } catch (err) {
       console.error('Camera access error:', err);
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
@@ -156,47 +158,63 @@ const FaceEnrollment = () => {
 
     setCapturing(true);
     setError('');
-    setFeedback('Scanning... Keep still and look directly at the camera.');
+    setProgress(0);
+    setCapturedEmbeddings([]);
+    setFeedback('Scanning biometrics... Please look directly at the camera.');
 
     const tempEmbeddings = [];
     let frameCount = 0;
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
 
     intervalRef.current = setInterval(async () => {
       try {
         if (!videoRef.current || videoRef.current.paused || videoRef.current.ended) return;
 
-        const detection = await faceapi
-          .detectSingleFace(videoRef.current, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 }))
+        let detection = await faceapi
+          .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.90 }))
           .withFaceLandmarks()
           .withFaceDescriptor();
 
-        if (detection) {
-          tempEmbeddings.push(Array.from(detection.descriptor));
-          frameCount++;
-          const currentProgress = Math.min(100, Math.round((frameCount / TARGET_FRAME_COUNT) * 100));
-          setProgress(currentProgress);
-          setFeedback(`Enrolling biometrics: ${frameCount}/${TARGET_FRAME_COUNT} angles scanned...`);
+        if (!detection) {
+          detection = await faceapi
+            .detectSingleFace(videoRef.current, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.10 }))
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+        }
 
-          if (frameCount >= TARGET_FRAME_COUNT) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-            setCapturedEmbeddings(tempEmbeddings);
-            setCapturing(false);
-            setFeedback('Capture complete! Click "Save Biometrics" to register.');
+        if (detection && detection.descriptor) {
+          const emb = Array.from(detection.descriptor);
+          if (emb && emb.length === 128) {
+            tempEmbeddings.push(emb);
+            frameCount++;
+            const currentProgress = Math.min(100, Math.round((frameCount / TARGET_FRAME_COUNT) * 100));
+            setProgress(currentProgress);
+            setFeedback(`Enrolling facial biometrics: ${frameCount}/${TARGET_FRAME_COUNT} frames captured (${currentProgress}%)...`);
 
-            confetti({
-              particleCount: 50,
-              spread: 60,
-              origin: { y: 0.6 }
-            });
+            if (frameCount >= TARGET_FRAME_COUNT) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+              setCapturedEmbeddings(tempEmbeddings);
+              setCapturing(false);
+              setFeedback('✅ Biometric capture complete! Click "Save Biometrics" to register.');
+
+              confetti({
+                particleCount: 60,
+                spread: 70,
+                origin: { y: 0.6 }
+              });
+            }
           }
         } else {
-          setFeedback('Face not detected clearly. Move slightly closer and center your face.');
+          setFeedback('Align face inside the circle and look at the camera...');
         }
       } catch (err) {
         console.error('Frame detection error:', err);
       }
-    }, 200);
+    }, 150);
   };
 
   const handleSave = async () => {
@@ -302,11 +320,10 @@ const FaceEnrollment = () => {
             <p className="text-xs text-slate-400 font-mono mt-0.5">ID: {employee.employeeId} • {employee.designation || 'Staff'}</p>
           </div>
           <div className="ml-auto">
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-              employee.faceEmbeddings && employee.faceEmbeddings.length > 0
-                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400'
-                : 'bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400'
-            }`}>
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${employee.faceEmbeddings && employee.faceEmbeddings.length > 0
+              ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400'
+              : 'bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400'
+              }`}>
               {employee.faceEmbeddings && employee.faceEmbeddings.length > 0 ? 'Face Enrolled' : 'Pending Enrollment'}
             </span>
           </div>
@@ -329,20 +346,17 @@ const FaceEnrollment = () => {
             autoPlay
             muted
             playsInline
-            style={{ transform: 'scaleX(-1)' }}
-            className={`w-full h-full object-cover ${cameraActive ? 'block' : 'hidden'}`}
+            className={`w-full h-full object-cover scale-x-[-1] transition-opacity duration-150 ${cameraActive ? 'opacity-100' : 'opacity-0 absolute pointer-events-none'}`}
           />
           <canvas
             ref={canvasRef}
-            style={{ transform: 'scaleX(-1)', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-            className={cameraActive ? 'block' : 'hidden'}
+            className={`absolute inset-0 w-full h-full object-cover scale-x-[-1] transition-opacity duration-150 ${cameraActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           />
 
           {cameraActive && (
             <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-              <div className={`w-64 h-64 md:w-72 md:h-72 rounded-full border-2 border-dashed flex items-center justify-center transition-colors ${
-                capturing ? 'border-emerald-400/80 animate-pulse' : 'border-primary-400/60'
-              }`}>
+              <div className={`w-64 h-64 md:w-72 md:h-72 rounded-full border-2 border-dashed flex items-center justify-center transition-colors ${capturing ? 'border-emerald-400/80 animate-pulse' : 'border-primary-400/60'
+                }`}>
                 <Scan className={`w-8 h-8 ${capturing ? 'text-emerald-400/60' : 'text-primary-400/40'} animate-pulse`} />
               </div>
             </div>
@@ -400,8 +414,8 @@ const FaceEnrollment = () => {
 
             {cameraActive && !capturing && capturedEmbeddings.length < TARGET_FRAME_COUNT && (
               <button
-                onClick={startEnrollmentCapture}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-primary-500 to-indigo-600 text-white font-semibold text-sm shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all"
+                onClick={captureFrames}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-gradient-to-r from-primary-500 to-indigo-600 text-white font-semibold text-sm shadow-md shadow-primary-500/20 hover:shadow-primary-500/30 transition-all cursor-pointer"
               >
                 <Scan className="w-4 h-4" />
                 Capture Face
@@ -410,8 +424,8 @@ const FaceEnrollment = () => {
 
             {capturedEmbeddings.length > 0 && !capturing && (
               <button
-                onClick={resetEnrollment}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-sm transition-all"
+                onClick={resetCapture}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-sm transition-all cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 Re-enroll
@@ -420,9 +434,9 @@ const FaceEnrollment = () => {
 
             {capturedEmbeddings.length >= TARGET_FRAME_COUNT && (
               <button
-                onClick={handleSaveEmbeddings}
+                onClick={handleSave}
                 disabled={submitting}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-500/20 transition-all disabled:opacity-70"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-md shadow-emerald-500/20 transition-all disabled:opacity-70 cursor-pointer"
               >
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                 Save Biometrics

@@ -110,8 +110,8 @@ export default function Blogs() {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${isSelected
-                    ? "bg-teal-600 text-white shadow-md shadow-teal-600/20 scale-105"
-                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 hover:text-slate-900 shadow-2xs"
+                  ? "bg-teal-600 text-white shadow-md shadow-teal-600/20 scale-105"
+                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 hover:text-slate-900 shadow-2xs"
                   }`}
               >
                 {cat}
@@ -125,8 +125,8 @@ export default function Blogs() {
       {selectedCategory === "All" && !searchQuery && featuredPost && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-14 relative z-10">
           <div className="relative rounded-3xl overflow-hidden border border-slate-200/90 bg-white p-6 sm:p-10 shadow-md">
-            <div className="grid lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8">
+            <div className="grid md:grid-cols-12 gap-8 items-center">
+              <div className="md:col-span-7 lg:col-span-8">
                 <div className="flex flex-wrap items-center gap-3 mb-4">
                   <span className="px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                     <Sparkles size={13} className="text-amber-500" /> Featured Guide
@@ -168,7 +168,7 @@ export default function Blogs() {
                 </div>
               </div>
 
-              <div className="lg:col-span-4 hidden lg:flex flex-col justify-center bg-slate-50 p-6 rounded-2xl border border-slate-200">
+              <div className="md:col-span-5 lg:col-span-4 hidden md:flex flex-col justify-center bg-slate-50 p-6 rounded-2xl border border-slate-200">
                 <div className="text-xs font-bold text-teal-700 uppercase tracking-wider mb-2">
                   What's Inside This Guide
                 </div>

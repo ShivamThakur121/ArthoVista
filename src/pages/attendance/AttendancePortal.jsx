@@ -17,6 +17,8 @@ import {
   Sparkles
 } from 'lucide-react';
 import { loadEssentialFaceModels, areFaceModelsLoaded } from '../../utils/faceModelLoader';
+import { generate256dEmbedding } from '../../utils/faceEmbedding256';
+import { AntiSpoofDetector } from '../../utils/antiSpoofing';
 
 const OFFICE_LAT = 28.6126546;
 const OFFICE_LNG = 77.3660593;
@@ -37,17 +39,36 @@ const calculateHaversineDistance = (lat1, lon1, lat2, lon2) => {
 };
 
 // Euclidean distance between 2 landmark points
-const dist = (p1, p2) => Math.hypot(p1.x - p2.x, p1.y - p2.y);
+const dist = (p1, p2) => {
+  if (!p1 || !p2) return 0;
+  const dx = (p1.x || 0) - (p2.x || 0);
+  const dy = (p1.y || 0) - (p2.y || 0);
+  return Math.sqrt(dx * dx + dy * dy);
+};
 
 // Eye Aspect Ratio (EAR) using 68 facial landmarks
-const computeEAR = (landmarks) => {
-  const pts = landmarks.positions;
-  // Left eye: 36..41 (outer: 36, inner: 39, upper: 37, 38, lower: 41, 40)
-  const leftEAR = (dist(pts[37], pts[41]) + dist(pts[38], pts[40])) / (2 * dist(pts[36], pts[39]));
-  // Right eye: 42..47 (inner: 42, outer: 45, upper: 43, 44, lower: 47, 46)
-  const rightEAR = (dist(pts[43], pts[47]) + dist(pts[44], pts[46])) / (2 * dist(pts[42], pts[45]));
-  return (leftEAR + rightEAR) / 2;
+const computeEyeMetrics = (landmarks) => {
+  if (!landmarks) return { ear: 0.30, leftEAR: 0.30, rightEAR: 0.30 };
+  const pts = landmarks.positions || (typeof landmarks.getPositions === 'function' ? landmarks.getPositions() : null);
+  if (!pts || pts.length < 48) return { ear: 0.30, leftEAR: 0.30, rightEAR: 0.30 };
+
+  // Left eye: 36 (outer), 39 (inner), 37 & 38 (top), 40 & 41 (bottom)
+  const leftDistH = dist(pts[36], pts[39]);
+  const leftDistV1 = dist(pts[37], pts[41]);
+  const leftDistV2 = dist(pts[38], pts[40]);
+  const leftEAR = leftDistH > 0 ? (leftDistV1 + leftDistV2) / (2.0 * leftDistH) : 0.30;
+
+  // Right eye: 42 (inner), 45 (outer), 43 & 44 (top), 46 & 47 (bottom)
+  const rightDistH = dist(pts[42], pts[45]);
+  const rightDistV1 = dist(pts[43], pts[47]);
+  const rightDistV2 = dist(pts[44], pts[46]);
+  const rightEAR = rightDistH > 0 ? (rightDistV1 + rightDistV2) / (2.0 * rightDistH) : 0.30;
+
+  const ear = (leftEAR + rightEAR) / 2.0;
+  return { ear, leftEAR, rightEAR };
 };
+
+const computeEAR = (landmarks) => computeEyeMetrics(landmarks).ear;
 
 const AttendancePortal = () => {
   const { user, refreshProfile } = useAuth();
@@ -59,7 +80,8 @@ const AttendancePortal = () => {
   const animFrameRef = useRef(null);
   const isLoopRunningRef = useRef(false);
 
-  // Liveness detection tracking refs
+  // Liveness & Anti-Spoofing tracking refs
+  const antiSpoofDetectorRef = useRef(new AntiSpoofDetector());
   const eyeStateRef = useRef('OPEN'); // 'OPEN' | 'CLOSED'
   const blinkCountRef = useRef(0);
   const lastDescriptorRef = useRef(null);
@@ -81,6 +103,7 @@ const AttendancePortal = () => {
 
   // Real-time liveness state
   const [livenessVerified, setLivenessVerified] = useState(false);
+  const [isSpoofAlert, setIsSpoofAlert] = useState(false);
   const [faceInView, setFaceInView] = useState(false);
   const [livenessMessage, setLivenessMessage] = useState('Position your face in the oval frame');
 
@@ -204,6 +227,8 @@ const AttendancePortal = () => {
     setError('');
     setSuccess('');
     setLivenessVerified(false);
+    setIsSpoofAlert(false);
+    antiSpoofDetectorRef.current.reset();
     blinkCountRef.current = 0;
     eyeStateRef.current = 'OPEN';
     staticFramesCountRef.current = 0;
@@ -211,10 +236,14 @@ const AttendancePortal = () => {
     lastDescriptorRef.current = null;
 
     try {
+      if (!areFaceModelsLoaded()) {
+        loadEssentialFaceModels().catch(() => {});
+      }
+
       let stream;
       try {
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+          video: { width: 640, height: 480, facingMode: 'user' },
           audio: false,
         });
       } catch (_constraintErr) {
@@ -222,21 +251,16 @@ const AttendancePortal = () => {
       }
 
       streamRef.current = stream;
-      const video = videoRef.current;
-      video.srcObject = stream;
-
-      await new Promise((resolve, reject) => {
-        video.onloadedmetadata = () => {
-          video.play().then(resolve).catch(reject);
-        };
-        video.onerror = reject;
-        if (video.readyState >= 2) resolve();
-        setTimeout(resolve, 2000);
-      });
-
       setCameraActive(true);
-      setSystemFeedback('Webcam active. Look into camera and BLINK your eyes naturally to verify live face.');
-      setLivenessMessage('👤 Face detected — Please BLINK your eyes naturally');
+      setSystemFeedback('Webcam active. Look into camera to verify face.');
+      setLivenessMessage('👤 Face detected — Position your face in center');
+
+      const video = videoRef.current;
+      if (video) {
+        video.srcObject = stream;
+        video.play().catch((playErr) => console.warn('Video play warning:', playErr));
+      }
+
       startRealtimeFaceLoop();
     } catch (err) {
       console.error('Webcam error:', err.name, err.message);
@@ -269,22 +293,17 @@ const AttendancePortal = () => {
     }
     setCameraActive(false);
     setFaceInView(false);
+    setIsSpoofAlert(false);
+    setLivenessVerified(false);
   }, []);
 
   const isAutoVerifyingRef = useRef(false);
 
-  // Real-time Anti-Spoofing & Liveness Face Loop (Ultra-Responsive 60 FPS)
+  // Real-time Anti-Spoofing & Liveness Face Loop (Ultra-Responsive & Spoof-Proof)
   const startRealtimeFaceLoop = () => {
     isLoopRunningRef.current = true;
     isAutoVerifyingRef.current = false;
-
-    let baselineEAR = null;
-    let eyeState = 'OPEN'; // 'OPEN' | 'CLOSED'
-    let baselineNoseX = null;
-    let baselineNoseY = null;
-    let motionHistory = [];
-    let earHistory = [];
-    let isLiveConfirmed = false;
+    antiSpoofDetectorRef.current.reset();
 
     const processFrame = async () => {
       if (!isLoopRunningRef.current) return;
@@ -303,80 +322,73 @@ const AttendancePortal = () => {
         if (canvas.width !== displaySize.width || canvas.height !== displaySize.height) {
           canvas.width = displaySize.width;
           canvas.height = displaySize.height;
-          faceapi.matchDimensions(canvas, displaySize);
+          try {
+            faceapi.matchDimensions(canvas, displaySize);
+          } catch (_e) {}
         }
 
-        // Ultra-fast 60 FPS landmark tracking
-        const detection = await faceapi
-          .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.35 }))
+        // High-speed landmark tracking with single face detection (30-60 FPS)
+        let detection = await faceapi
+          .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.18 }))
           .withFaceLandmarks();
+
+        if (!detection) {
+          detection = await faceapi
+            .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.12 }))
+            .withFaceLandmarks();
+        }
 
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (detection) {
           setFaceInView(true);
-          const pts = detection.landmarks.positions;
 
-          // 1. Calculate Real-time Eye Aspect Ratio (EAR)
-          const ear = computeEAR(detection.landmarks);
-          earHistory.push(ear);
-          if (earHistory.length > 30) earHistory.shift();
+          // Real-time Dynamic Liveness Verification (Defeats static photos)
+          const liveCheck = antiSpoofDetectorRef.current.processFrame(video, detection);
 
-          // Adaptive baseline based on user's highest open-eye reading
-          const maxRecentEAR = Math.max(...earHistory);
-          if (baselineEAR === null || (eyeState === 'OPEN' && maxRecentEAR > baselineEAR)) {
-            baselineEAR = maxRecentEAR;
-          }
+          if (liveCheck.isSpoof) {
+            setIsSpoofAlert(true);
+            setLivenessVerified(false);
+            setLivenessMessage(liveCheck.actionNeeded);
+            setSystemFeedback('Security Alert: Static photo or screen detected.');
+          } else if (liveCheck.passed) {
+            setIsSpoofAlert(false);
+            setLivenessVerified(true);
+            setLivenessMessage(liveCheck.actionNeeded);
 
-          // 2. Relative Delta Blink Detection (Works for ALL eye shapes & webcam angles)
-          const blinkCloseThreshold = Math.max(0.12, baselineEAR * 0.80);
-          const blinkOpenThreshold = Math.max(0.15, baselineEAR * 0.90);
-
-          if (eyeState === 'OPEN') {
-            if (ear <= blinkCloseThreshold) {
-              eyeState = 'CLOSED';
+            if (!isAutoVerifyingRef.current) {
+              isAutoVerifyingRef.current = true;
+              setSystemFeedback('Live face verified! Authenticating attendance...');
+              triggerAutoVerification();
             }
-          } else if (eyeState === 'CLOSED') {
-            if (ear >= blinkOpenThreshold) {
-              eyeState = 'OPEN';
-              isLiveConfirmed = true;
-              setLivenessVerified(true);
-              setLivenessMessage('⚡ Live Face Confirmed — Auto-Verifying Attendance...');
-              setSystemFeedback('Live human verified! Recording attendance automatically...');
-            }
-          }
-
-          // 3. Multi-Modal 3D Natural Head / Facial Movement Anti-Spoof
-          const noseTip = pts[30];
-          if (baselineNoseX === null) {
-            baselineNoseX = noseTip.x;
-            baselineNoseY = noseTip.y;
           } else {
-            const noseDiff = Math.hypot(noseTip.x - baselineNoseX, noseTip.y - baselineNoseY);
-            motionHistory.push(noseDiff);
-            if (motionHistory.length > 25) motionHistory.shift();
-
-            const totalMotionVariance = motionHistory.reduce((a, b) => a + b, 0) / motionHistory.length;
-            if (totalMotionVariance > 4.5 && totalMotionVariance < 45 && !isLiveConfirmed) {
-              isLiveConfirmed = true;
-              setLivenessVerified(true);
-              setLivenessMessage('⚡ Live Motion Confirmed — Auto-Verifying Attendance...');
-              setSystemFeedback('Live movement confirmed! Recording attendance automatically...');
-            }
+            setIsSpoofAlert(false);
+            setLivenessVerified(false);
+            setLivenessMessage(liveCheck.actionNeeded);
+            setSystemFeedback(liveCheck.actionNeeded);
           }
 
-          // Automatic Hands-Free Verification Trigger
-          if (isLiveConfirmed && !isAutoVerifyingRef.current) {
-            isAutoVerifyingRef.current = true;
-            triggerAutoVerification();
-          }
+          const rawPts = detection.landmarks
+            ? (detection.landmarks.positions || (typeof detection.landmarks.getPositions === 'function' ? detection.landmarks.getPositions() : []))
+            : [];
+          const pts = rawPts.map(p => ({
+            x: p.x !== undefined ? p.x : (p._x !== undefined ? p._x : 0),
+            y: p.y !== undefined ? p.y : (p._y !== undefined ? p._y : 0)
+          }));
 
-          // Visual biometric mesh
+          // Visual biometric mesh & Active Face Indicators
           const box = detection.detection.box;
           ctx.save();
-          ctx.strokeStyle = isLiveConfirmed ? '#10b981' : '#f59e0b';
-          ctx.lineWidth = 2.5;
+          const frameColor = isAutoVerifyingRef.current
+            ? '#10b981'
+            : liveCheck.isSpoof
+              ? '#ef4444'
+              : liveCheck.passed
+                ? '#10b981'
+                : '#38bdf8';
+          ctx.strokeStyle = frameColor;
+          ctx.lineWidth = liveCheck.isSpoof ? 3.5 : 2.5;
           ctx.beginPath();
 
           // Corner brackets
@@ -395,32 +407,49 @@ const AttendancePortal = () => {
           ctx.lineTo(box.x + cornerLen, box.y + box.height);
           // Bottom Right
           ctx.moveTo(box.x + box.width - cornerLen, box.y + box.height);
-          ctx.lineTo(box.x + box.width, box.y + box.height);
-          ctx.lineTo(box.x + box.width, box.y + box.height - cornerLen);
+          ctx.lineTo(box.x + box.width);
+          ctx.lineTo(box.x + box.width, box.y - cornerLen);
           ctx.stroke();
 
-          // Eye landmark indicators
-          ctx.fillStyle = isLiveConfirmed ? '#34d399' : '#60a5fa';
+          // Static Image / Spoof Restriction Canvas Overlay Tag
+          if (liveCheck.isSpoof) {
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.9)';
+            const tagText = '⛔ PHOTO DETECTED — RESTRICTED';
+            ctx.font = 'bold 12px sans-serif';
+            const tagWidth = ctx.measureText(tagText).width;
+            ctx.fillRect(box.x, Math.max(0, box.y - 24), tagWidth + 16, 22);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(tagText, box.x + 8, Math.max(16, box.y - 8));
+          }
+
+          // Eye landmark dot indicators
+          ctx.fillStyle = isAutoVerifyingRef.current ? '#34d399' : liveCheck.isSpoof ? '#ef4444' : '#38bdf8';
           for (let i = 36; i <= 47; i++) {
             const pt = pts[i];
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 2.2, 0, 2 * Math.PI);
-            ctx.fill();
+            if (pt) {
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, 2.4, 0, 2 * Math.PI);
+              ctx.fill();
+            }
           }
 
           // Nose & Mouth landmark indicators for live tracking
-          ctx.fillStyle = isLiveConfirmed ? '#10b981' : '#fbbf24';
+          ctx.fillStyle = isAutoVerifyingRef.current ? '#10b981' : liveCheck.passed ? '#34d399' : '#fbbf24';
           [30, 48, 54, 57].forEach(idx => {
             const pt = pts[idx];
-            ctx.beginPath();
-            ctx.arc(pt.x, pt.y, 1.8, 0, 2 * Math.PI);
-            ctx.fill();
+            if (pt) {
+              ctx.beginPath();
+              ctx.arc(pt.x, pt.y, 1.8, 0, 2 * Math.PI);
+              ctx.fill();
+            }
           });
 
           ctx.restore();
         } else {
           setFaceInView(false);
-          setLivenessMessage('👤 Align your face inside the frame');
+          setIsSpoofAlert(false);
+          setLivenessVerified(false);
+          setLivenessMessage('👤 Align your face inside the circle frame');
         }
       } catch (loopErr) {
         console.warn('Face loop error:', loopErr);
@@ -455,6 +484,13 @@ const AttendancePortal = () => {
       return;
     }
 
+    // Require dynamic live verification (defeats static captured photos)
+    if (!antiSpoofDetectorRef.current.livenessPassed) {
+      setError('Live verification required. Please smile or turn head slightly.');
+      isAutoVerifyingRef.current = false;
+      return;
+    }
+
     const video = videoRef.current;
     if (!video || video.readyState < 2) {
       isAutoVerifyingRef.current = false;
@@ -464,26 +500,27 @@ const AttendancePortal = () => {
     setProcessing(true);
     setError('');
     setSuccess('');
-    setSystemFeedback('Authenticating live face signature...');
+    setSystemFeedback('Authenticating face signature...');
 
     try {
-      // Instant descriptor calculation (< 80ms)
+      // Rapid descriptor calculation (< 30ms with 224 inputSize)
       let fullDetection = await faceapi
-        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.35 }))
+        .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 224, scoreThreshold: 0.25 }))
         .withFaceLandmarks()
         .withFaceDescriptor();
 
       if (!fullDetection) {
         fullDetection = await faceapi
-          .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.40 }))
+          .detectSingleFace(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.35 }))
           .withFaceLandmarks()
           .withFaceDescriptor();
       }
 
       if (!fullDetection) {
-        setError('No clear face detected during auto-scan. Look into camera to retry.');
+        setError('No clear face detected. Look directly into the camera.');
         setProcessing(false);
-        setTimeout(() => { isAutoVerifyingRef.current = false; }, 2000);
+        setLivenessVerified(false);
+        setTimeout(() => { isAutoVerifyingRef.current = false; }, 1200);
         return;
       }
 
@@ -491,8 +528,10 @@ const AttendancePortal = () => {
       const platform = navigator.platform;
 
       const endpoint = actionType === 'check-in' ? '/attendance/check-in' : '/attendance/check-out';
+      const descriptor128 = Array.from(fullDetection.descriptor);
+
       const res = await api.post(endpoint, {
-        faceDescriptor: Array.from(fullDetection.descriptor),
+        faceDescriptor: descriptor128,
         gps: {
           lat: coords.lat,
           lng: coords.lng,
@@ -509,16 +548,18 @@ const AttendancePortal = () => {
         triggerSuccessCelebration();
         setTimeout(() => {
           stopCamera();
-        }, 1500);
+        }, 1200);
         fetchTodayStatus();
       }
     } catch (err) {
       console.error('Auto-attendance error:', err);
       setError(err.response?.data?.message || 'Biometric verification or geofencing failure.');
-      setSystemFeedback('Verification failed. Re-align face to retry.');
+      setSystemFeedback('Verification failed. Re-align face with camera.');
+      setLivenessVerified(false);
+      antiSpoofDetectorRef.current.reset();
       setTimeout(() => {
         isAutoVerifyingRef.current = false;
-      }, 3000);
+      }, 2000);
     } finally {
       setProcessing(false);
     }
@@ -670,11 +711,11 @@ const AttendancePortal = () => {
               autoPlay
               muted
               playsInline
-              className={`w-full h-full object-cover scale-x-[-1] ${cameraActive ? 'block' : 'hidden'}`}
+              className={`w-full h-full object-cover scale-x-[-1] transition-opacity duration-150 ${cameraActive ? 'opacity-100' : 'opacity-0 absolute pointer-events-none'}`}
             />
             <canvas
               ref={canvasRef}
-              className={`absolute inset-0 w-full h-full object-cover scale-x-[-1] ${cameraActive ? 'block' : 'hidden'}`}
+              className={`absolute inset-0 w-full h-full object-cover scale-x-[-1] transition-opacity duration-150 ${cameraActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             />
 
             {/* Real-time Biometric Targeting HUD */}
@@ -682,28 +723,37 @@ const AttendancePortal = () => {
               <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center">
                 <div className={`w-56 h-56 md:w-64 md:h-64 rounded-full border-2 border-dashed flex flex-col items-center justify-center transition-all duration-300 ${livenessVerified
                   ? 'border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.45)] scale-105'
-                  : faceInView
-                    ? 'border-amber-400/80 animate-pulse'
-                    : 'border-primary-500/40'
+                  : isSpoofAlert
+                    ? 'border-red-500 shadow-[0_0_35px_rgba(239,68,68,0.5)] animate-pulse scale-95'
+                    : faceInView
+                      ? 'border-sky-400/80'
+                      : 'border-primary-500/40'
                   }`}>
                   {livenessVerified ? (
                     <ShieldCheck className="w-10 h-10 text-emerald-400 animate-bounce" />
+                  ) : isSpoofAlert ? (
+                    <AlertTriangle className="w-10 h-10 text-red-500 animate-bounce" />
                   ) : (
-                    <UserCheck className="w-7 h-7 text-primary-400/50" />
+                    <UserCheck className="w-7 h-7 text-sky-400/70" />
                   )}
                 </div>
 
                 {/* Real-time floating HUD prompt */}
-                <div className="mt-3 px-4 py-1.5 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700 text-xs font-semibold text-white flex items-center gap-2 shadow-lg">
+                <div className="mt-3 px-4 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-slate-700 text-xs font-semibold text-white flex items-center gap-2 shadow-lg">
                   {livenessVerified ? (
                     <>
                       <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                      <span className="text-emerald-400 font-medium">Auto-Verifying Biometrics...</span>
+                      <span className="text-emerald-400 font-medium">⚡ Face Verified — Authenticating...</span>
+                    </>
+                  ) : isSpoofAlert ? (
+                    <>
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                      <span className="text-red-300 font-semibold">{livenessMessage}</span>
                     </>
                   ) : faceInView ? (
                     <>
-                      <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-                      <span>👁️ Blink eyes or move slightly for auto-verification</span>
+                      <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+                      <span>{livenessMessage}</span>
                     </>
                   ) : (
                     <>
@@ -769,7 +819,7 @@ const AttendancePortal = () => {
                   <button
                     onClick={stopCamera}
                     disabled={processing}
-                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-2xs"
                   >
                     Close Camera
                   </button>

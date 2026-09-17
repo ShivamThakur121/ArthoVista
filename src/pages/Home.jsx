@@ -242,64 +242,64 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* ====== HERO SECTION ====== */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden border-b border-slate-200">
-        <div className="w-full max-w-7xl mx-auto px-6 md:px-10 py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <section className="relative flex items-center overflow-hidden border-b border-slate-200 py-10 sm:py-14 md:py-16 lg:py-20">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-10 grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="animate-slide-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold uppercase tracking-wider mb-6">
-              <Shield size={14} className="text-amber-500" />
-              Empanelled Advisory · 500+ MSMEs Empowered
+            <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-4 sm:mb-6">
+              <Shield size={14} className="text-amber-500 shrink-0" />
+              <span>Empanelled Advisory · 500+ MSMEs Empowered</span>
             </div>
             <h1
               className="font-display font-black text-slate-900 leading-tight tracking-tight"
-              style={{ fontSize: "clamp(34px, 5vw, 56px)" }}
+              style={{ fontSize: "clamp(28px, 4.5vw, 54px)" }}
             >
               Accelerate Your{" "}
               <span className="bg-gradient-to-r from-green-500 via-blue-500 to-green-500 bg-clip-text text-transparent relative font-black inline-block">
                 Business Growth
-                <svg className="absolute -bottom-2 left-0 w-full" height="4" viewBox="0 0 200 4">
+                <svg className="absolute -bottom-1.5 sm:-bottom-2 left-0 w-full" height="4" viewBox="0 0 200 4">
                   <path d="M0 2 Q50 0 100 2 Q150 4 200 2" stroke="#22c55e" strokeWidth="2.5" fill="none" strokeLinecap="round" />
                 </svg>
               </span>
               <br />With ArthoVista
             </h1>
-            <p className="text-slate-600 mt-5 text-base font-normal leading-relaxed max-w-lg">
+            <p className="text-slate-600 mt-4 sm:mt-5 text-sm sm:text-base font-normal leading-relaxed max-w-lg">
               Official end-to-end consulting for MSMEs, Corporates, and NGOs — registrations, ISO/FSSAI certifications, government scheme grants, and loan facilitation.
             </p>
 
             {/* Badges */}
-            <div className="flex flex-wrap gap-8 mt-8">
+            <div className="flex flex-wrap gap-4 sm:gap-8 mt-6 sm:mt-8">
               {[
                 { val: "500+", lab: "Clients Empowered" },
                 { val: "₹50Cr+", lab: "Funding Facilitated" },
                 { val: "98%", lab: "Approval Rate" },
               ].map((b) => (
                 <div key={b.lab} className="text-left">
-                  <div className="text-2xl md:text-3xl font-display font-black text-slate-900">{b.val}</div>
-                  <div className="text-xs font-semibold text-slate-500 mt-0.5 tracking-wide">{b.lab}</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-display font-black text-slate-900">{b.val}</div>
+                  <div className="text-[11px] sm:text-xs font-semibold text-slate-500 mt-0.5 tracking-wide">{b.lab}</div>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-3 sm:gap-4 mt-6 sm:mt-8">
               <button
                 onClick={() => openConsultationModal("General Consultation")}
-                className="btn-3d inline-flex items-center gap-2 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-green-500/25 transition-all cursor-pointer"
+                className="btn-3d inline-flex items-center gap-2 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold text-xs sm:text-sm px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-lg shadow-green-500/25 transition-all cursor-pointer"
               >
-                <Phone size={15} />
+                <Phone size={14} className="shrink-0" />
                 <span>Free Consultation</span>
-                <ArrowRight size={15} />
+                <ArrowRight size={14} className="shrink-0" />
               </button>
-              <Link to="/services" className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-sm px-6 py-3.5 rounded-xl shadow-xs transition-all">
+              <Link to="/services" className="inline-flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs sm:text-sm px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl shadow-xs transition-all">
                 Explore Services
               </Link>
             </div>
 
             {/* Trust badges */}
-            <div className="flex flex-wrap gap-5 mt-8 pt-5 border-t border-slate-200">
+            <div className="flex flex-wrap gap-3 sm:gap-5 mt-6 sm:mt-8 pt-4 sm:pt-5 border-t border-slate-200">
               {["KVIC Empanelled", "MSME Certified", "Startup India Partner"].map((b) => (
-                <span key={b} className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                  <CheckCircle size={14} className="text-teal-600" />
+                <span key={b} className="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-slate-700">
+                  <CheckCircle size={13} className="text-teal-600 shrink-0" />
                   {b}
                 </span>
               ))}
@@ -307,26 +307,26 @@ export default function Home() {
           </div>
 
           {/* Right — 3D Lead Form Card */}
-          <div className="animate-slide-right lg:animate-scale-in">
+          <div className="animate-slide-right md:animate-scale-in w-full max-w-lg mx-auto md:max-w-none">
             <div
-              className="tilt-3d float-3d bg-white border border-slate-200/90 rounded-2xl p-7 md:p-8 relative overflow-hidden shadow-xl"
+              className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 md:p-8 relative overflow-hidden shadow-xl"
             >
               <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-500 via-blue-500 to-green-500" />
-              <h2 className="font-display font-bold text-slate-900 text-xl mb-1">
+              <h2 className="font-display font-bold text-slate-900 text-lg sm:text-xl mb-1">
                 Get Free Business Assessment
               </h2>
-              <p className="text-slate-600 text-sm font-medium mb-6">
+              <p className="text-slate-600 text-xs sm:text-sm font-medium mb-5 sm:mb-6">
                 Our expert advisor will call you within 24 hours.
               </p>
 
               {status === "success" ? (
-                <div className="py-10 text-center">
-                  <CheckCircle size={48} className="text-emerald-500 mx-auto mb-4" />
-                  <p className="text-slate-900 font-bold text-lg">Consultation Requested!</p>
-                  <p className="text-slate-600 text-sm font-medium mt-2">Thank you! Our expert will call you within 24 hours.</p>
+                <div className="py-8 sm:py-10 text-center">
+                  <CheckCircle size={44} className="text-emerald-500 mx-auto mb-3" />
+                  <p className="text-slate-900 font-bold text-base sm:text-lg">Consultation Requested!</p>
+                  <p className="text-slate-600 text-xs sm:text-sm font-medium mt-1.5">Thank you! Our expert will call you within 24 hours.</p>
                 </div>
               ) : (
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-3.5 sm:space-y-4" onSubmit={handleSubmit}>
                   <input
                     type="text"
                     required
@@ -335,7 +335,7 @@ export default function Home() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                   <input
                     type="tel"
@@ -345,7 +345,7 @@ export default function Home() {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                   <input
                     type="email"
@@ -354,14 +354,14 @@ export default function Home() {
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                   <select
                     value={formData.service}
                     onChange={(e) =>
                       setFormData({ ...formData, service: e.target.value })
                     }
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
                   >
                     <option value="General Consultation Leads" className="bg-white text-slate-800">Select Service / Lead Category</option>
                     <option value="PMEGP Subsidy Scheme Leads" className="bg-white text-slate-800">PMEGP Subsidy Scheme Leads (up to 35%)</option>
@@ -387,12 +387,12 @@ export default function Home() {
                   <button
                     type="submit"
                     disabled={status === "loading"}
-                    className="btn-3d w-full bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 cursor-pointer shadow-lg shadow-green-500/25"
+                    className="btn-3d w-full bg-gradient-to-r from-green-500 via-blue-500 to-green-500 hover:opacity-95 text-white font-bold py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all disabled:opacity-70 cursor-pointer shadow-lg shadow-green-500/25 text-xs sm:text-sm"
                   >
                     {status === "loading" ? "Booking..." : "Book Free Consultation"}
-                    <ArrowRight size={15} />
+                    <ArrowRight size={14} />
                   </button>
-                  <p className="text-center text-xs font-medium text-slate-500">
+                  <p className="text-center text-[11px] sm:text-xs font-medium text-slate-500">
                     No hidden fees · 100% Confidential
                   </p>
                 </form>
@@ -427,7 +427,7 @@ export default function Home() {
           {segments.map((s, i) => (
             <div
               key={s.title}
-              className="tilt-3d service-block rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md"
+              className="service-block rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:shadow-lg transition-all"
               style={{ animationDelay: `${i * 150}ms` }}
             >
               <div className={`bg-gradient-to-br ${s.color} p-6`}>
@@ -471,7 +471,7 @@ export default function Home() {
               <Link
                 key={q.title}
                 to={q.to}
-                className="tilt-3d bg-white rounded-2xl p-6 border border-slate-200/90 shadow-md hover:border-teal-500 transition-all group"
+                className="bg-white rounded-2xl p-6 border border-slate-200/90 shadow-md hover:border-teal-500 hover:shadow-lg transition-all group"
               >
                 <div className={`w-12 h-12 rounded-xl ${q.color} bg-opacity-20 flex items-center justify-center mb-4 shadow-xs`}>
                   <q.icon size={22} />
@@ -508,15 +508,15 @@ export default function Home() {
       </section>
 
       {/* ====== WHY ARTHOVISTA SECTION ====== */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <section className="py-14 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div>
             <div className="eyebrow">Why Choose Us</div>
             <h2 className="section-title">
               India's Most <span className="highlight">Trusted</span>
               <br />MSME Advisor
             </h2>
-            <p className="text-slate-600 mt-4 font-medium leading-relaxed text-base">
+            <p className="text-slate-600 mt-4 font-medium leading-relaxed text-sm sm:text-base">
               We combine deep regulatory expertise with a proven track record — helping businesses unlock funding, stay compliant, and scale fast.
             </p>
             <div className="grid sm:grid-cols-2 gap-4 mt-8">
@@ -540,17 +540,17 @@ export default function Home() {
           </div>
 
           {/* Right Visual */}
-          <div className="relative hidden lg:block">
+          <div className="relative hidden md:block">
             <div
-              className="rounded-2xl p-8 text-white text-center animate-breathe border border-teal-600/30 shadow-xl"
+              className="rounded-2xl p-6 sm:p-8 text-white text-center animate-breathe border border-teal-600/30 shadow-xl"
               style={{ background: "linear-gradient(135deg, #0f766e 0%, #1e40af 100%)" }}
             >
-              <div className="text-6xl font-display font-black text-white">98%</div>
+              <div className="text-5xl sm:text-6xl font-display font-black text-white">98%</div>
               <p className="text-white mt-2 font-bold text-base">Application Success Rate</p>
-              <div className="mt-6 grid grid-cols-3 gap-3">
+              <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
                 {["₹50Cr+ Funded", "500+ Clients", "6+ Years"].map((t) => (
-                  <div key={t} className="bg-white/15 rounded-lg p-3 border border-white/10">
-                    <p className="text-xs font-bold text-white">{t}</p>
+                  <div key={t} className="bg-white/15 rounded-lg p-2.5 sm:p-3 border border-white/10">
+                    <p className="text-[11px] sm:text-xs font-bold text-white">{t}</p>
                   </div>
                 ))}
               </div>
@@ -560,17 +560,17 @@ export default function Home() {
             </div>
 
             {/* Floating badges */}
-            <div className="absolute -top-4 -left-4 bg-white border border-slate-200 rounded-xl shadow-lg p-3 flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+            <div className="absolute -top-3 -left-3 sm:-top-4 sm:-left-4 bg-white border border-slate-200 rounded-xl shadow-lg p-2.5 sm:p-3 flex items-center gap-2">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-50 rounded-full flex items-center justify-center">
                 <CheckCircle size={14} className="text-green-600" />
               </div>
-              <span className="text-xs font-bold text-slate-800">PMEGP Approved!</span>
+              <span className="text-[11px] sm:text-xs font-bold text-slate-800">PMEGP Approved!</span>
             </div>
-            <div className="absolute -bottom-4 -right-4 bg-white border border-slate-200 rounded-xl shadow-lg p-3 flex items-center gap-2">
-              <div className="w-8 h-8 bg-orange-50 rounded-full flex items-center justify-center">
+            <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-white border border-slate-200 rounded-xl shadow-lg p-2.5 sm:p-3 flex items-center gap-2">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-orange-50 rounded-full flex items-center justify-center">
                 <Star size={14} className="text-orange-500 fill-orange-500" />
               </div>
-              <span className="text-xs font-bold text-slate-800">5-Star Rated</span>
+              <span className="text-[11px] sm:text-xs font-bold text-slate-800">5-Star Rated</span>
             </div>
           </div>
         </div>
@@ -578,14 +578,14 @@ export default function Home() {
 
       {/* ====== KNOWLEDGE HUB & MSME INSIGHTS ====== */}
       {/* ====== RESOURCES SECTION (BLOGS & NEWSLETTER) ====== */}
-      <section id="resources" className="py-20 px-6 max-w-6xl mx-auto border-t border-slate-200">
+      <section id="resources" className="py-14 md:py-20 px-4 sm:px-6 max-w-6xl mx-auto border-t border-slate-200">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
           <div>
             <div className="eyebrow">Enterprise Knowledge & Intelligence</div>
             <h2 className="section-title">
               Resources <span className="highlight">Hub</span>
             </h2>
-            <p className="text-slate-600 mt-2 font-medium text-base">
+            <p className="text-slate-600 mt-2 font-medium text-sm sm:text-base">
               Explore in-depth MSME blogs, regulatory guides, and subscribe to our weekly Gazette newsletter.
             </p>
           </div>
@@ -602,7 +602,7 @@ export default function Home() {
               className="inline-flex items-center gap-1.5 text-white bg-teal-600 hover:bg-teal-700 px-3.5 py-2 rounded-xl font-bold text-xs shadow-sm shadow-teal-600/20 transition-all"
             >
               <Mail size={14} className="text-teal-200" />
-              <span>Newslatter</span>
+              <span>Newsletter</span>
             </Link>
           </div>
         </div>
@@ -610,7 +610,7 @@ export default function Home() {
         {/* --- SUBSECTION 1: BLOGS & GUIDES --- */}
         <div className="mb-14">
           <div className="flex items-center justify-between mb-5 pb-3 border-b border-slate-200">
-            <h3 className="font-display font-bold text-lg text-slate-900 flex items-center gap-2">
+            <h3 className="font-display font-bold text-base sm:text-lg text-slate-900 flex items-center gap-2">
               <BookOpen size={18} className="text-teal-600" />
               <span>1. Latest Blogs & Scheme Guides</span>
             </h3>
@@ -656,8 +656,8 @@ export default function Home() {
         <div className="bg-gradient-to-br from-teal-900 via-slate-900 to-slate-950 rounded-3xl p-6 sm:p-10 text-white border border-teal-500/30 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="grid lg:grid-cols-12 gap-8 items-center relative z-10">
-            <div className="lg:col-span-7 space-y-3">
+          <div className="grid md:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
+            <div className="md:col-span-7 space-y-3">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-teal-300 text-xs font-bold uppercase tracking-wider shadow-xs">
                 <Mail size={13} /> 2. Weekly MSME Gazette Newsletter (Newslater)
               </div>
@@ -681,7 +681,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 bg-white/10 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/15">
+            <div className="md:col-span-5 bg-white/10 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/15">
               {homeNewsletterStatus === "success" ? (
                 <div className="text-center py-4 space-y-2 animate-fade-in">
                   <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto shadow-md">

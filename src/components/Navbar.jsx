@@ -83,19 +83,19 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 transition-all duration-300 ${scrolled ? "shadow-md py-2.5" : "shadow-xs py-3"
+      className={`sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 transition-all duration-300 ${scrolled ? "shadow-md py-2 sm:py-2.5" : "shadow-xs py-2.5 sm:py-3"
         }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
 
         {/* ================= LEFT: LOGO (OFFICIAL ARTHOVISTA LOGO) ================= */}
-        <Logo variant="light" size="md" className="pr-2" />
+        <Logo variant="light" size="md" className="pr-1 sm:pr-2 shrink-0" />
 
         {/* ================= RIGHT: BLUE RIBBON WITH ROUND CURVE ================= */}
-        <div className="hidden lg:flex items-center justify-between flex-1 relative bg-gradient-to-r from-green-500 via-blue-500 to-green-500 py-1.5 px-6 rounded-full shadow-sm">
+        <div className="hidden lg:flex items-center justify-between gap-1.5 xl:gap-3 bg-gradient-to-r from-green-500 via-blue-500 to-green-500 py-1.5 pl-3.5 xl:pl-5 pr-2 xl:pr-3 rounded-full shadow-sm ml-auto">
 
           {/* Navigation Links inside Blue Curve */}
-          <nav className="flex items-center gap-1 xl:gap-1.5">
+          <nav className="flex items-center gap-0.5 xl:gap-1 flex-nowrap">
             {navLinks.map((item) => {
               if (item.isDropdown) {
                 return (
@@ -109,14 +109,14 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all whitespace-nowrap cursor-pointer ${isResourceActive
+                      className={`inline-flex items-center gap-0.5 xl:gap-1 px-2 xl:px-2.5 py-1.5 rounded-full text-xs xl:text-[13px] font-semibold transition-all whitespace-nowrap cursor-pointer ${isResourceActive
                         ? "bg-white text-blue-900 font-bold shadow-xs"
                         : "text-white/90 hover:text-white hover:bg-white/15"
                         }`}
                     >
                       <span>{item.label}</span>
                       <ChevronDown
-                        size={13}
+                        size={12}
                         className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""
                           }`}
                       />
@@ -156,7 +156,7 @@ export default function Navbar() {
                   to={item.to}
                   end={item.to === "/"}
                   className={({ isActive }) =>
-                    `px-3 py-1.5 rounded-full text-xs xl:text-sm font-semibold transition-all whitespace-nowrap ${isActive
+                    `px-2 xl:px-2.5 py-1.5 rounded-full text-xs xl:text-[13px] font-semibold transition-all whitespace-nowrap ${isActive
                       ? "bg-white text-blue-900 font-bold shadow-xs"
                       : "text-white/90 hover:text-white hover:bg-white/15"
                     }`
@@ -169,33 +169,33 @@ export default function Navbar() {
           </nav>
 
           {/* Right Action Call Button */}
-          <div className="flex items-center pl-2">
+          <div className="flex items-center pl-1 pr-1 shrink-0">
             <button
               onClick={() => openConsultationModal("Navbar Free Consult")}
-              className="btn-3d inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-blue-800 text-xs font-bold px-4 py-2 rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap"
+              className="btn-3d inline-flex items-center gap-1.5 bg-white hover:bg-slate-50 text-blue-800 text-xs font-bold px-3.5 xl:px-4 py-1.5 rounded-full shadow-md transition-all cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Sparkles size={13} className="text-amber-500" />
+              <Sparkles size={12} className="text-amber-500 shrink-0" />
               <span>Free Consult</span>
             </button>
           </div>
         </div>
 
         {/* Mobile Hamburger Trigger */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
           <button
             onClick={() => openConsultationModal("Mobile Quick Consult")}
-            className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-teal-600 to-blue-600 text-white text-xs font-bold shadow-xs flex items-center gap-1.5"
+            className="px-2.5 sm:px-3.5 py-1.5 rounded-full bg-gradient-to-r from-teal-600 to-blue-600 text-white text-[11px] sm:text-xs font-bold shadow-xs flex items-center gap-1 sm:gap-1.5 cursor-pointer whitespace-nowrap"
           >
-            <Sparkles size={12} className="text-amber-300" />
+            <Sparkles size={11} className="text-amber-300 shrink-0" />
             <span>Free Consult</span>
           </button>
 
           <button
-            className="p-2 rounded-xl text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-xl text-slate-800 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer"
             onClick={() => setOpen(!open)}
             aria-label="Toggle Navigation Menu"
           >
-            {open ? <X size={20} /> : <Menu size={20} />}
+            {open ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>

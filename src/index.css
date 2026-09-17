@@ -127,32 +127,17 @@ input[type="button"],
   background: var(--surface);
 }
 
-/* ===================== 3D CARD ANIMATIONS & TILTS ===================== */
+/* ===================== CARD HOVER & SHADOWS ===================== */
 .tilt-3d {
-  perspective: 1000px;
-  transform-style: preserve-3d;
-  transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
 
 .tilt-3d:hover {
-  transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) translateZ(14px);
-  box-shadow: 0 25px 50px -12px rgba(13, 148, 136, 0.2), 0 0 0 1px rgba(13, 148, 136, 0.2);
+  box-shadow: 0 12px 28px -8px rgba(13, 148, 136, 0.15), 0 0 0 1px rgba(13, 148, 136, 0.15);
 }
 
 .float-3d {
-  animation: float3d 5s ease-in-out infinite;
-}
-
-@keyframes float3d {
-
-  0%,
-  100% {
-    transform: translateY(0) rotateX(0deg) rotateY(0deg);
-  }
-
-  50% {
-    transform: translateY(-12px) rotateX(3deg) rotateY(-3deg);
-  }
+  animation: none;
 }
 
 .btn-3d {

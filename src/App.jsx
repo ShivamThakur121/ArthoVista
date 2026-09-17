@@ -86,6 +86,12 @@ function MainLayoutWrapper() {
     location.pathname.startsWith('/admin') ||
     location.pathname.startsWith('/employee');
 
+  useEffect(() => {
+    if (isAttendanceRoute) {
+      preloadFaceModelsInBackground();
+    }
+  }, [isAttendanceRoute]);
+
   if (isAttendanceRoute) {
     return (
       <div className="min-h-screen flex flex-col bg-[#f1f5f9] text-slate-700 font-sans relative overflow-x-hidden">

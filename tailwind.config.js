@@ -54,6 +54,12 @@ export default {
       boxShadow: {
         'glass-light': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
         'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        "orange-glow": "0 8px 30px rgba(234, 88, 12, 0.25)",
+        "teal-glow": "0 8px 30px rgba(13, 148, 136, 0.35)",
+        "gold-glow": "0 8px 30px rgba(212, 175, 55, 0.25)",
+        "navy-glow": "0 12px 40px rgba(6, 11, 24, 0.4)",
+        "glass": "0 8px 32px 0 rgba(0, 0, 0, 0.08)",
+        "card-3d": "0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(13, 148, 136, 0.08)",
       },
       backdropBlur: {
         xs: '2px',
@@ -87,15 +93,6 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
-      },
-      boxShadow: {
-        "orange-glow": "0 8px 30px rgba(234, 88, 12, 0.25)",
-        "teal-glow": "0 8px 30px rgba(13, 148, 136, 0.35)",
-        "gold-glow": "0 8px 30px rgba(212, 175, 55, 0.25)",
-        "navy-glow": "0 12px 40px rgba(6, 11, 24, 0.4)",
-        "glass": "0 8px 32px 0 rgba(0, 0, 0, 0.08)",
-        "glass-dark": "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-        "card-3d": "0 20px 40px -15px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(13, 148, 136, 0.08)",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

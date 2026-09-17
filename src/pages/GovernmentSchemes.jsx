@@ -335,7 +335,7 @@ export default function GovernmentSchemes() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {schemes.map((s) => (
-              <div key={s.code} className="tilt-3d rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 transition-all">
+              <div key={s.code} className="rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 hover:shadow-lg transition-all">
                 {/* Card Header */}
                 <div className={`bg-gradient-to-br ${s.color} p-6`}>
                   <div className="flex items-center justify-between">
@@ -505,10 +505,10 @@ export default function GovernmentSchemes() {
             </div>
 
             {/* Modal Content: 2-Column Responsive Layout */}
-            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
+            <div className="p-6 sm:p-8 grid md:grid-cols-12 gap-8 bg-white">
 
               {/* Left Column: Scheme Specifications */}
-              <div className="lg:col-span-7 space-y-6">
+              <div className="md:col-span-7 space-y-6">
                 <div>
                   <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-2 flex items-center gap-1.5">
                     <Layers size={14} /> Scheme Overview & Purpose
@@ -585,7 +585,7 @@ export default function GovernmentSchemes() {
               </div>
 
               {/* Right Column: Scheme Assessment & Application Form */}
-              <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
+              <div className="md:col-span-5 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold mb-3">
                     <Sparkles size={13} /> Official Scheme Application

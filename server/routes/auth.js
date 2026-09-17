@@ -8,13 +8,13 @@ const sendEmail = require('../utils/email');
 
 const generateAccessToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '1h'
+    expiresIn: process.env.JWT_EXPIRES_IN || '1d'
   });
 };
 
 const generateRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '1h'
+    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
   });
 };
 
@@ -66,7 +66,7 @@ router.post('/login', async (req, res, next) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 1 * 60 * 60 * 1000 // 1 hour
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours (1 day)
     });
 
     const populatedUser = await User.findById(user._id).populate('department', 'name code');

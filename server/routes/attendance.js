@@ -287,6 +287,14 @@ router.post('/check-in', protect, async (req, res, next) => {
   const { faceDescriptor, gps, deviceInfo, browser, livenessVerified } = req.body;
   const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
+  if (!livenessVerified) {
+    return res.status(403).json({
+      success: false,
+      code: 'LIVENESS_REQUIRED',
+      message: 'Live human biometric verification required. Face detection from static photos, printed images, or screens is strictly prohibited.'
+    });
+  }
+
   if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
     return res.status(400).json({
       success: false,
@@ -313,9 +321,11 @@ router.post('/check-in', protect, async (req, res, next) => {
 
     const faceCheck = verifyFace(faceDescriptor, employee.faceEmbeddings);
     if (!faceCheck.verified) {
-      return res.status(401).json({
+      const bestDist = (faceCheck.minDistance !== undefined ? faceCheck.minDistance : faceCheck.medianDistance).toFixed(3);
+      return res.status(400).json({
         success: false,
-        message: `Biometric verification failed. Face match score too low (distance: ${faceCheck.medianDistance.toFixed(3)}, matched ${faceCheck.matchCount}/${faceCheck.totalEmbeddings} frames). Please ensure only the enrolled employee attempts check-in.`
+        code: 'BIOMETRIC_MISMATCH',
+        message: `Biometric verification failed. Face match score too low (best distance: ${bestDist}, matched ${faceCheck.matchCount}/${faceCheck.totalEmbeddings} frames). Please ensure only the enrolled employee attempts check-in.`
       });
     }
 
@@ -396,6 +406,14 @@ router.post('/check-out', protect, async (req, res, next) => {
   const { faceDescriptor, gps, deviceInfo, browser, livenessVerified } = req.body;
   const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
+  if (!livenessVerified) {
+    return res.status(403).json({
+      success: false,
+      code: 'LIVENESS_REQUIRED',
+      message: 'Live human biometric verification required. Face detection from static photos, printed images, or screens is strictly prohibited.'
+    });
+  }
+
   if (!faceDescriptor || !Array.isArray(faceDescriptor)) {
     return res.status(400).json({
       success: false,
@@ -439,9 +457,11 @@ router.post('/check-out', protect, async (req, res, next) => {
 
     const faceCheck = verifyFace(faceDescriptor, employee.faceEmbeddings);
     if (!faceCheck.verified) {
-      return res.status(401).json({
+      const bestDist = (faceCheck.minDistance !== undefined ? faceCheck.minDistance : faceCheck.medianDistance).toFixed(3);
+      return res.status(400).json({
         success: false,
-        message: `Biometric verification failed. Face match score too low (distance: ${faceCheck.medianDistance.toFixed(3)}, matched ${faceCheck.matchCount}/${faceCheck.totalEmbeddings} frames). Please ensure only the enrolled employee attempts check-out.`
+        code: 'BIOMETRIC_MISMATCH',
+        message: `Biometric verification failed. Face match score too low (best distance: ${bestDist}, matched ${faceCheck.matchCount}/${faceCheck.totalEmbeddings} frames). Please ensure only the enrolled employee attempts check-out.`
       });
     }
 

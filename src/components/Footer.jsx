@@ -20,7 +20,7 @@ const navigation = [
   { to: "/government-schemes", label: "Government Schemes" },
   { to: "/loans", label: "Loans" },
   { to: "/blogs", label: "Blogs" },
-  { to: "/newsletter", label: "Newslatter" },
+  { to: "/newsletter", label: "Newsletter" },
   { to: "/about", label: "About Us" },
   { to: "/contact", label: "Contact" },
   { to: "/employee", label: "Employee" },
@@ -105,7 +105,7 @@ export default function Footer() {
       </div>
 
       {/* ====== MAIN FOOTER GRID ====== */}
-      <div className="max-w-6xl mx-auto px-6 py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 md:py-14 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
         {/* Brand */}
         <div>
           <div className="mb-4">

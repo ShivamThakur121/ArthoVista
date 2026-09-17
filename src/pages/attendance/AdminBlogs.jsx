@@ -545,8 +545,8 @@ Bullets:
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${selectedCategory === cat
-                  ? 'bg-teal-600 text-white shadow-xs'
-                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50'
+                ? 'bg-teal-600 text-white shadow-xs'
+                : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50'
                 }`}
             >
               {cat}
@@ -620,8 +620,8 @@ Bullets:
 
                     <td className="px-4 py-4 whitespace-nowrap">
                       <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${blog.status === 'Published'
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-amber-50 text-amber-800 border border-amber-200'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-amber-50 text-amber-800 border border-amber-200'
                         }`}>
                         {blog.status}
                       </span>
@@ -682,8 +682,8 @@ Bullets:
                   type="button"
                   onClick={() => setAiAssistantOpen(!aiAssistantOpen)}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${aiAssistantOpen
-                      ? 'bg-gradient-to-r from-teal-600 to-indigo-600 text-white shadow-sm'
-                      : 'bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100'
+                    ? 'bg-gradient-to-r from-teal-600 to-indigo-600 text-white shadow-sm'
+                    : 'bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100'
                     }`}
                 >
                   <Sparkles size={14} className={aiAssistantOpen ? 'text-amber-300' : 'text-teal-600'} />
@@ -781,8 +781,8 @@ Bullets:
 
             {message && (
               <div className={`p-4 rounded-xl text-xs font-bold flex items-center gap-2 ${message.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                  : 'bg-rose-50 text-rose-800 border border-rose-200'
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'bg-rose-50 text-rose-800 border border-rose-200'
                 }`}>
                 {message.type === 'success' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
                 <span>{message.text}</span>
@@ -807,11 +807,10 @@ Bullets:
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
-                    URL Slug *
+                    URL Slug
                   </label>
                   <input
                     type="text"
-                    required
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                     placeholder="e.g. pmegp-subsidy-guide-2026"

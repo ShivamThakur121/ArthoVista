@@ -359,7 +359,7 @@ export default function Loans() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loans.map((l) => (
-              <div key={l.title} className="tilt-3d rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 transition-all">
+              <div key={l.title} className="rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-md hover:border-teal-500 hover:shadow-lg transition-all">
                 <div className="loan-card-inner">
                   {/* Header */}
                   <div className={`bg-gradient-to-br ${l.color} p-6`}>
@@ -568,10 +568,10 @@ export default function Loans() {
             </div>
 
             {/* Modal Content: 2-Column Responsive Layout */}
-            <div className="p-6 sm:p-8 grid lg:grid-cols-12 gap-8 bg-white">
+            <div className="p-6 sm:p-8 grid md:grid-cols-12 gap-8 bg-white">
 
               {/* Left Column: Loan Specifications */}
-              <div className="lg:col-span-6 space-y-6">
+              <div className="md:col-span-6 space-y-6">
                 <div>
                   <h4 className="text-xs font-bold uppercase text-teal-700 tracking-wider mb-2 flex items-center gap-1.5">
                     <Layers size={14} /> Product Overview
@@ -613,7 +613,7 @@ export default function Loans() {
               </div>
 
               {/* Right Column: TAILORED INDIVIDUAL LOAN FORM */}
-              <div className="lg:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
+              <div className="md:col-span-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-md flex flex-col justify-between">
                 <div>
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold mb-3">
                     <Sparkles size={13} /> {selectedLoan.title} Specific Form

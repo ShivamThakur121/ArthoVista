@@ -365,8 +365,8 @@ export default function Services() {
                 key={c.id}
                 onClick={() => handleCategoryClick(c.id)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 cursor-pointer ${active === c.id
-                    ? "bg-teal-600 text-white shadow-md shadow-teal-500/25"
-                    : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-xs"
+                  ? "bg-teal-600 text-white shadow-md shadow-teal-500/25"
+                  : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-200 shadow-xs"
                   }`}
               >
                 <c.icon size={15} />
@@ -384,14 +384,14 @@ export default function Services() {
             <div
               key={b.id}
               id={b.id}
-              className={`tilt-3d scroll-mt-28 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all duration-500 ${active === b.id
-                  ? "ring-2 ring-teal-500 ring-offset-2 ring-offset-slate-100"
-                  : "opacity-100"
+              className={`scroll-mt-28 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-md transition-all duration-300 ${active === b.id
+                ? "ring-2 ring-teal-500 ring-offset-2 ring-offset-slate-100"
+                : "hover:shadow-lg"
                 }`}
             >
-              <div className="grid md:grid-cols-[300px_1fr]">
+              <div className="grid md:grid-cols-[260px_1fr] lg:grid-cols-[300px_1fr]">
                 {/* Left Panel */}
-                <div className={`bg-gradient-to-br ${b.color} p-8 flex flex-col justify-between relative overflow-hidden`}>
+                <div className={`bg-gradient-to-br ${b.color} p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden`}>
                   <div>
                     <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mb-5 shadow-xs">
                       <b.icon size={22} className="text-white" />
@@ -599,8 +599,8 @@ export default function Services() {
                       <div
                         key={it.t}
                         className={`p-3.5 rounded-xl border transition-all ${selectedDetail.activeItem?.t === it.t
-                            ? "bg-teal-50 border-teal-500 ring-1 ring-teal-500"
-                            : "bg-slate-50 border-slate-200"
+                          ? "bg-teal-50 border-teal-500 ring-1 ring-teal-500"
+                          : "bg-slate-50 border-slate-200"
                           }`}
                       >
                         <p className="font-bold text-slate-900 text-sm flex items-center gap-2">

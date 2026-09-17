@@ -186,10 +186,10 @@ export default function Newsletter() {
       {/* ========================================================================= */}
       <section className="pt-2 pb-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-12 gap-8 items-start">
+          <div className="grid md:grid-cols-12 gap-8 items-start">
 
             {/* Left 7 Columns: Interactive Subscription Card */}
-            <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
+            <div className="md:col-span-7 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-md relative overflow-hidden">
               <div className="absolute top-0 right-0 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
 
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
@@ -324,7 +324,7 @@ export default function Newsletter() {
             </div>
 
             {/* Right 5 Columns: Recent Gazette Releases Archive */}
-            <div className="lg:col-span-5 space-y-4">
+            <div className="md:col-span-5 space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-display font-bold text-base text-slate-900 flex items-center gap-2">
                   <FileText size={16} className="text-teal-600" />

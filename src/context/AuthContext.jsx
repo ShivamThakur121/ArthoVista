@@ -41,8 +41,8 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('accessToken') || null);
   const [loading, setLoading] = useState(true);
 
-  // Helper to handle expired session (1-hour limit)
-  const handleSessionExpired = (message = 'Your session has expired (1 hour limit). Please login again.') => {
+  // Helper to handle expired session (1-day limit)
+  const handleSessionExpired = (message = 'Your session has expired. Please login again.') => {
     sessionStorage.setItem('authErrorMessage', message);
     setToken(null);
     setUser(null);
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       if (storedToken) {
         const remainingMs = getTokenRemainingMs(storedToken);
         if (remainingMs <= 0) {
-          handleSessionExpired('Your session has expired (1 hour limit). Please login again.');
+          handleSessionExpired('Your session has expired. Please login again.');
           setLoading(false);
           return;
         }
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
           console.error('Error fetching initial profile:', error);
           if (error.response?.status === 401) {
-            handleSessionExpired('Your session has expired (1 hour limit). Please login again.');
+            handleSessionExpired('Your session has expired. Please login again.');
           } else {
             logout();
           }
@@ -97,19 +97,19 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  // 1-Hour Session Timer & Active Visibility Check
+  // 1-Day (24-Hour) Session Timer & Active Visibility Check
   useEffect(() => {
     if (!token) return;
 
     const remainingMs = getTokenRemainingMs(token);
     if (remainingMs <= 0) {
-      handleSessionExpired('Your session has expired (1 hour limit). Please login again.');
+      handleSessionExpired('Your session has expired. Please login again.');
       return;
     }
 
-    // Auto-logout exactly when token / 1-hour session expires
+    // Auto-logout exactly when token / 1-day session expires
     const timer = setTimeout(() => {
-      handleSessionExpired('Your session has expired (1 hour limit). Please login again.');
+      handleSessionExpired('Your session has expired. Please login again.');
     }, remainingMs);
 
     // Also check when tab becomes visible or receives focus
@@ -117,7 +117,7 @@ export const AuthProvider = ({ children }) => {
       if (document.visibilityState === 'visible' || document.hasFocus()) {
         const checkRemaining = getTokenRemainingMs(token);
         if (checkRemaining <= 0) {
-          handleSessionExpired('Your session has expired (1 hour limit). Please login again.');
+          handleSessionExpired('Your session has expired. Please login again.');
         }
       }
     };
@@ -138,7 +138,21 @@ export const AuthProvider = ({ children }) => {
       (response) => response,
       (error) => {
         if (error.response && error.response.status === 401) {
-          const msg = error.response.data?.message || 'Your session has expired (1 hour limit). Please login again.';
+          const url = error.config?.url || '';
+          const code = error.response.data?.code;
+
+          // Never log out on attendance endpoints, login attempts, face enrollment, or business logic failures
+          if (
+            url.includes('/attendance') ||
+            url.includes('/auth/login') ||
+            url.includes('/face-embeddings') ||
+            code === 'BIOMETRIC_MISMATCH' ||
+            code === 'GEOFENCE_FAILED'
+          ) {
+            return Promise.reject(error);
+          }
+
+          const msg = error.response.data?.message || 'Your session has expired. Please login again.';
           handleSessionExpired(msg);
         }
         return Promise.reject(error);

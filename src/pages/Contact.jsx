@@ -165,9 +165,9 @@ export default function Contact() {
       </section>
 
       {/* ====== MAIN CONTACT SECTION ====== */}
-      <section className="py-14 px-6">
+      <section className="py-10 md:py-14 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-[1fr_1.3fr] gap-10">
+          <div className="grid md:grid-cols-[1fr_1.3fr] gap-8 lg:gap-10">
             {/* Left Side */}
             <div>
               <div className="eyebrow">We're Here to Help</div>
